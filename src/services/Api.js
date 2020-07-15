@@ -3,7 +3,7 @@ import axios from 'axios'
 let url = null
 
 if (process.env.NODE_ENV === 'production') {
-    url = 'https://server-oshwapp.herokuapp.com:80/'
+    url = 'https://server-oshwapp.herokuapp.com/'
 } else {
     url = process.env.VUE_APP_BASE_URL
 }
