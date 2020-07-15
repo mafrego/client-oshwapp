@@ -1,0 +1,2 @@
+(window["webpackJsonp"]=window["webpackJsonp"]||[]).push([["about"],{f820:function(t,n,e){"use strict";e.r(n);var a=function(){var t=this,n=t.$createElement,e=t._self._c||n;return e("div",{staticClass:"about"},[e("h1",[t._v(t._s(t.title))])])},s=[],u={data:function(){return{title:"oshwapp"}}},l=u,i=e("2877"),o=Object(i["a"])(l,a,s,!1,null,null,null);n["default"]=o.exports}}]);
+//# sourceMappingURL=about.46d60f3a.js.map

@@ -1,0 +1,79 @@
+<template>
+  <div class="container">
+    <v-layout column>
+      <v-flex xs6>
+        <panel title="Projects">
+          <v-btn
+            v-if="$store.state.isUserLoggedIn"
+            class="cyan ml-2"
+            :to="{name: 'projects-create'}"
+            slot="action"
+            title="create project"
+            light
+          >
+            <v-icon>add_circle</v-icon>
+          </v-btn>
+          <div v-for="project in projects" :key="project.uuid">
+            <v-layout>
+              <v-flex xs6>
+                <div class="project-name">{{project.name}}</div>
+                <div class="project-description">{{project.description}}</div>
+                <div class="project-state">{{project.state}}</div>
+                <div class="project-datetime">{{project.dateTime}}</div>
+                <v-btn
+                  class="cyan"
+                  :to="{
+              name: 'project',
+              params: {
+                projectId: project.uuid
+              } 
+              }"
+                >manage</v-btn>
+              </v-flex>
+
+              <v-flex xs6>
+                <img class="project-image" :src="project.imageUrl" />
+              </v-flex>
+            </v-layout>
+          </div>
+        </panel>
+      </v-flex>
+    </v-layout>
+  </div>
+</template>
+
+<script>
+import ProjectService from "@/services/ProjectService";
+
+export default {
+  name: "ProjectsPanel",
+  data() {
+    return {
+      projects: []
+    };
+  },
+  computed: {
+    currentUser() {
+      return this.$store.state.user;
+    }
+  },
+  async mounted() {
+    if (!this.currentUser) {
+      this.$router.push("/login");
+    }
+    this.projects = (await ProjectService.index(this.currentUser.uuid)).data;
+  }
+};
+</script>
+
+<style scoped>
+.project-image {
+  max-width: 200px;
+  max-height: 150px;
+  min-width: 200px;
+  min-height: 150px;
+}
+.project-datetime {
+  font-size: 24px;
+}
+</style>
