@@ -1,6 +1,6 @@
 <template>
   <div class="about">
-    <h1>{{title}}</h1>
+    <h1>mode: {{process.env.NODE_ENV}}</h1>
     <v-btn color="primary" @click="test">test</v-btn>
     <p>{{this.response}}</p>
   </div>
