@@ -1,7 +1,14 @@
 import axios from 'axios';
 import authHeader from './AuthHeader';
 
-const url = process.env.VUE_APP_BASE_URL
+let url = null
+
+if (process.env.NODE_ENV === 'production') {
+    url = `https://server-oshwapp.herokuapp.com/`
+} else {
+    url = process.env.VUE_APP_BASE_URL
+}
+
 const API_URL = url+'api/test/';
 
 class UserService {
