@@ -20,3 +20,8 @@ yarn-error.log*
 *.njsproj
 *.sln
 *.sw?
+
+#ABYME
+# e2e test screenshots and videos
+/tests/e2e/screenshots/*
+/tests/e2e/videos/*
