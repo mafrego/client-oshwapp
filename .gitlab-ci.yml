@@ -31,6 +31,7 @@ test_e2e:
    stage: test
    script:
        - npm install
+       - $(npm bin)/cypress install
        - $(npm bin)/cypress verify
        - npm run serve &
       # sleep in order to make "npm run serve" start the server in background
