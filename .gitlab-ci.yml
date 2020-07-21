@@ -16,10 +16,10 @@ build_app:
    script:
       - npm install
       - npm run build
-   artifacts:
-      paths:
-         - dist/
-      expire_in: 1 hour
+   # artifacts:
+   #    paths:
+   #       - dist/
+   #    expire_in: 1 hour
 
 test_unit:
    stage: test
@@ -27,7 +27,7 @@ test_unit:
       - npm run test:unit
 
 test_e2e:
-   # image: cypress/base:10
+   image: cypress/base:10
    stage: test
    script:
        - npm install
@@ -37,4 +37,8 @@ test_e2e:
       # sleep in order to make "npm run serve" start the server in background
        - sleep 20 
        - $(npm bin)/cypress run
+   artifacts:
+      paths:
+         - tests/e2e/videos/
+      expire_in: 1 hour
 
