@@ -30,6 +30,7 @@ test_e2e:
    stage: test
    script:
        - npm ci
+       - $(npm bin)/cypress verify
        - npm run serve &
        - sleep 30 && $(npm bin)/cypress run
 
