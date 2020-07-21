@@ -2,7 +2,7 @@ stages:
    - build
    - test
 
-#ABYME
+#ABYME cache specifies files that should be saved for later to be used between runs or stages
 cache:
    paths:
       - node_modules/
@@ -15,9 +15,6 @@ build_app:
    script:
       - npm install
       - npm run build
-   # cache:
-   #   paths:
-   #     - node_modules/
    artifacts:
       paths:
          - dist/
@@ -27,8 +24,6 @@ test_unit:
    image: node:12
    stage: test
    script: 
-      # check if it works without installing
-      #- npm install
       - npm run test:unit
 
 test_e2e:
