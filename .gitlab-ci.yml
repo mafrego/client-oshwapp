@@ -31,5 +31,5 @@ test_e2e:
    script:
        - npm ci
        - npm run serve &
-       - $(npm bin)/cypress run
+       - sleep 30 && $(npm bin)/cypress run
 
