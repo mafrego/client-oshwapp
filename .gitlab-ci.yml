@@ -22,7 +22,8 @@ test_unit:
    image: node:12
    stage: test
    script: 
-      - npm install
+      # check if it works without installing
+      #- npm install
       - npm run test:unit
 
 test_e2e:
