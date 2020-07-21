@@ -16,10 +16,6 @@ build_app:
    script:
       - npm install
       - npm run build
-   # artifacts:
-   #    paths:
-   #       - dist/
-   #    expire_in: 1 hour
 
 test_unit:
    stage: test
