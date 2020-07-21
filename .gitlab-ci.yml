@@ -2,6 +2,11 @@ stages:
    - build
    - test
 
+#ABYME
+cache:
+   paths:
+      - node_modules/
+
 build_app:
    image: node:12
    stage: build
@@ -10,9 +15,9 @@ build_app:
    script:
       - npm install
       - npm run build
-   cache:
-     paths:
-       - node_modules/
+   # cache:
+   #   paths:
+   #     - node_modules/
    artifacts:
       paths:
          - dist/
