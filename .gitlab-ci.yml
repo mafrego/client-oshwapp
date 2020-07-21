@@ -27,7 +27,7 @@ test_unit:
       - npm run test:unit
 
 test_e2e:
-   image: cypress/base:10
+   # image: cypress/base:10
    stage: test
    script:
        - npm install
