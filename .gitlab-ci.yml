@@ -21,7 +21,7 @@ build_app:
       expire_in: 1 hour
 
 test_unit:
-   # image: node:12
+   image: node:12
    stage: test
    script: 
       - npm run test:unit
