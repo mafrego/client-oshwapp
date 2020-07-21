@@ -29,7 +29,7 @@ test_e2e:
    image: cypress/base:10
    stage: test
    script:
-       - npm install
+       - npm ci
        - npm run serve &
        - $(npm bin)/cypress run
 
