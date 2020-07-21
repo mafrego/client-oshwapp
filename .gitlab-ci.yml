@@ -33,6 +33,6 @@ test_e2e:
        - $(npm bin)/cypress verify
        - npm run serve &
       # sleep in order to make "npm run serve" start the server in background
-      # - sleep 30 
+       - sleep 20 
        - $(npm bin)/cypress run
 
