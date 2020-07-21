@@ -29,8 +29,10 @@ test_e2e:
    image: cypress/base:10
    stage: test
    script:
-       - npm ci
+       - npm install
        - $(npm bin)/cypress verify
        - npm run serve &
-       - sleep 30 && $(npm bin)/cypress run
+      # sleep in order to make "npm run serve" start the server in background
+      # - sleep 30 
+       - $(npm bin)/cypress run
 
