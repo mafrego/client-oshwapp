@@ -5,13 +5,12 @@ stages:
    - build
    - test
 
-#ABYME cache specifies files that should be saved for later to be used between runs or stages
+# cache specifies files that should be saved for later to be used between runs or stages
 cache:
    paths:
       - node_modules/
 
 build_app:
-   # image: node:12
    stage: build
    only:
       - master
@@ -24,7 +23,6 @@ build_app:
       expire_in: 1 hour
 
 test_unit:
-   # image: node:12
    stage: test
    script: 
       - npm run test:unit
