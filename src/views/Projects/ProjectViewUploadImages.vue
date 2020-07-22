@@ -98,7 +98,8 @@ export default {
         const res = await FileService.uploadImages(formData, this.projectid);
         // console.log(res.data)
         this.uploadedFiles = res.data.files;
-        this.message = "valid images have been uploaded";
+        this.message = res.data.message
+        // console.log(res.data.message)
         this.files = [];
         this.uploadFiles = [];
         this.error = false;
