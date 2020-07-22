@@ -88,6 +88,10 @@ export default {
       return "";
     },
     async submitMultipleFiles() {
+      if(this.files.length == 0){
+        this.message = "you need to select at least an image!"
+        return
+      }
       const formData = new FormData();
       this.uploadFiles.forEach(file => {
         if (this.validate(file) === "") {

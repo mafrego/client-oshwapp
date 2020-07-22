@@ -65,6 +65,10 @@ export default {
       }
     },
     async submitFile() {
+      if(this.file.length == 0){
+        this.message = 'you need to select a .csv file!'
+        return
+      }
       let formData = new FormData();
       let msg = {};
       // the name "file" is the same used in server with middleware multer
