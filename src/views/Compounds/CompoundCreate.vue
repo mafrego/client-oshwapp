@@ -103,7 +103,8 @@ export default {
       }
       try {
         this.compound.quantities = this.quantities.filter(n => n);
-        this.compound.imageUrl = "https://oshwpublicbucket.s3.eu-central-1.amazonaws.com/images/comp100.png"
+        // TODO set imageUrl on server
+        this.compound.imageUrl = "https://oshwapp.s3.eu-central-1.amazonaws.com/service/assembly.png"
         await CompoundService.post(this.compound);
         this.$router.push({
           name: "products"

@@ -103,7 +103,6 @@ export default {
       }
       try {
         this.assembly.quantities = this.quantities.filter(n => n);
-        // this.assembly.imageUrl = "https://oshwpublicbucket.s3.eu-central-1.amazonaws.com/images/comp100.png"
         await AssemblyService.post(this.assembly);
         this.$router.push({
           name: "products"

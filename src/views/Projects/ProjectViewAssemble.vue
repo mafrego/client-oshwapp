@@ -125,7 +125,8 @@ export default {
       }
       try {
         this.assembly.quantities = this.quantities.filter(n => n);
-        this.assembly.imageUrl = "https://oshwpublicbucket.s3.eu-central-1.amazonaws.com/images/comp100.png"
+        // TODO set imageUrl on server properly
+        this.assembly.imageUrl = "https://oshwapp.s3.eu-central-1.amazonaws.com/service/assembly.png"
         // await AssemblyService.post(this.assembly);
         // console.log(this.projectId)
         await AssemblyService.assemble(this.assembly, this.projectId);
