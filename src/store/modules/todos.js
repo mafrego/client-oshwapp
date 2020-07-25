@@ -6,8 +6,8 @@ const state = () => ({
  })
 
 const getters = {
-    allTodos: state => state.todos,
-    allFiltered: state => state.filtered
+    getAllTodos: state => state.todos,
+    getAllFiltered: state => state.filtered
  }
 
 const actions = { 
