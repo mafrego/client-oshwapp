@@ -3,7 +3,7 @@
     <v-flex xs6>
       <panel title="Atom">
         <v-btn
-          v-if="$store.state.isUserLoggedIn"
+          v-if="$store.state.users.isUserLoggedIn"
           class="cyan ml-2"
           :to="{name: 'atoms-create'}"
           slot="action"
@@ -13,7 +13,7 @@
           <v-icon>add_circle</v-icon>
         </v-btn>
         <!-- <v-btn
-          v-if="$store.state.isUserLoggedIn"
+          v-if="$store.state.users.isUserLoggedIn"
           class="cyan ml-2"
           :to="{name: 'compounds-create'}"
           slot="action"
@@ -23,7 +23,7 @@
           <v-icon>group_work</v-icon>
         </v-btn> -->
         <v-btn
-          v-if="$store.state.isUserLoggedIn"
+          v-if="$store.state.users.isUserLoggedIn"
           class="cyan ml-2"
           :to="{name: 'assemblies-create'}"
           slot="action"

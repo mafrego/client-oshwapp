@@ -48,6 +48,7 @@
 
 <script>
 import AuthenticationService from "@/services/AuthenticationService";
+import { mapActions } from "vuex";
 
 export default {
   data() {
@@ -68,6 +69,7 @@ export default {
     };
   },
   methods: {
+    ...mapActions(["setUser", "setToken"]),
     async register() {
       try {
         const response = await AuthenticationService.register({
@@ -76,8 +78,10 @@ export default {
           username: this.username
         });
         if (response) {
-          this.$store.dispatch("setToken", response.data.token);
-          this.$store.dispatch("setUser", response.data.user);
+          this.setToken(response.data.token);
+          this.setUser(response.data.user);
+          // this.$store.dispatch("setToken", response.data.token);
+          // this.$store.dispatch("setUser", response.data.user);
           this.$router.push({
             name: "projects"
           });

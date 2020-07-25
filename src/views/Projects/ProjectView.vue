@@ -14,7 +14,7 @@
         <v-icon>build</v-icon>
       </v-btn>
       <v-btn
-        v-if="$store.state.isUserLoggedIn"
+        v-if="$store.state.users.isUserLoggedIn"
         class="cyan ml-2"
         @click="del"
         title="delete project"

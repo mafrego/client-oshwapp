@@ -2,7 +2,7 @@
   <panel :title="productType">
     <v-toolbar-items slot="action">
       <v-btn
-        v-if="$store.state.isUserLoggedIn"
+        v-if="$store.state.users.isUserLoggedIn"
         class="cyan ml-2"
         :to="{name: 'atoms-create'}"
         title="create atom"
@@ -11,7 +11,7 @@
         <v-icon>add_circle</v-icon>
       </v-btn>
       <!-- <v-btn
-        v-if="$store.state.isUserLoggedIn"
+        v-if="$store.state.users.isUserLoggedIn"
         class="cyan ml-2"
         :to="{name: 'compounds-create'}"
         title="create compound"
@@ -20,7 +20,7 @@
         <v-icon>group_work</v-icon>
       </v-btn> -->
       <v-btn
-        v-if="$store.state.isUserLoggedIn"
+        v-if="$store.state.users.isUserLoggedIn"
         class="cyan ml-2"
         :to="{name: 'assemblies-create'}"
         title="create assembly"
@@ -29,7 +29,7 @@
         <v-icon>group_work</v-icon>
       </v-btn>
       <v-btn
-        v-if="$store.state.isUserLoggedIn"
+        v-if="$store.state.users.isUserLoggedIn"
         class="cyan ml-2"
         @click="del"
         title="delete product"

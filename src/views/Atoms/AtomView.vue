@@ -8,7 +8,7 @@
     <panel title="Atom">
       <v-toolbar-items slot="action">
         <v-btn
-          v-if="$store.state.isUserLoggedIn"
+          v-if="$store.state.users.isUserLoggedIn"
           class="cyan ml-2"
           :to="{name: 'atoms-create'}"
           light
@@ -16,7 +16,7 @@
           <v-icon>add_circle</v-icon>
         </v-btn>
         <v-btn
-          v-if="$store.state.isUserLoggedIn"
+          v-if="$store.state.users.isUserLoggedIn"
           class="cyan ml-2"
           @click="del"
           title="delete atom"
@@ -52,6 +52,7 @@ export default {
   },
   async mounted() {
     const atomId = this.$store.state.route.params.atomId;
+    console.log(atomId)
     this.atom = (await AtomService.show(atomId)).data;
     console.log(this.atom);
   },

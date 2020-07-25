@@ -20,10 +20,10 @@ export default {
   name: "Profile",
   computed: {
     currentUser() {
-      return this.$store.state.user;
+      return this.$store.state.users.user;
     },
     currentToken() {
-      return this.$store.state.token;
+      return this.$store.state.users.token;
     }
   },
   mounted() {

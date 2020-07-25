@@ -4,7 +4,7 @@
       <v-flex xs6>
         <panel title="Projects">
           <v-btn
-            v-if="$store.state.isUserLoggedIn"
+            v-if="$store.state.users.isUserLoggedIn"
             class="cyan ml-2"
             :to="{name: 'projects-create'}"
             slot="action"
@@ -54,7 +54,7 @@ export default {
   },
   computed: {
     currentUser() {
-      return this.$store.state.user;
+      return this.$store.state.users.user;
     }
   },
   async mounted() {
