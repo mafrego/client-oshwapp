@@ -1,8 +1,8 @@
 import Vue from 'vue'
 import VueRouter from 'vue-router'
-import Home from '../views/Home.vue'
-import Register from '@/views/Register'
-import Login from '@/views/Login'
+import Home from '../views/general/Home.vue'
+import Register from '@/views/general/Register'
+import Login from '@/views/general/Login'
 import Atoms from '@/views/Atoms/Index'
 import Products from '@/views/Products/Index'
 import Projects from '@/views/Projects/ProjectsPanel'
@@ -112,19 +112,19 @@ const routes = [
     path: '/profile',
     name: 'profile',
     // lazy-loaded
-    component: () => import('../views/Profile.vue')
+    component: () => import('../views/general/Profile.vue')
   },
   {
     path: '/admin',
     name: 'admin',
     // lazy-loaded
-    component: () => import('../views/BoardAdmin.vue')
+    component: () => import('../views/general/BoardAdmin.vue')
   },
   {
     path: '/assembler',
     name: 'assembler',
     // lazy-loaded
-    component: () => import('../views/BoardAssembler.vue')
+    component: () => import('../views/general/BoardAssembler.vue')
   },
   {
     path: '/about',
@@ -132,7 +132,7 @@ const routes = [
     // route level code-splitting
     // this generates a separate chunk (about.[hash].js) for this route
     // which is lazy-loaded when the route is visited.
-    component: () => import(/* webpackChunkName: "about" */ '../views/About.vue')
+    component: () => import(/* webpackChunkName: "about" */ '../views/general/About.vue')
   }
 ]
 

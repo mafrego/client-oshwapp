@@ -7,17 +7,17 @@
 </template>
 
 <script>
-import UserService from '../services/UserService';
+import UserService from '@/services/UserService';
 
 export default {
-  name: 'Admin',
+  name: 'Moderator',
   data() {
     return {
       content: ''
     };
   },
   mounted() {
-    UserService.getAdminBoard().then(
+    UserService.getAssemblerBoard().then(
       response => {
         this.content = response.data;
       },
