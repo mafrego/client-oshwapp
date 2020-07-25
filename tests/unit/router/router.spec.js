@@ -31,7 +31,9 @@ describe("AtomView", () => {
       mocks: {
         $store: {
           state: {
-            isLoggedIn: true,
+            users: {
+              isLoggedIn: true,
+            },
             route: { params: { atomId: 1 } }
           }
         },
