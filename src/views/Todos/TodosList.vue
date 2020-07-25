@@ -4,8 +4,8 @@
     <div class="legend">
       <span>Double click to mark as complete</span>
     </div>
-    <div class="todos" v-if="allFiltered">
-      <div v-for="a in allFiltered" :key="a.uuid" 
+    <div class="todos" v-if="getAllFiltered">
+      <div v-for="a in getAllFiltered" :key="a.uuid" 
       v-bind:class="{
          'is-complete': a.completed,
          'priority1': a.priority == 1,
@@ -23,9 +23,9 @@
         <v-icon v-if="a.completed" class="done">done_outline</v-icon>
       </div>
     </div>
-    <div class="todos" v-if="allFiltered.length == 0">
+    <div class="todos" v-if="getAllFiltered.length == 0">
       <div
-        v-for="todo in allTodos"
+        v-for="todo in getAllTodos"
         :key="todo.uuid"
         v-bind:class="{
          'is-complete': todo.completed,
@@ -62,7 +62,7 @@ export default {
       this.updateTodo(updTodo);
     },
   },
-  computed: { ...mapGetters(["allTodos", "allFiltered"])},
+  computed: { ...mapGetters(["getAllTodos", "getAllFiltered"])},
   created() {
     this.fetchTodos();
   }
