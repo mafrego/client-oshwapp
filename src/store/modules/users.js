@@ -1,16 +1,21 @@
-// import TodoService from '@/services/TodoService'
+// this is the correct way of structuring a file as vuex module
 
-const state = () => ({
+// const state = () => ({
+//   token: null,
+//   user: null,
+//   isUserLoggedIn: false
+// })
+const state = {
   token: null,
   user: null,
   isUserLoggedIn: false
-})
-
-const getters = {
-  getToken: state => state.token,
-  getUser: state => state.user,
-  isUserLoggedIn: state => state.isUserLoggedIn
 }
+
+// const getters = {
+//   getToken: state => state.token,
+//   getUser: state => state.user,
+//   isUserLoggedIn: state => state.isUserLoggedIn
+// }
 
 const actions = {
   setToken({ commit }, token) {
@@ -39,7 +44,7 @@ const mutations = {
 export default {
     // namespaced: true,
     state,
-    getters,
+    // getters,
     actions,
     mutations
   }

@@ -8,7 +8,7 @@
     <panel title="Atom">
       <v-toolbar-items slot="action">
         <v-btn
-          v-if="$store.state.users.isUserLoggedIn"
+          v-if="$store.state.isUserLoggedIn"
           class="cyan ml-2"
           :to="{name: 'atoms-create'}"
           light
@@ -16,7 +16,7 @@
           <v-icon>add_circle</v-icon>
         </v-btn>
         <v-btn
-          v-if="$store.state.users.isUserLoggedIn"
+          v-if="$store.state.isUserLoggedIn"
           class="cyan ml-2"
           @click="del"
           title="delete atom"

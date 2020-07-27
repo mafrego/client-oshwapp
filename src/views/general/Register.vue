@@ -70,6 +70,10 @@ export default {
   },
   methods: {
     ...mapActions(["setUser", "setToken"]),
+    // ...mapActions('users',[
+    //   'setUser',
+    //   'setToken'
+    // ]),
     async register() {
       try {
         const response = await AuthenticationService.register({

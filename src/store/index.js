@@ -2,24 +2,53 @@ import Vue from 'vue'
 import Vuex from 'vuex'
 import createPersistedState from 'vuex-persistedstate'
 import todos from './modules/todos'
-import users from './modules/users'
+// import users from './modules/users'
 
 Vue.use(Vuex)
 
-// const userState = createPersistedState({
-//   paths: ['token', 'user', 'isUserLoggedIn']
-// })
+// if module present has to be here before new Vuex.Store.... otherwise app doesn't load
 
 export default new Vuex.Store({
-  modules: {
-    todos,
-    users
-  },
-  strict: true,
 
-  // plugins: [userState]
+  strict: process.env.NODE_ENV !== 'production',
+
+  modules: {
+    todos: todos,
+    // users: users
+  },
 
   plugins: [
     createPersistedState()
   ],
+
+  state: {
+    token: null,
+    user: null,
+    isUserLoggedIn: false
+  },
+
+  actions: {
+    setToken({ commit }, token) {
+      commit('setToken', token)
+    },
+    setUser({ commit }, user) {
+      commit('setUser', user)
+    }
+  },
+
+  mutations: {
+    setToken(state, token) {
+      state.token = token
+      // state.isUserLoggedIn = !!(token)
+      if (token) {
+        state.isUserLoggedIn = true
+      } else {
+        state.isUserLoggedIn = false
+      }
+    },
+    setUser(state, user) {
+      state.user = user
+    }
+  }
+
 })

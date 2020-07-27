@@ -4,7 +4,7 @@
       <v-flex xs6>
         <panel title="Projects">
           <v-btn
-            v-if="$store.state.users.isUserLoggedIn"
+            v-if="isUserLoggedIn"
             class="cyan ml-2"
             :to="{name: 'projects-create'}"
             slot="action"
@@ -44,6 +44,7 @@
 
 <script>
 import ProjectService from "@/services/ProjectService";
+import {mapState} from 'vuex'
 
 export default {
   name: "ProjectsPanel",
@@ -53,16 +54,22 @@ export default {
     };
   },
   computed: {
-    currentUser() {
-      return this.$store.state.users.user;
-    }
+    ...mapState(["user", "isUserLoggedIn"]),
+    // currentUser() {
+    //   return this.$store.state.user;
+    // }
   },
   async mounted() {
-    if (!this.currentUser) {
+  //   if (!this.currentUser) {
+  //     this.$router.push("/login");
+  //   }
+  //   this.projects = (await ProjectService.index(this.currentUser.uuid)).data;
+  // },
+    if (!this.user) {
       this.$router.push("/login");
     }
-    this.projects = (await ProjectService.index(this.currentUser.uuid)).data;
-  }
+    this.projects = (await ProjectService.index(this.user.uuid)).data;
+  },
 };
 </script>
 

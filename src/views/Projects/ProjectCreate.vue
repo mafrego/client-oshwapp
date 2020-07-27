@@ -24,7 +24,7 @@ export default {
       project: {
         name: null,
         description: null,
-        userID: this.$store.state.users.user.uuid,
+        userID: this.$store.state.user.uuid,
       },
       error: null,
       // required: value => !!value || "Required"

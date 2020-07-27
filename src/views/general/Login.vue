@@ -61,6 +61,10 @@ export default {
   },
   methods: {
     ...mapActions(["setUser", "setToken"]),
+    // ...mapActions('users',[
+    //   'setUser',
+    //   'setToken'
+    // ]),
 
     async login() {
       try {
