@@ -55,16 +55,8 @@ export default {
   },
   computed: {
     ...mapState(["user", "isUserLoggedIn"]),
-    // currentUser() {
-    //   return this.$store.state.user;
-    // }
   },
   async mounted() {
-  //   if (!this.currentUser) {
-  //     this.$router.push("/login");
-  //   }
-  //   this.projects = (await ProjectService.index(this.currentUser.uuid)).data;
-  // },
     if (!this.user) {
       this.$router.push("/login");
     }

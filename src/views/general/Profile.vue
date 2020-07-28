@@ -22,17 +22,8 @@ export default {
   name: "Profile",
   computed: {
     ...mapState(["user"]),
-    // currentUser() {
-    //   return this.$store.state.user;
-    // },
-    // currentToken() {
-    //   return this.$store.state.token;
-    // }
   },
   mounted() {
-    // if (!this.currentUser) {
-    //   this.$router.push("/login");
-    // }
     if (!this.user) {
       this.$router.push("/login");
     }

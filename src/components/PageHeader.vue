@@ -96,16 +96,6 @@ export default {
       //   isUserLoggedIn: state => state.users.isUserLoggedIn
       //   }),
 
-    // currentRoles() {
-    //   // if-else to avoid Vue warn in case user is not logged in
-    //   if (this.$store.state.user.has_role) {
-    //     let roles = this.$store.state.user.has_role;
-    //     return roles.map(el => el.node).map(el => el.name);
-    //   } else {
-    //     return [];
-    //   }
-    // },
-
     currentRoles() {
       // if-else to avoid Vue warn in case user is not logged in
       if (this.user.has_role) {
