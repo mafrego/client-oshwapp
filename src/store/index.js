@@ -1,7 +1,8 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
 import createPersistedState from 'vuex-persistedstate'
-import todos from './modules/todos'
+// import todos from './modules/todos'
+import projects from './modules/projects'
 // import users from './modules/users'
 
 Vue.use(Vuex)
@@ -13,7 +14,8 @@ export default new Vuex.Store({
   strict: process.env.NODE_ENV !== 'production',
 
   modules: {
-    todos: todos,
+    // todos: todos,
+    projects: projects,
     // users: users
   },
 
