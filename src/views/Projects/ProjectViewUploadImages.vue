@@ -45,6 +45,7 @@
 <script>
 import FileService from "@/services/FileService";
 // import ProjectService from "@/services/ProjectService";
+import {mapGetters} from 'vuex'
 
 export default {
   name: "ProjectViewUploadImages",
@@ -57,10 +58,13 @@ export default {
       uploadedFiles: []
     };
   },
-  props: {
-    projectid: {
-      type: String
-    }
+  // props: {
+  //   projectid: {
+  //     type: String
+  //   }
+  // },
+  computed: {
+    ...mapGetters(['getProject'])
   },
   methods: {
     selectFile() {
@@ -99,7 +103,7 @@ export default {
         }
       });
       try {
-        const res = await FileService.uploadImages(formData, this.projectid);
+        const res = await FileService.uploadImages(formData, this.getProject.uuid);
         // console.log(res.data)
         this.uploadedFiles = res.data.files;
         this.message = res.data.message

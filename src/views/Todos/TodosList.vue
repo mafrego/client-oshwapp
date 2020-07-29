@@ -49,6 +49,7 @@
 
 <script>
 import { mapGetters, mapActions } from "vuex";
+
 export default {
   name: "TodosList",
   methods: {
@@ -62,7 +63,9 @@ export default {
       this.updateTodo(updTodo);
     },
   },
-  computed: { ...mapGetters(["getAllTodos", "getAllFiltered"])},
+  computed: { 
+    ...mapGetters(["getAllTodos", "getAllFiltered"]
+    )},
   created() {
     this.fetchTodos();
   }

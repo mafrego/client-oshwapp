@@ -29,6 +29,7 @@
 <script>
 import FileService from "@/services/FileService";
 import ProjectService from "@/services/ProjectService";
+import {mapGetters} from 'vuex'
 
 export default {
   name: "ProjectViewUploadFile",
@@ -40,11 +41,14 @@ export default {
       error: false
     };
   },
-  props: {
-    projectid: {
-      type: String
-    }
+  computed: {
+    ...mapGetters(['getProject'])
   },
+  // props: {
+  //   projectid: {
+  //     type: String
+  //   }
+  // },
   methods: {
     // no need of following method with v-file-input
     selectFile() {
@@ -75,7 +79,7 @@ export default {
       formData.append("file", this.file);
       try {
         // I need the projectId to bind the BOM atoms to the project
-        msg = await FileService.sendBom(formData, this.projectid);
+        msg = await FileService.sendBom(formData, this.getProject.uuid);
         this.message = msg.data.message;
         // substitutte "" with [] to eliminate Vue warn
         this.file = [];
@@ -86,7 +90,7 @@ export default {
         this.error = true;
       }
       if (msg.status == 201) {
-        const project = (await ProjectService.put({ state: "assembling" }, this.projectid)).data
+        const project = (await ProjectService.put({ state: "assembling" }, this.getProject.uuid)).data
         // TODO This part has to be susbstituted using Vuex
         // I have to put an if(project) otherwise event emits before project is returned
         if(project){

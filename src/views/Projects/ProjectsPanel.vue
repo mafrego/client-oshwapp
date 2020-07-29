@@ -13,7 +13,7 @@
           >
             <v-icon>add_circle</v-icon>
           </v-btn>
-          <div v-for="project in projects" :key="project.uuid">
+          <div v-for="project in getProjects" :key="project.uuid">
             <v-layout>
               <v-flex xs6>
                 <div class="project-name">{{project.name}}</div>
@@ -43,25 +43,35 @@
 </template>
 
 <script>
-import ProjectService from "@/services/ProjectService";
-import {mapState} from 'vuex'
+// import ProjectService from "@/services/ProjectService";
+import {mapState, mapActions, mapGetters} from 'vuex'
 
 export default {
   name: "ProjectsPanel",
-  data() {
-    return {
-      projects: []
-    };
-  },
+  // data() {
+  //   return {
+  //     projects: []
+  //   };
+  // },
   computed: {
     ...mapState(["user", "isUserLoggedIn"]),
+    ...mapGetters(['getProjects'])
   },
-  async mounted() {
+  methods: {
+    ...mapActions(['fetchProjects'])
+  },
+  created(){
     if (!this.user) {
       this.$router.push("/login");
     }
-    this.projects = (await ProjectService.index(this.user.uuid)).data;
+    this.fetchProjects(this.user.uuid)
   },
+  // async mounted() {
+  //   if (!this.user) {
+  //     this.$router.push("/login");
+  //   }
+  //   this.projects = (await ProjectService.index(this.user.uuid)).data;
+  // },
 };
 </script>
 

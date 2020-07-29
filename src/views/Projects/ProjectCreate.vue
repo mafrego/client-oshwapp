@@ -60,7 +60,6 @@ export default {
         // fix image URL
         this.project.state = "created"
         this.project.dateTime = new Date()
-        // this.project.imageUrl = "https://oshwpublicbucket.s3.eu-central-1.amazonaws.com/service/project.svg"
         await ProjectService.post(this.project);
         this.$router.push({
           name: "projects"

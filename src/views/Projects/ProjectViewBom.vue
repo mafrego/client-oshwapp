@@ -1,8 +1,8 @@
 <template>
   <v-layout column>
     <v-flex xs6>
-      <panel title="BOM" v-if="atoms.length">
-        <div v-for="atom in atoms" :key="atom.uuid">
+      <panel title="BOM" v-if="getBom.length">
+        <div v-for="atom in getBom" :key="atom.uuid">
           <v-layout>
             <v-flex xs6>
               <div class="atom-name">{{atom.name}}</div>
@@ -31,23 +31,33 @@
 
 <script>
 // import ProjectService from "@/services/ProjectService";
+import {mapGetters, mapActions} from 'vuex'
 
 export default {
-  data() {
-    return {
-      atoms: []
-    };
+  // data() {
+  //   return {
+  //     atoms: []
+  //   };
+  // },
+  computed: {
+    ...mapGetters(['getBom', 'getProject'])
   },
-  props: {
-    project: {
-      type: Object
-    }
+  methods: {
+    ...mapActions(['fetchBom'])
   },
-  mounted() {
-    //from object prop project get all relative atoms
-    this.atoms = this.project.consists_of.map(rel => rel.node);
-    //listen to event from project-view-file-upload component as soon as atom nodes are created
-  }
+  created(){
+    this.fetchBom(this.getProject.uuid)
+  },
+//   props: {
+//     project: {
+//       type: Object
+//     }
+//   },
+//   mounted() {
+//     //from object prop project get all relative atoms
+//     this.atoms = this.project.consists_of.map(rel => rel.node);
+//     //listen to event from project-view-file-upload component as soon as atom nodes are created
+//   }
 }
 </script>
 
