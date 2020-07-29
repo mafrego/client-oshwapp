@@ -11,7 +11,7 @@ export default {
     })  
   },
 
-  showBom (projectID) {
+  getBom (projectID) {
     return Api().get('projectBOM', {
       params: {
         projectID: projectID
