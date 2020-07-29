@@ -19,6 +19,10 @@ export default {
     })  
   },
 
+  getAssemblableProducts(projectId){
+    return Api().get(`getassemblables/${projectId}`)
+  },
+
   show(projectId){
     return Api().get(`projects/${projectId}`)
   },
@@ -28,9 +32,9 @@ export default {
       .post('projects', project, { headers: authHeader() })
   },
 
-  put(state, projectId) {
+  put(project, projectId) {
     return Api()
-      .put(`project/${projectId}`, state, { headers: authHeader() })
+      .put(`project/${projectId}`, project, { headers: authHeader() })
   },
 
   delete(projectId){
