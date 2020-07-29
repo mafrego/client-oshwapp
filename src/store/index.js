@@ -20,7 +20,7 @@ export default new Vuex.Store({
   },
 
   plugins: [
-    createPersistedState({paths: ['token', 'user', 'isUserLoggedIn']})
+    createPersistedState({paths: ['token', 'user', 'isUserLoggedIn', 'projects.projects']})
   ],
 
   state: {
