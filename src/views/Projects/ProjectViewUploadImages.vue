@@ -58,11 +58,6 @@ export default {
       uploadedFiles: []
     };
   },
-  // props: {
-  //   projectid: {
-  //     type: String
-  //   }
-  // },
   computed: {
     ...mapGetters(['getProject'])
   },
@@ -79,7 +74,6 @@ export default {
       }));
     },
     validate(file) {
-      console.log(file);
       // check that MAX_SIZE matches MAX_SIZE in FileUpload middleware in server
       const MAX_SIZE = 500000;
       const allowedTypes = ["image/png", "image/svg", "image/jpg", "image/jpeg"];

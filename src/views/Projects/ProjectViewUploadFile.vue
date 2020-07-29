@@ -28,8 +28,7 @@
 
 <script>
 import FileService from "@/services/FileService";
-import ProjectService from "@/services/ProjectService";
-import {mapGetters} from 'vuex'
+import { mapGetters, mapActions } from "vuex";
 
 export default {
   name: "ProjectViewUploadFile",
@@ -38,18 +37,14 @@ export default {
       // substitutte "" with [] to eliminate Vue warn
       file: [],
       message: "",
-      error: false
+      error: false,
     };
   },
   computed: {
-    ...mapGetters(['getProject'])
+    ...mapGetters(["getProject"]),
   },
-  // props: {
-  //   projectid: {
-  //     type: String
-  //   }
-  // },
   methods: {
+    ...mapActions(["updateProjectState"]),
     // no need of following method with v-file-input
     selectFile() {
       const file = this.$refs.file.files[0];
@@ -69,9 +64,9 @@ export default {
       }
     },
     async submitFile() {
-      if(this.file.length == 0){
-        this.message = 'you need to select a .csv file!'
-        return
+      if (this.file.length == 0) {
+        this.message = "you need to select a .csv file!";
+        return;
       }
       let formData = new FormData();
       let msg = {};
@@ -90,24 +85,23 @@ export default {
         this.error = true;
       }
       if (msg.status == 201) {
-        const project = (await ProjectService.put({ state: "assembling" }, this.getProject.uuid)).data
-        // TODO This part has to be susbstituted using Vuex
-        // I have to put an if(project) otherwise event emits before project is returned
-        if(project){
-          this.$emit("projectStateUpdated", project)
-        }
-        console.log(project)
+      // update project state to 'assembling'
+        let project = {
+          state: "assembling",
+          uuid: this.getProject.uuid,
+        };
+        this.updateProjectState(project)
       }
-    }
-  }
+    },
+  },
 };
 </script>
 
 <style scoped>
-.message-error{
+.message-error {
   color: red;
 }
-.message-success{
+.message-success {
   color: green;
 }
 </style>

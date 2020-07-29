@@ -22,50 +22,14 @@
       >
         <v-icon>delete</v-icon>
       </v-btn>
-      <!-- testing btn -->
-      <!-- <v-btn @click="callBOM" class="cyan ml-2" title="callBOM" light>
-        <v-icon>test</v-icon>
-      </v-btn>-->
     </v-toolbar-items>
-    <!-- <v-row>
-      <v-col md6>
-        <div class="project-name">{{project.name}}</div>
-        <div class="project-description">{{project.description}}</div>
-        <div class="project-material">{{project.state}}</div>
-        <div class="project-datetime">{{project.dateTime}}</div>
-      </v-col>
-      <v-col md6>
-        <img class="project-image" :src="project.imageUrl" />
-      </v-col>
-    </v-row>
-
-    <project-view-upload-file
-      @projectStateUpdated="changeProjectStatus"
-      v-bind:projectid="projectid"
-      v-if="showComponentUpload"
-    />
-    <br />
-    <project-view-upload-images
-      v-bind:projectid="projectid"
-      v-if="showComponentUploadImages"
-    />
-    <br />
-    <project-view-bom v-bind:project="project" v-if="showComponentBOM" />
-    <br />
-    <project-view-assemble
-      v-bind:project="project"
-      v-bind:projectid="projectid"
-      v-if="showComponentAssemble"
-    />  -->
-
-    <!-- <project-view-upload-test/> -->
-
 
     <v-row>
       <v-col md6>
         <div class="project-name">{{getProject.name}}</div>
         <div class="project-description">{{getProject.description}}</div>
-        <div class="project-material">{{getProject.state}}</div>
+        <div class="project-material">{{getProject.material}}</div>
+        <div class="project-state">{{getProject.state}}</div>
         <!-- <div class="project-datetime">{{project.dateTime.day.low}}/{{project.dateTime.month.low}}/{{project.dateTime.year.low}}</div> -->
         <div class="project-datetime">{{getProject.dateTime}}</div>
       </v-col>
@@ -75,21 +39,16 @@
     </v-row>
 
     <project-view-upload-file
-      @projectStateUpdated="changeProjectStatus"
-      v-bind:projectid="getProject.uuid"
       v-if="showComponentUpload"
     />
     <br />
     <project-view-upload-images
-      v-bind:projectid="getProject.uuid"
       v-if="showComponentUploadImages"
     />
     <br />
-    <project-view-bom v-bind:project="getProject" v-if="showComponentBOM" />
+    <project-view-bom v-if="showComponentBOM" />
     <br />
     <project-view-assemble
-      v-bind:project="getProject"
-      v-bind:projectid="getProject.uuid"
       v-if="showComponentAssemble"
     />
 
@@ -116,8 +75,6 @@ export default {
   },
   data() {
     return {
-      // project: {},
-      // projectid: "",
       showComponentUpload: false,
       showComponentUploadImages: false,
       showComponentBOM: false,
@@ -127,11 +84,6 @@ export default {
   computed:{
     ...mapGetters(['getProject'])
   },
-  // async mounted() {
-  //   this.projectid = this.$store.state.route.params.projectId;
-  //   // console.log(this.projectid)
-  //   this.project = (await ProjectService.show(this.projectid)).data;
-  // },
   methods: {
     // ...mapActions(['fetchProject']),
     ...mapMutations(['setProject']),
@@ -157,19 +109,8 @@ export default {
     toggleAssemble() {
       this.showComponentAssemble = !this.showComponentAssemble;
     },
-    changeProjectStatus(project){
-      console.log("changing project.state")
-      this.project.state = project.state
-    }
   },
-  // async mounted(){
-  //   // this.projectid = this.$store.state.route.params.projectId;
-  //   // console.log(this.projectid)
-  //   await this.fetchProject(this.$store.state.route.params.projectId)
-  // },
   created(){
-    // this.projectid = this.$store.state.route.params.projectId;
-    // console.log(this.projectid)
     this.setProject(this.$store.state.route.params.projectId)
   }
 };
@@ -180,10 +121,13 @@ export default {
   font-size: 30px;
 }
 .project-description {
-  font-size: 12px;
+  font-size: 16px;
 }
 .project-material {
-  font-size: 24px;
+  font-size: 16px;
+}
+.project-state {
+  font-size: 16px;
 }
 .project-image {
   max-width: 200px;
@@ -192,6 +136,6 @@ export default {
   min-height: 150px;
 }
 .project-datetime {
-  font-size: 24px;
+  font-size: 12px;
 }
 </style>

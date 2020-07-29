@@ -33,7 +33,7 @@
       <span>Quantities: {{ quantities }}</span>
       <br />
       <!-- solution see https://stackoverflow.com/questions/52691527/use-v-model-with-a-checkbox-when-v-for-is-used-with-properties-of-an-object-->
-      <div v-for="(value, key, index) in atoms" :key="index">
+      <div v-for="(value, key, index) in getAssemblableProducts" :key="index">
         <v-layout>
           <v-flex xs3>
             <div class="atom-name">{{value.name}}</div>
@@ -69,6 +69,7 @@
 // import ProductService from "@/services/ProductService";
 import AssemblyService from "@/services/AssemblyService";
 // import ProjectService from "@/services/ProjectService";
+import {mapGetters, mapActions} from 'vuex'
 
 export default {
   name: "ProjectViewAssemble",
@@ -102,18 +103,25 @@ export default {
       }
     };
   },
-  props: {
-    project: {
-      type: Object
-    },
-    projectid: {
-      type: String
-    }
+  computed: {
+    ...mapGetters(['getProject', 'getAssemblableProducts'])
   },
-  mounted() {
-    this.atoms = this.project.consists_of.map(rel => rel.node);
+  created(){
+    this.fetchAssemblableProducts(this.getProject.uuid)
   },
+  // props: {
+  //   project: {
+  //     type: Object
+  //   },
+  //   projectid: {
+  //     type: String
+  //   }
+  // },
+  // mounted() {
+  //   this.atoms = this.project.consists_of.map(rel => rel.node);
+  // },
   methods: {
+    ...mapActions(['fetchAssemblableProducts']),
     async create() {
       this.error = null;
       const areAllFieldsFilledIn = Object.keys(this.assembly).every(
@@ -129,7 +137,7 @@ export default {
         this.assembly.imageUrl = "https://oshwapp.s3.eu-central-1.amazonaws.com/service/assembly.png"
         // await AssemblyService.post(this.assembly);
         // console.log(this.projectId)
-        await AssemblyService.assemble(this.assembly, this.projectId);
+        await AssemblyService.assemble(this.assembly, this.getProject.uuid);
         // TODO fix this router problem
         // this.$router.push({
         //   name: 'project'
