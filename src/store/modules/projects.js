@@ -4,7 +4,7 @@ const state = () => ({
     projects: null,
     project: null,
     bom: [],
-    workingProducts:[],
+    assemblableProducts:[],
     root: null
  })
 
@@ -12,7 +12,7 @@ const getters = {
     getProjects: state => state.projects,
     getProject: state => state.project,
     getBom: state => state.bom,
-    getWorkingProfucts: state => state.workingProducts
+    getAssemblableProducts: state => state.assemblableProducts
  }
 
 const actions = { 
@@ -32,10 +32,26 @@ const actions = {
            console.log(error) 
         }
     },
+    async updateProjectState({commit}, project){
+        try {
+            const response = await ProjectService.put(project, project.uuid)
+            commit('updateState', response.data.state)
+        } catch (error) {
+           console.log(error) 
+        }
+    },
     async fetchBom({commit}, projectId){
         try {
             const response = await ProjectService.getBom(projectId)
             commit('setBom',response.data)
+        } catch (error) {
+           console.log(error) 
+        }
+    },
+    async fetchAssemblableProducts({commit}, projectId){
+        try {
+            const response = await ProjectService.getAssemblableProducts(projectId)
+            commit('setAssemblableProducts',response.data)
         } catch (error) {
            console.log(error) 
         }
@@ -49,9 +65,18 @@ const mutations = {
     setProject: (state, projectID) => {
         state.project = state.projects.find(el => el.uuid === projectID)
     },
+    uploadBom: (state, project) => {
+        state.project = project
+    },
+    updateState: (state, projectState) => {
+        state.project.state = projectState
+    },
     setBom: (state, bom) => {
         state.bom = bom
     },
+    setAssemblableProducts: (state, products) => {
+        state.assemblableProducts = products
+    }
 } 
 
 export default {
