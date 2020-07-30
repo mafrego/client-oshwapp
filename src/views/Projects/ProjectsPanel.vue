@@ -83,6 +83,6 @@ export default {
   min-height: 150px;
 }
 .project-datetime {
-  font-size: 24px;
+  font-size: 12px;
 }
 </style>

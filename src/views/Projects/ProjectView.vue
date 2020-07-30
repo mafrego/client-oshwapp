@@ -4,7 +4,12 @@
       <v-btn @click="toggleComponentUpload" class="cyan ml-2" title="toggle Upload BOM" light>
         <v-icon>attach_file</v-icon>
       </v-btn>
-      <v-btn @click="toggleComponentUploadImages" class="cyan ml-2" title="toggle upload images" light>
+      <v-btn
+        @click="toggleComponentUploadImages"
+        class="cyan ml-2"
+        title="toggle upload images"
+        light
+      >
         <v-icon>add_a_photo</v-icon>
       </v-btn>
       <v-btn @click="toggleComponentBOM" class="cyan ml-2" title="toggle show BOM" light>
@@ -38,32 +43,24 @@
       </v-col>
     </v-row>
 
-    <project-view-upload-file
-      v-if="showComponentUpload"
-    />
+    <project-view-upload-file v-if="showComponentUpload" />
     <br />
-    <project-view-upload-images
-      v-if="showComponentUploadImages"
-    />
+    <project-view-upload-images v-if="showComponentUploadImages" />
     <br />
     <project-view-bom v-if="showComponentBOM" />
     <br />
-    <project-view-assemble
-      v-if="showComponentAssemble"
-    />
-
-
+    <project-view-assemble v-if="showComponentAssemble" />
   </panel>
 </template>
 
 <script>
-import ProjectService from "@/services/ProjectService";
+// import ProjectService from "@/services/ProjectService";
 import ProjectViewUploadFile from "./ProjectViewUploadFile";
 import ProjectViewUploadImages from "./ProjectViewUploadImages";
 // import ProjectViewUploadTest from "./ProjectViewUploadTest";
 import ProjectViewBom from "./ProjectViewBom";
 import ProjectViewAssemble from "./ProjectViewAssemble";
-import {mapGetters, mapMutations} from 'vuex'
+import { mapGetters, mapMutations, mapActions } from "vuex";
 
 export default {
   components: {
@@ -71,27 +68,37 @@ export default {
     ProjectViewUploadImages,
     // ProjectViewUploadTest,
     ProjectViewBom,
-    ProjectViewAssemble
+    ProjectViewAssemble,
   },
   data() {
     return {
       showComponentUpload: false,
       showComponentUploadImages: false,
       showComponentBOM: false,
-      showComponentAssemble: false
+      showComponentAssemble: false,
     };
   },
-  computed:{
-    ...mapGetters(['getProject'])
+  computed: {
+    ...mapGetters(["getProject"]),
   },
   methods: {
-    // ...mapActions(['fetchProject']),
-    ...mapMutations(['setProject']),
-    async del() {
+    ...mapActions(["deleteProject"]),
+    ...mapMutations(["setProject"]),
+    // async del() {
+    //   try {
+    //     await ProjectService.delete(this.getProject.uuid);
+    //     this.$router.push({
+    //       name: "projects"
+    //     });
+    //   } catch (err) {
+    //     console.log(err);
+    //   }
+    // },
+    del() {
       try {
-        await ProjectService.delete(this.getProject.uuid);
+        this.deleteProject(this.getProject.uuid);
         this.$router.push({
-          name: "projects"
+          name: "projects",
         });
       } catch (err) {
         console.log(err);
@@ -110,9 +117,9 @@ export default {
       this.showComponentAssemble = !this.showComponentAssemble;
     },
   },
-  created(){
-    this.setProject(this.$store.state.route.params.projectId)
-  }
+  created() {
+    this.setProject(this.$store.state.route.params.projectId);
+  },
 };
 </script>
 

@@ -1,18 +1,21 @@
 import ProjectService from '@/services/ProjectService'
+import AssemblyService from '@/services/AssemblyService'
 
 const state = () => ({
     projects: null,
     project: null,
     bom: [],
     assemblableProducts:[],
-    root: null
+    root: null,
+    assembly: null
  })
 
 const getters = {
     getProjects: state => state.projects,
     getProject: state => state.project,
     getBom: state => state.bom,
-    getAssemblableProducts: state => state.assemblableProducts
+    getAssemblableProducts: state => state.assemblableProducts,
+    getAssembly: state => state.assembly
  }
 
 const actions = { 
@@ -56,6 +59,23 @@ const actions = {
            console.log(error) 
         }
     },
+    async deleteProject({commit}, projectId){
+        try {
+            await ProjectService.delete(projectId)
+            commit('delProject', projectId)
+        } catch (error) {
+           console.log(error) 
+        }
+    },
+    async assemble({state, commit}, assembly){
+        try {
+            const projectId = state.project.uuid
+            const response = await AssemblyService.assemble(assembly, projectId)
+            commit('assembleProduct', response.data)
+        } catch (error) {
+           console.log(error) 
+        }
+    }
 }
 
 const mutations = {
@@ -76,7 +96,16 @@ const mutations = {
     },
     setAssemblableProducts: (state, products) => {
         state.assemblableProducts = products
-    }
+    },
+    delProject: (state, projectID) => {
+        state.bom = []
+        state.project = null
+        state.assemblableProducts = []
+        state.projects = state.projects.filter(el => {return el.uuid != projectID})
+    },
+    assembleProduct: (state, assembly) => {
+        state.assemblableProducts.push(assembly)
+    },
 } 
 
 export default {

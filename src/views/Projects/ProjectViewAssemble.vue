@@ -16,15 +16,9 @@
       <v-text-field
         label="quantity"
         :rules="[rules.required]"
-        v-model="assembly.quantity"
+        v-model="assembly.quantity_to_assemble"
         id="id"
       ></v-text-field>
-      <!-- <v-text-field
-        label="img url"
-        :rules="[rules.required, rules.http]"
-        v-model="assembly.imageUrl"
-        id="id"
-      ></v-text-field> -->
       <div class="danger-alert" v-if="error">{{error}}</div>
       <v-btn class="cyan" @click="create">Create assembly</v-btn>
       <br />
@@ -33,7 +27,7 @@
       <span>Quantities: {{ quantities }}</span>
       <br />
       <!-- solution see https://stackoverflow.com/questions/52691527/use-v-model-with-a-checkbox-when-v-for-is-used-with-properties-of-an-object-->
-      <div v-for="(value, key, index) in getAssemblableProducts" :key="index">
+      <div v-for="(value, key, index) in assemblables" :key="index">
         <v-layout>
           <v-flex xs3>
             <div class="atom-name">{{value.name}}</div>
@@ -50,7 +44,7 @@
               type="number"
               :id="key"
               min="1"
-              max="1000"
+              max="100"
               step="1"
               v-model="quantities[key]"
             />
@@ -65,11 +59,7 @@
 </template>
 
 <script>
-// import AtomService from "@/services/AtomService";
-// import ProductService from "@/services/ProductService";
-import AssemblyService from "@/services/AssemblyService";
-// import ProjectService from "@/services/ProjectService";
-import {mapGetters, mapActions} from 'vuex'
+import {mapGetters, mapActions, mapState} from 'vuex'
 
 export default {
   name: "ProjectViewAssemble",
@@ -79,50 +69,30 @@ export default {
         name: null,
         description: null,
         parts: [],
-        quantity: 0,
+        quantity_to_assemble: 1,
+        quantity: 1,
         version: "0.0.1",
         type: "child"
       },
       quantities: [],
       error: null,
-      // required: value => !!value || "Required",
-      // atoms: null,
       atoms: [],
       rules: {
         required: value => !!value || "Required.",
         counter: value => value.length >= 8 || "Min 8 characters",
-        email: value => {
-          const pattern = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
-          return pattern.test(value) || "Invalid e-mail.";
-        },
-        http: value => {
-          const pattern = /https?:\/\/(www\.)?[-a-zA-Z0-9@:%._+~#=]{1,256}\.[a-zA-Z0-9()]{1,6}\b([-a-zA-Z0-9()@:%_+.~#?&//=]*)/;
-          return pattern.test(value) || "Invalid http link";
-        },
-        
       }
     };
   },
   computed: {
-    ...mapGetters(['getProject', 'getAssemblableProducts'])
+    ...mapGetters(['getProject', 'getAssemblableProducts']),
+    ...mapState({ assemblables: state => state.projects.assemblableProducts})
   },
   created(){
     this.fetchAssemblableProducts(this.getProject.uuid)
   },
-  // props: {
-  //   project: {
-  //     type: Object
-  //   },
-  //   projectid: {
-  //     type: String
-  //   }
-  // },
-  // mounted() {
-  //   this.atoms = this.project.consists_of.map(rel => rel.node);
-  // },
   methods: {
-    ...mapActions(['fetchAssemblableProducts']),
-    async create() {
+    ...mapActions(['fetchAssemblableProducts', 'assemble']),
+    create() {
       this.error = null;
       const areAllFieldsFilledIn = Object.keys(this.assembly).every(
         key => !!this.assembly[key]
@@ -131,20 +101,11 @@ export default {
         this.error = "Please fill in all the required fields.";
         return;
       }
-      try {
         this.assembly.quantities = this.quantities.filter(n => n);
-        // TODO set imageUrl on server properly
+        this.assembly.quantity = this.assembly.quantity_to_assemble
+        // // TODO set imageUrl on server properly
         this.assembly.imageUrl = "https://oshwapp.s3.eu-central-1.amazonaws.com/service/assembly.png"
-        // await AssemblyService.post(this.assembly);
-        // console.log(this.projectId)
-        await AssemblyService.assemble(this.assembly, this.getProject.uuid);
-        // TODO fix this router problem
-        // this.$router.push({
-        //   name: 'project'
-        // });
-      } catch (err) {
-        console.log(err);
-      }
+        this.assemble(this.assembly)
     },
     // TODO change to toggle quantity value 1 null
     toggleQuantity : function(key) {
@@ -160,5 +121,9 @@ export default {
 <style scoped>
 .danger-alert {
   color: red;
+}
+.atom-image {
+  width: 100px;
+  height: 100px;
 }
 </style>
