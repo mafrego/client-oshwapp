@@ -24,7 +24,7 @@
       <br />
       <span>Checked names: {{ assembly.parts }}</span>
       <br />
-      <span>Quantities: {{ quantities }}</span>
+      <span>Quantities: {{ assembly.quantities }}</span>
       <br />
       <!-- solution see https://stackoverflow.com/questions/52691527/use-v-model-with-a-checkbox-when-v-for-is-used-with-properties-of-an-object-->
       <div v-for="(value, key, index) in assemblables" :key="index">
@@ -46,7 +46,7 @@
               min="1"
               max="100"
               step="1"
-              v-model="quantities[key]"
+              v-model="assembly.quantities[key]"
             />
           </v-flex>
           <v-flex xs2>
@@ -69,12 +69,13 @@ export default {
         name: null,
         description: null,
         parts: [],
+        quantities: [],
         quantity_to_assemble: 1,
         quantity: 1,
         version: "0.0.1",
         type: "child"
       },
-      quantities: [],
+      // quantities: [],
       error: null,
       atoms: [],
       rules: {
@@ -101,18 +102,24 @@ export default {
         this.error = "Please fill in all the required fields.";
         return;
       }
-        this.assembly.quantities = this.quantities.filter(n => n);
+        // this.assembly.quantities = this.quantities.filter(n => n);
+        // allign parts elements with quantities elements: TODO find a better solution
+        this.assembly.quantities = this.assembly.quantities.filter(n => n);
         this.assembly.quantity = this.assembly.quantity_to_assemble
-        // // TODO set imageUrl on server properly
-        this.assembly.imageUrl = "https://oshwapp.s3.eu-central-1.amazonaws.com/service/assembly.png"
         this.assemble(this.assembly)
     },
     // TODO change to toggle quantity value 1 null
+    // toggleQuantity : function(key) {
+    //   if(this.quantities[key])
+    //     this.quantities[key] = null
+    //   else
+    //     this.quantities[key] = 1
+    //   },
     toggleQuantity : function(key) {
-      if(this.quantities[key])
-        this.quantities[key] = null
+      if(this.assembly.quantities[key])
+        this.assembly.quantities[key] = null
       else
-        this.quantities[key] = 1
+        this.assembly.quantities[key] = 1
       }
   },
 };
