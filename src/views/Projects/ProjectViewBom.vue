@@ -71,4 +71,8 @@ export default {
 .atom-material {
   font-size: 24px;
 }
+.atom-image {
+  width: 100px;
+  height: 100px;
+}
 </style>

@@ -10,6 +10,7 @@ const state = () => ({
     assembly: null
  })
 
+//  TODO implement getters properly see vuex getters
 const getters = {
     getProjects: state => state.projects,
     getProject: state => state.project,
