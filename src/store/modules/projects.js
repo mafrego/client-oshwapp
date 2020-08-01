@@ -1,14 +1,18 @@
 import ProjectService from '@/services/ProjectService'
 import AssemblyService from '@/services/AssemblyService'
+import FileService from '@/services/FileService'
 
 const state = () => ({
     projects: null,
     project: null,
     bom: [],
-    assemblableProducts:[],
+    assemblableProducts: [],
+
     root: null,
-    assembly: null
- })
+    assembly: null,
+    loading: false,
+    error: null
+})
 
 //  TODO implement getters properly see vuex getters
 const getters = {
@@ -16,65 +20,126 @@ const getters = {
     getProject: state => state.project,
     getBom: state => state.bom,
     getAssemblableProducts: state => state.assemblableProducts,
-    getAssembly: state => state.assembly
- }
+    getAssembly: state => state.assembly,
+    getLoading: state => state.loading,
+    getError: state => state.error
+}
 
-const actions = { 
-    async fetchProjects({commit},userID){
+const actions = {
+    async fetchProjects({ commit }, userID) {
         try {
+            commit('setLoading', true)
             const response = await ProjectService.index(userID)
-            commit('setProjects',response.data)
+            commit('setProjects', response.data)
         } catch (error) {
-           console.log(error) 
+            commit('setError', error)
+        } finally {
+            commit('setLoading', false)
         }
     },
-    async fetchProject({commit},projectID){
+    async fetchProject({ commit }, projectID) {
         try {
+            commit('setLoading', true)
             const response = await ProjectService.show(projectID)
-            commit('setProject',response.data)
+            commit('setProject', response.data)
         } catch (error) {
-           console.log(error) 
+            commit('setError', error)
+        } finally {
+            commit('setLoading', false)
         }
     },
-    async updateProjectState({commit}, project){
+    async updateProjectState({ commit }, project) {
         try {
+            commit('setLoading', true)
             const response = await ProjectService.put(project, project.uuid)
             commit('updateState', response.data.state)
         } catch (error) {
-           console.log(error) 
+            commit('setError', error)
+        } finally {
+            commit('setLoading', false)
         }
     },
-    async fetchBom({commit}, projectId){
+    async sendBom({ state, commit }, formData) {
         try {
+            commit('setLoading', true)
+            let bom = []
+            const response = await FileService.sendBom(formData, state.project.uuid)
+            if (response) {
+                bom = await ProjectService.getBom(state.project.uuid)
+                commit('setBom', bom)
+                const assemblableProducts = await ProjectService.getAssemblableProducts(state.project.uuid)
+                commit('setAssemblableProducts', assemblableProducts.data)
+                return true
+            }
+            return false
+        } catch (error) {
+            commit('setError', error)
+        } finally {
+            commit('setLoading', false)
+        }
+    },
+    async fetchBom({ commit }, projectId) {
+        try {
+            commit('setLoading', true)
             const response = await ProjectService.getBom(projectId)
-            commit('setBom',response.data)
+            commit('setBom', response.data)
         } catch (error) {
-           console.log(error) 
+            commit('setError', error)
+        } finally {
+            commit('setLoading', false)
         }
     },
-    async fetchAssemblableProducts({commit}, projectId){
+    async uploadImages({ state, commit }, formData) {
         try {
+            commit('setLoading', true)
+            const response = await FileService.uploadImages(formData, state.project.uuid)
+            console.log(response)
+            if (response.status == 201) {
+                const retBom = await ProjectService.getBom(state.project.uuid)
+                commit('setBom', retBom.data)
+                const retAssemblbales = await ProjectService.getAssemblableProducts(state.project.uuid)
+                commit('setAssemblableProducts', retAssemblbales.data)
+            }
+            return response
+        } catch (error) {
+            commit('setError', error)
+        } finally {
+            commit('setLoading', false)
+        }
+    },
+    async fetchAssemblableProducts({ commit }, projectId) {
+        try {
+            commit('setLoading', true)
             const response = await ProjectService.getAssemblableProducts(projectId)
-            commit('setAssemblableProducts',response.data)
+            commit('setAssemblableProducts', response.data)
         } catch (error) {
-           console.log(error) 
+            commit('setError', error)
+        } finally {
+            commit('setLoading', false)
         }
     },
-    async deleteProject({commit}, projectId){
+    async deleteProject({ commit }, projectId) {
         try {
+            commit('setLoading', true)
             await ProjectService.delete(projectId)
             commit('delProject', projectId)
         } catch (error) {
-           console.log(error) 
+            commit('setError', error)
+        } finally {
+            commit('setLoading', false)
         }
     },
-    async assemble({state, commit}, assembly){
+    async assemble({ state, commit }, assembly) {
         try {
+            commit('setLoading', true)
             const projectId = state.project.uuid
             const response = await AssemblyService.assemble(assembly, projectId)
-            commit('assembleProduct', response.data)
+            commit('setAssemblableProducts', response.data)
+            return true
         } catch (error) {
-           console.log(error) 
+            commit('setError', error)
+        } finally {
+            commit('setLoading', false)
         }
     }
 }
@@ -102,12 +167,15 @@ const mutations = {
         state.bom = []
         state.project = null
         state.assemblableProducts = []
-        state.projects = state.projects.filter(el => {return el.uuid != projectID})
+        state.projects = state.projects.filter(el => { return el.uuid != projectID })
     },
-    assembleProduct: (state, assembly) => {
-        state.assemblableProducts.push(assembly)
+    setError: (state, error) => {
+        state.error = error
     },
-} 
+    setLoading: (state, value) => {
+        state.loading = value
+    }
+}
 
 export default {
     // namespaced: true,
@@ -115,4 +183,4 @@ export default {
     getters,
     actions,
     mutations
-  }
+}
