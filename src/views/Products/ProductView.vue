@@ -86,7 +86,7 @@ export default {
       return ret == "Assembly" || ret == "Atom";
     });
     this.parts = this.product.assembled_from.map(rel => rel.node);
-    console.log(this.product);
+    // console.log(this.product);
   },
   methods: {
     async del() {

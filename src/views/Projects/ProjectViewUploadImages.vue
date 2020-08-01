@@ -43,9 +43,9 @@
 </template>
 
 <script>
-import FileService from "@/services/FileService";
+// import FileService from "@/services/FileService";
 // import ProjectService from "@/services/ProjectService";
-import {mapGetters} from 'vuex'
+import {mapGetters, mapActions} from 'vuex'
 
 export default {
   name: "ProjectViewUploadImages",
@@ -62,6 +62,7 @@ export default {
     ...mapGetters(['getProject'])
   },
   methods: {
+    ...mapActions(['fetchAssemblableProducts', 'uploadImages']),
     selectFile() {
       this.message = "";
       this.uploadedFiles = []
@@ -97,8 +98,9 @@ export default {
         }
       });
       try {
-        //TODO add uploadImages() to vuex projects.js
-        const res = await FileService.uploadImages(formData, this.getProject.uuid);
+        //TODO add uploadImages() to vuex projects.js(not necessary for the moment)
+        // const res = await FileService.uploadImages(formData, this.getProject.uuid);
+        const res = await this.uploadImages(formData);
         // console.log(res.data)
         this.uploadedFiles = res.data.files;
         this.message = res.data.message
@@ -106,6 +108,7 @@ export default {
         this.files = [];
         this.uploadFiles = [];
         this.error = false;
+        // this.fetchAssemblableProducts(this.getProject.uuid)
       } catch (error) {
         this.message = error.response.data.error;
         this.error = true;

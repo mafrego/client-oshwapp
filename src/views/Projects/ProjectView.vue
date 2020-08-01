@@ -1,10 +1,16 @@
 <template>
   <panel title="Project">
     <v-toolbar-items slot="action">
-      <v-btn @click="toggleComponentUpload" class="cyan ml-2" title="toggle Upload BOM" light>
+      <v-btn 
+      @click="toggleComponentUpload" 
+      class="cyan ml-2" 
+      title="toggle Upload BOM" 
+      light
+      >
         <v-icon>attach_file</v-icon>
       </v-btn>
       <v-btn
+      v-if="getBom.length != 0"
         @click="toggleComponentUploadImages"
         class="cyan ml-2"
         title="toggle upload images"
@@ -12,10 +18,22 @@
       >
         <v-icon>add_a_photo</v-icon>
       </v-btn>
-      <v-btn @click="toggleComponentBOM" class="cyan ml-2" title="toggle show BOM" light>
+      <v-btn 
+      v-if="getBom.length != 0" 
+      @click="toggleComponentBOM" 
+      class="cyan ml-2" 
+      title="toggle show BOM" 
+      light
+      >
         <v-icon>list</v-icon>
       </v-btn>
-      <v-btn @click="toggleAssemble" class="cyan ml-2" title="assemble object" light>
+      <v-btn 
+      v-if="getAssemblableProducts.length != 0" 
+      @click="toggleAssemble" 
+      class="cyan ml-2" 
+      title="assemble object" 
+      light
+      >
         <v-icon>build</v-icon>
       </v-btn>
       <v-btn
@@ -54,10 +72,8 @@
 </template>
 
 <script>
-// import ProjectService from "@/services/ProjectService";
 import ProjectViewUploadFile from "./ProjectViewUploadFile";
 import ProjectViewUploadImages from "./ProjectViewUploadImages";
-// import ProjectViewUploadTest from "./ProjectViewUploadTest";
 import ProjectViewBom from "./ProjectViewBom";
 import ProjectViewAssemble from "./ProjectViewAssemble";
 import { mapGetters, mapMutations, mapActions } from "vuex";
@@ -66,7 +82,6 @@ export default {
   components: {
     ProjectViewUploadFile,
     ProjectViewUploadImages,
-    // ProjectViewUploadTest,
     ProjectViewBom,
     ProjectViewAssemble,
   },
@@ -79,21 +94,12 @@ export default {
     };
   },
   computed: {
-    ...mapGetters(["getProject"]),
+    ...mapGetters(["getProject", "getBom", "getAssemblableProducts"]),
   },
   methods: {
-    ...mapActions(["deleteProject"]),
+    // TODO add actions to populate project in case of user log out
+    ...mapActions(["deleteProject", "fetchBom", "fetchAssemblableProducts"]),
     ...mapMutations(["setProject"]),
-    // async del() {
-    //   try {
-    //     await ProjectService.delete(this.getProject.uuid);
-    //     this.$router.push({
-    //       name: "projects"
-    //     });
-    //   } catch (err) {
-    //     console.log(err);
-    //   }
-    // },
     del() {
       try {
         this.deleteProject(this.getProject.uuid);
@@ -119,6 +125,8 @@ export default {
   },
   created() {
     this.setProject(this.$store.state.route.params.projectId);
+    this.fetchBom(this.getProject.uuid)
+    this.fetchAssemblableProducts(this.getProject.uuid)
   },
 };
 </script>

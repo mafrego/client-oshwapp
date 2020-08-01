@@ -1,12 +1,7 @@
 <template>
   <div>
     <panel title="Assembly metadata">
-      <v-text-field
-        label="name"
-        :rules="[rules.required]"
-        v-model="assembly.name"
-        id="id"
-      ></v-text-field>
+      <v-text-field label="name" :rules="[rules.required]" v-model="assembly.name" id="id"></v-text-field>
       <v-text-field
         label="description"
         :rules="[rules.required]"
@@ -19,10 +14,11 @@
         v-model="assembly.quantity_to_assemble"
         id="id"
       ></v-text-field>
-      <div class="danger-alert" v-if="error">{{error}}</div>
+      <div class="danger-alert" v-if="msg">{{msg}}</div>
       <v-btn class="cyan" @click="create">Create assembly</v-btn>
+      <v-progress-circular class="ml-10" v-if="loading" :indeterminate="loading" color="light-blue"></v-progress-circular>
       <br />
-      <span>Checked names: {{ assembly.parts }}</span>
+      <span>parts checked: {{ assembly.parts }}</span>
       <br />
       <span>Quantities: {{ assembly.quantities }}</span>
       <br />
@@ -30,7 +26,7 @@
       <div v-for="(value, key, index) in assemblables" :key="index">
         <v-layout>
           <v-flex xs3>
-            <div class="atom-name">{{value.name}}</div>
+            <div class="atom-name">{{value.name}} - pieces left: {{value.quantity_to_assemble}}</div>
             <input
               v-on:click="toggleQuantity(key)"
               type="checkbox"
@@ -59,7 +55,7 @@
 </template>
 
 <script>
-import {mapGetters, mapActions, mapState} from 'vuex'
+import { mapGetters, mapActions, mapState } from "vuex";
 
 export default {
   name: "ProjectViewAssemble",
@@ -73,54 +69,62 @@ export default {
         quantity_to_assemble: 1,
         quantity: 1,
         version: "0.0.1",
-        type: "child"
+        type: "child",
       },
-      // quantities: [],
-      error: null,
+      // indeterminate: false,
+      msg: null,
       atoms: [],
       rules: {
-        required: value => !!value || "Required.",
-        counter: value => value.length >= 8 || "Min 8 characters",
-      }
+        required: (value) => !!value || "Required.",
+        counter: (value) => value.length >= 8 || "Min 8 characters",
+      },
     };
   },
   computed: {
-    ...mapGetters(['getProject', 'getAssemblableProducts']),
-    ...mapState({ assemblables: state => state.projects.assemblableProducts})
+    ...mapGetters([
+      "getProject",
+      "getAssemblableProducts",
+      "getLoading",
+      "getError",
+    ]),
+    ...mapState({
+      assemblables: (state) => state.projects.assemblableProducts,
+      loading: (state) => state.projects.loading,
+    }),
   },
-  created(){
-    this.fetchAssemblableProducts(this.getProject.uuid)
+  created() {
+    this.fetchAssemblableProducts(this.getProject.uuid);
   },
   methods: {
-    ...mapActions(['fetchAssemblableProducts', 'assemble']),
-    create() {
-      this.error = null;
+    ...mapActions(["fetchAssemblableProducts", "assemble"]),
+    async create() {
+      this.msg = null;
       const areAllFieldsFilledIn = Object.keys(this.assembly).every(
-        key => !!this.assembly[key]
+        (key) => !!this.assembly[key]
       );
       if (!areAllFieldsFilledIn) {
-        this.error = "Please fill in all the required fields.";
+        this.msg = "Please fill in all the required fields.";
         return;
       }
-        // this.assembly.quantities = this.quantities.filter(n => n);
+      try {
         // allign parts elements with quantities elements: TODO find a better solution
-        this.assembly.quantities = this.assembly.quantities.filter(n => n);
-        this.assembly.quantity = this.assembly.quantity_to_assemble
-        this.assemble(this.assembly)
-    },
-    // TODO change to toggle quantity value 1 null
-    // toggleQuantity : function(key) {
-    //   if(this.quantities[key])
-    //     this.quantities[key] = null
-    //   else
-    //     this.quantities[key] = 1
-    //   },
-    toggleQuantity : function(key) {
-      if(this.assembly.quantities[key])
-        this.assembly.quantities[key] = null
-      else
-        this.assembly.quantities[key] = 1
+        this.assembly.quantities = this.assembly.quantities.filter((n) => n);
+        this.assembly.quantity = this.assembly.quantity_to_assemble;
+        const ret = await this.assemble(this.assembly);
+        if (ret) {
+          this.assembly.parts = [];
+          this.assembly.quantities = [];
+          this.assembly.quantity_to_assemble = 1;
+          this.assembly.quantity = 1;
+        }
+      } catch (error) {
+        console.log(error);
       }
+    },
+    toggleQuantity: function (key) {
+      if (this.assembly.quantities[key]) this.assembly.quantities[key] = null;
+      else this.assembly.quantities[key] = 1;
+    },
   },
 };
 </script>

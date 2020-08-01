@@ -30,34 +30,18 @@
 </template>
 
 <script>
-// import ProjectService from "@/services/ProjectService";
 import {mapGetters, mapActions} from 'vuex'
 
 export default {
-  // data() {
-  //   return {
-  //     atoms: []
-  //   };
-  // },
   computed: {
     ...mapGetters(['getBom', 'getProject'])
   },
   methods: {
-    ...mapActions(['fetchBom'])
+    ...mapActions(['fetchBom', 'fetchAssemblableProducts'])
   },
   created(){
     this.fetchBom(this.getProject.uuid)
   },
-//   props: {
-//     project: {
-//       type: Object
-//     }
-//   },
-//   mounted() {
-//     //from object prop project get all relative atoms
-//     this.atoms = this.project.consists_of.map(rel => rel.node);
-//     //listen to event from project-view-file-upload component as soon as atom nodes are created
-//   }
 }
 </script>
 

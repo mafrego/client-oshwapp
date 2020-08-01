@@ -27,7 +27,7 @@
 </template>
 
 <script>
-import FileService from "@/services/FileService";
+// import FileService from "@/services/FileService";
 import { mapGetters, mapActions } from "vuex";
 
 export default {
@@ -44,7 +44,7 @@ export default {
     ...mapGetters(["getProject"]),
   },
   methods: {
-    ...mapActions(["updateProjectState"]),
+    ...mapActions(["updateProjectState", "sendBom"]),
     // no need of following method with v-file-input
     selectFile() {
       const file = this.$refs.file.files[0];
@@ -69,29 +69,37 @@ export default {
         return;
       }
       let formData = new FormData();
-      let msg = {};
+      // let msg = {};
       // the name "file" is the same used in server with middleware multer
       formData.append("file", this.file);
       try {
-        // I need the projectId to bind the BOM atoms to the project
-        msg = await FileService.sendBom(formData, this.getProject.uuid);
-        this.message = msg.data.message;
+        // TODO substitute sendBom with a corresponding vuex action(but not necessary now) 
+        // msg = await FileService.sendBom(formData, this.getProject.uuid);
+        const msg = await this.sendBom(formData);
+        if(msg){
+        this.message = "bom uploaded!"
         // substitutte "" with [] to eliminate Vue warn
-        this.file = [];
-        this.error = false;
-      } catch (error) {
-        console.log(error);
-        this.message = error.response.data.error;
-        this.error = true;
-      }
-      if (msg.status == 201) {
-      // update project state to 'assembling'
         let project = {
           state: "assembling",
           uuid: this.getProject.uuid,
         };
         this.updateProjectState(project)
+        this.file = [];
+        this.error = false;
+        }
+      } catch (error) {
+        console.log(error);
+        this.message = error.response.data.error;
+        this.error = true;
       }
+      // if (msg.status == 201) {
+      // // update project state to 'assembling'
+      //   let project = {
+      //     state: "assembling",
+      //     uuid: this.getProject.uuid,
+      //   };
+      //   this.updateProjectState(project)
+      // }
     },
   },
 };
