@@ -1,12 +1,10 @@
 <template>
   <form @submit.prevent="submitFile" enctype="multipart/form-data">
-    <!-- TODO fix color message with right classes -->
-    <div v-if="message" :class="`${error ? 'message-error' : 'message-success'}`">
-      <div class="message-body">{{message}}</div>
-    </div>
+      <div v-if="getErrorBom" class="message-error">{{getErrorBom.join(", ")}}</div>
+      <div v-if="message" class="message-error">{{message}}</div>
+      <div v-if="getProject.state === 'assembling'" class="message-success">bom uploaded!</div>
     <div class="field">
       <label for="file" class="label">
-        Upload BOM
         <!-- the v-file-input works with v-model -->
         <v-file-input
           v-model="file"
@@ -22,13 +20,14 @@
         <!-- <input type="file" ref="file" @change="selectFile" /> -->
       </label>
       <v-btn class="cyan" @click="submitFile">Send</v-btn>
+      <v-progress-circular class="ml-10" v-if="loading" :indeterminate="loading" color="light-blue"></v-progress-circular>
     </div>
   </form>
 </template>
 
 <script>
 // import FileService from "@/services/FileService";
-import { mapGetters, mapActions } from "vuex";
+import { mapGetters, mapActions, mapState, mapMutations } from "vuex";
 
 export default {
   name: "ProjectViewUploadFile",
@@ -37,14 +36,25 @@ export default {
       // substitutte "" with [] to eliminate Vue warn
       file: [],
       message: "",
-      error: false,
+      error: "",
     };
   },
   computed: {
-    ...mapGetters(["getProject"]),
+    ...mapGetters(["getProject", "getBom", "getErrorBom", "getLoading"]),
+    ...mapState({
+      loading: (state) => state.projects.loading,
+    }),
+  },
+  mounted(){
+    this.setErrorBom(null)
   },
   methods: {
-    ...mapActions(["updateProjectState", "sendBom"]),
+    ...mapActions([
+      "updateProjectState",
+      "sendBom",
+      "fetchAssemblableProducts",
+    ]),
+    ...mapMutations(["setErrorBom"]),
     // no need of following method with v-file-input
     selectFile() {
       const file = this.$refs.file.files[0];
@@ -63,43 +73,17 @@ export default {
           : "Only csv file allowed";
       }
     },
-    async submitFile() {
+    submitFile() {
+      this.message = ""
       if (this.file.length == 0) {
         this.message = "you need to select a .csv file!";
         return;
       }
       let formData = new FormData();
-      // let msg = {};
       // the name "file" is the same used in server with middleware multer
       formData.append("file", this.file);
-      try {
-        // TODO substitute sendBom with a corresponding vuex action(but not necessary now) 
-        // msg = await FileService.sendBom(formData, this.getProject.uuid);
-        const msg = await this.sendBom(formData);
-        if(msg){
-        this.message = "bom uploaded!"
-        // substitutte "" with [] to eliminate Vue warn
-        let project = {
-          state: "assembling",
-          uuid: this.getProject.uuid,
-        };
-        this.updateProjectState(project)
-        this.file = [];
-        this.error = false;
-        }
-      } catch (error) {
-        console.log(error);
-        this.message = error.response.data.error;
-        this.error = true;
-      }
-      // if (msg.status == 201) {
-      // // update project state to 'assembling'
-      //   let project = {
-      //     state: "assembling",
-      //     uuid: this.getProject.uuid,
-      //   };
-      //   this.updateProjectState(project)
-      // }
+      this.sendBom(formData);
+      this.file = []
     },
   },
 };
