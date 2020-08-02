@@ -7,11 +7,11 @@ const state = () => ({
     project: null,
     bom: [],
     assemblableProducts: [],
-
     root: null,
     assembly: null,
     loading: false,
-    error: null
+    error: null,
+    errorBom: null
 })
 
 //  TODO implement getters properly see vuex getters
@@ -22,7 +22,8 @@ const getters = {
     getAssemblableProducts: state => state.assemblableProducts,
     getAssembly: state => state.assembly,
     getLoading: state => state.loading,
-    getError: state => state.error
+    getError: state => state.error,
+    getErrorBom: state => { return state.errorBom}
 }
 
 const actions = {
@@ -61,19 +62,20 @@ const actions = {
     },
     async sendBom({ state, commit }, formData) {
         try {
+            commit('setErrorBom', null)
             commit('setLoading', true)
-            let bom = []
             const response = await FileService.sendBom(formData, state.project.uuid)
-            if (response) {
-                bom = await ProjectService.getBom(state.project.uuid)
-                commit('setBom', bom)
-                const assemblableProducts = await ProjectService.getAssemblableProducts(state.project.uuid)
-                commit('setAssemblableProducts', assemblableProducts.data)
-                return true
+            // not working properly because of async functions
+            if (response.status == 201) {
+                const newstate = 'assembling'
+                commit('updateState', newstate)
+                const retBom = await ProjectService.getBom(state.project.uuid)
+                commit('setBom', retBom.data)
+                const retAssemblbales = await ProjectService.getAssemblableProducts(state.project.uuid)
+                commit('setAssemblableProducts', retAssemblbales.data)
             }
-            return false
         } catch (error) {
-            commit('setError', error)
+            commit('setErrorBom', error.response.data)
         } finally {
             commit('setLoading', false)
         }
@@ -93,7 +95,7 @@ const actions = {
         try {
             commit('setLoading', true)
             const response = await FileService.uploadImages(formData, state.project.uuid)
-            console.log(response)
+            // not working properly because of async functions
             if (response.status == 201) {
                 const retBom = await ProjectService.getBom(state.project.uuid)
                 commit('setBom', retBom.data)
@@ -171,6 +173,9 @@ const mutations = {
     },
     setError: (state, error) => {
         state.error = error
+    },
+    setErrorBom: (state, error) => {
+        state.errorBom = error
     },
     setLoading: (state, value) => {
         state.loading = value
