@@ -9,7 +9,7 @@
         id="id"
       ></v-text-field>
       <v-text-field
-        label="quantity"
+        label="quantity to assemble"
         :rules="[rules.required]"
         v-model="assembly.quantity_to_assemble"
         id="id"
