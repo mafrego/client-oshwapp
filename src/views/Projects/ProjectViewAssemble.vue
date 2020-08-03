@@ -3,7 +3,7 @@
     <panel title="Assembly metadata">
       <v-text-field 
       label="name" 
-      :rules="[rules.singleName, rules.requiredi]" 
+      :rules="[rules.singleName, rules.required]" 
       v-model="assembly.name" 
       id="id"
       >
@@ -16,7 +16,7 @@
       ></v-text-field>
       <v-text-field
         label="quantity to assemble"
-        :rules="[rules.required]"
+        :rules="[rules.required, rules.natural]"
         v-model="assembly.quantity_to_assemble"
         id="id"
       ></v-text-field>
@@ -82,8 +82,8 @@ export default {
       atoms: [],
       rules: {
         required: (value) => !!value || "Required.",
-        counter: (value) => value.length >= 8 || "Min 8 characters",
-        singleName: (value) => !this.getAllProductNames.includes(value) || "name already taken!"
+        natural : (value) => {const pattern = /^([1-9]\d*)$/; return pattern.test(value) || "entry must be a positive integer"},
+        singleName: (value) => !this.productNames.includes(value) || "name already taken!"
       },
     };
   },
@@ -98,6 +98,7 @@ export default {
     ...mapState({
       assemblables: (state) => state.projects.assemblableProducts,
       loading: (state) => state.projects.loading,
+      productNames: (state) => state.projects.productNames
     }),
   },
   created() {
