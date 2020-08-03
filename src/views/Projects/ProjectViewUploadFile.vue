@@ -6,6 +6,7 @@
     <div class="field">
       <label for="file" class="label">
         <!-- the v-file-input works with v-model -->
+        upload BOM
         <v-file-input
           v-model="file"
           value
