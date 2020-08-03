@@ -27,7 +27,7 @@ const getters = {
     getAssembly: state => state.assembly,
     getLoading: state => state.loading,
     getError: state => state.error,
-    getErrorBom: state => { return state.errorBom}
+    getErrorBom: state => { return state.errorBom }
 }
 
 const actions = {
@@ -69,14 +69,10 @@ const actions = {
             commit('setErrorBom', null)
             commit('setLoading', true)
             const response = await FileService.sendBom(formData, state.project.uuid)
-            // not working properly because of async functions
             if (response.status == 201) {
-                const newstate = 'assembling'
-                commit('updateState', newstate)
-                // const retBom = await ProjectService.getBom(state.project.uuid)
-                // commit('setBom', retBom.data)
-                // const retAssemblbales = await ProjectService.getAssemblableProducts(state.project.uuid)
-                // commit('setAssemblableProducts', retAssemblbales.data)
+                const response = await ProjectService.put({ state: 'assembling' }, state.project.uuid)
+                console.log(response)
+                commit('updateState', response.data.state)
             }
         } catch (error) {
             commit('setErrorBom', error.response.data)
