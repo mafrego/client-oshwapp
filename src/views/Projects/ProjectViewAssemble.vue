@@ -1,7 +1,13 @@
 <template>
   <div>
     <panel title="Assembly metadata">
-      <v-text-field label="name" :rules="[rules.required]" v-model="assembly.name" id="id"></v-text-field>
+      <v-text-field 
+      label="name" 
+      :rules="[rules.singleName, rules.requiredi]" 
+      v-model="assembly.name" 
+      id="id"
+      >
+      </v-text-field>
       <v-text-field
         label="description"
         :rules="[rules.required]"
@@ -55,7 +61,7 @@
 </template>
 
 <script>
-import { mapGetters, mapActions, mapState } from "vuex";
+import { mapGetters, mapActions, mapState, mapMutations } from "vuex";
 
 export default {
   name: "ProjectViewAssemble",
@@ -77,6 +83,7 @@ export default {
       rules: {
         required: (value) => !!value || "Required.",
         counter: (value) => value.length >= 8 || "Min 8 characters",
+        singleName: (value) => !this.getAllProductNames.includes(value) || "name already taken!"
       },
     };
   },
@@ -86,6 +93,7 @@ export default {
       "getAssemblableProducts",
       "getLoading",
       "getError",
+      "getAllProductNames"
     ]),
     ...mapState({
       assemblables: (state) => state.projects.assemblableProducts,
@@ -94,9 +102,11 @@ export default {
   },
   created() {
     this.fetchAssemblableProducts(this.getProject.uuid);
+    this.fetchAllProducts(this.getProject.uuid);
   },
   methods: {
-    ...mapActions(["fetchAssemblableProducts", "assemble"]),
+    ...mapActions(["fetchAssemblableProducts", "assemble", "fetchAllProducts"]),
+    ...mapMutations(['addProductName']),
     async create() {
       this.msg = null;
       const areAllFieldsFilledIn = Object.keys(this.assembly).every(
@@ -106,12 +116,19 @@ export default {
         this.msg = "Please fill in all the required fields.";
         return;
       }
+      if (this.getAllProductNames.includes(this.assembly.name)) {
+        this.msg = "Please change assembly name";
+        return;
+      }
       try {
         // allign parts elements with quantities elements: TODO find a better solution
         this.assembly.quantities = this.assembly.quantities.filter((n) => n);
         this.assembly.quantity = this.assembly.quantity_to_assemble;
         const ret = await this.assemble(this.assembly);
         if (ret) {
+          this.addProductName(this.assembly.name)
+          this.assembly.name = ""
+          this.assembly.description = ""
           this.assembly.parts = [];
           this.assembly.quantities = [];
           this.assembly.quantity_to_assemble = 1;
