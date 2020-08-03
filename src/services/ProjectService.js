@@ -39,5 +39,9 @@ export default {
 
   delete(projectId){
     return Api().delete(`projects/${projectId}`, { headers: authHeader() })
+  },
+
+  deleteBom(projectId){
+    return Api().delete(`projectbom/${projectId}`, { headers: authHeader() })
   }
 }

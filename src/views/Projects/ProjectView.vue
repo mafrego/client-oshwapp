@@ -1,7 +1,12 @@
 <template>
   <panel title="Project">
     <v-toolbar-items slot="action">
-      <v-btn @click="toggleComponentUpload" class="cyan ml-2" title="upload BOM" light>
+      <v-btn
+      @click="toggleComponentUpload" 
+      class="cyan ml-2" 
+      title="upload BOM" 
+      light
+      >
         <v-icon>attach_file</v-icon>
       </v-btn>
       <v-btn
@@ -106,7 +111,7 @@ export default {
   },
   methods: {
     // TODO add actions to populate project in case of user log out
-    ...mapActions(["deleteProject", "fetchBom", "fetchAssemblableProducts"]),
+    ...mapActions(["deleteProject", "fetchBom", "fetchAssemblableProducts", "fetchAllProducts"]),
     ...mapMutations(["setProject"]),
     del() {
       try {
@@ -138,6 +143,7 @@ export default {
     this.setProject(this.$store.state.route.params.projectId);
     this.fetchBom(this.getProject.uuid);
     this.fetchAssemblableProducts(this.getProject.uuid);
+    this.fetchAllProducts(this.getProject.uuid);
   },
 };
 </script>

@@ -71,8 +71,15 @@ const actions = {
             const response = await FileService.sendBom(formData, state.project.uuid)
             if (response.status == 201) {
                 const response = await ProjectService.put({ state: 'assembling' }, state.project.uuid)
-                console.log(response)
                 commit('updateState', response.data.state)
+                // http 304 instead of 200 that's why I don't get data from actual project
+                const ret1 = await ProjectService.getAllProducts(state.project.uuid)
+                commit('setProducts', ret1.data)
+                commit('setProductNames', ret1.data)
+                const ret2 = await ProjectService.getAssemblableProducts(state.project.uuid)
+                commit('setAssemblableProducts', ret2.data)
+                const ret3 = await ProjectService.getBom(state.project.uuid)
+                commit('setBom', ret3.data)
             }
         } catch (error) {
             commit('setErrorBom', error.response.data)
@@ -85,6 +92,21 @@ const actions = {
             commit('setLoading', true)
             const response = await ProjectService.getBom(projectId)
             commit('setBom', response.data)
+        } catch (error) {
+            commit('setError', error)
+        } finally {
+            commit('setLoading', false)
+        }
+    },
+    async deleteBom({ state, commit }) {
+        try {
+            commit('setLoading', true)
+            const response = await ProjectService.deleteBom(state.project.uuid)
+            if (response.status === 200) {
+                commit('deleteBom')
+                const ret = await ProjectService.put({ state: 'created' }, state.project.uuid)
+                commit('updateState', ret.data.state)
+            }
         } catch (error) {
             commit('setError', error)
         } finally {
@@ -112,7 +134,7 @@ const actions = {
                 const retBom = await ProjectService.getBom(state.project.uuid)
                 commit('setBom', retBom.data)
                 const retProducts = await ProjectService.getAllProducts(state.project.uuid)
-                commit('setAllProducts', retProducts.data)
+                commit('setProducts', retProducts.data)
                 const retAssemblbales = await ProjectService.getAssemblableProducts(state.project.uuid)
                 commit('setAssemblableProducts', retAssemblbales.data)
             }
@@ -148,9 +170,13 @@ const actions = {
     async assemble({ state, commit }, assembly) {
         try {
             commit('setLoading', true)
-            const projectId = state.project.uuid
-            const response = await AssemblyService.assemble(assembly, projectId)
+            const response = await AssemblyService.assemble(assembly, state.project.uuid)
             commit('setAssemblableProducts', response.data)
+            if (response.status === 201) {
+                const response = await ProjectService.getAllProducts(state.project.uuid)
+                commit('setProducts', response.data)
+                commit('setProductNames', response.data)
+            }
             return true
         } catch (error) {
             commit('setError', error)
@@ -176,6 +202,12 @@ const mutations = {
     setBom: (state, bom) => {
         state.bom = bom
     },
+    deleteBom: (state) => {
+        state.bom = []
+        state.products = []
+        state.productNames = []
+        state.assemblableProducts = []
+    },
     setProducts: (state, products) => {
         state.products = products
     },
@@ -191,6 +223,7 @@ const mutations = {
     delProject: (state, projectID) => {
         state.bom = []
         state.products = []
+        state.productNames = []
         state.project = null
         state.assemblableProducts = []
         state.projects = state.projects.filter(el => { return el.uuid != projectID })

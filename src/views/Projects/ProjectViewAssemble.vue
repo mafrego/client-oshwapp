@@ -1,6 +1,6 @@
 <template>
   <div>
-    <panel title="Assembly metadata">
+    <panel v-if="getAssemblableProducts.length != 0" title="Assembly metadata">
       <v-text-field 
       label="name" 
       :rules="[rules.singleName, rules.required]" 

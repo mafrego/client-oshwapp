@@ -1,9 +1,9 @@
 <template>
   <form @submit.prevent="submitFile" enctype="multipart/form-data">
-      <div v-if="getErrorBom" class="message-error">{{getErrorBom.join(", ")}}</div>
-      <div v-if="message" class="message-error">{{message}}</div>
-      <div v-if="getProject.state === 'assembling'" class="message-success">bom uploaded!</div>
-    <div class="field">
+    <div v-if="getErrorBom" class="message-error">{{getErrorBom.join(", ")}}</div>
+    <div v-if="message" class="message-error">{{message}}</div>
+    <div v-if="getProject.state === 'assembling'" class="message-success">bom uploaded!</div>
+    <div v-if="getProject.state != 'assembling'" class="field">
       <label for="file" class="label">
         <!-- the v-file-input works with v-model -->
         upload BOM
@@ -46,8 +46,8 @@ export default {
       loading: (state) => state.projects.loading,
     }),
   },
-  mounted(){
-    this.setErrorBom(null)
+  mounted() {
+    this.setErrorBom(null);
   },
   methods: {
     ...mapActions([
@@ -75,7 +75,7 @@ export default {
       }
     },
     submitFile() {
-      this.message = ""
+      this.message = "";
       if (this.file.length == 0) {
         this.message = "you need to select a .csv file!";
         return;
@@ -84,7 +84,7 @@ export default {
       // the name "file" is the same used in server with middleware multer
       formData.append("file", this.file);
       this.sendBom(formData);
-      this.file = []
+      this.file = [];
     },
   },
 };
