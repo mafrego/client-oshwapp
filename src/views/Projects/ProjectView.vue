@@ -1,38 +1,42 @@
 <template>
   <panel title="Project">
     <v-toolbar-items slot="action">
-      <v-btn 
-      @click="toggleComponentUpload" 
-      class="cyan ml-2" 
-      title="toggle Upload BOM" 
-      light
-      >
+      <v-btn @click="toggleComponentUpload" class="cyan ml-2" title="upload BOM" light>
         <v-icon>attach_file</v-icon>
       </v-btn>
       <v-btn
-      v-if="getBom.length != 0"
+        v-if="getProject.state === 'assembling'"
         @click="toggleComponentUploadImages"
         class="cyan ml-2"
-        title="toggle upload images"
+        title="upload images"
         light
       >
         <v-icon>add_a_photo</v-icon>
       </v-btn>
-      <v-btn 
-      v-if="getBom.length != 0" 
-      @click="toggleComponentBOM" 
-      class="cyan ml-2" 
-      title="toggle show BOM" 
-      light
+      <v-btn
+        v-if="getProject.state === 'assembling'"
+        @click="toggleComponentBOM"
+        class="cyan ml-2"
+        title="BOM"
+        light
       >
         <v-icon>list</v-icon>
       </v-btn>
-      <v-btn 
-      v-if="getAssemblableProducts.length != 0" 
-      @click="toggleAssemble" 
-      class="cyan ml-2" 
-      title="assemble object" 
-      light
+      <v-btn
+        v-if="getProject.state === 'assembling'"
+        @click="toggleComponentAllProducts"
+        class="cyan ml-2"
+        title="all products"
+        light
+      >
+        <v-icon>account_tree</v-icon>
+      </v-btn>
+      <v-btn
+        v-if="getProject.state === 'assembling'"
+        @click="toggleAssemble"
+        class="cyan ml-2"
+        title="assemble"
+        light
       >
         <v-icon>build</v-icon>
       </v-btn>
@@ -53,7 +57,6 @@
         <div class="project-description">{{getProject.description}}</div>
         <div class="project-material">{{getProject.material}}</div>
         <div class="project-state">{{getProject.state}}</div>
-        <!-- <div class="project-datetime">{{project.dateTime.day.low}}/{{project.dateTime.month.low}}/{{project.dateTime.year.low}}</div> -->
         <div class="project-datetime">{{getProject.dateTime}}</div>
       </v-col>
       <v-col md6>
@@ -67,6 +70,8 @@
     <br />
     <project-view-bom v-if="showComponentBOM" />
     <br />
+    <project-view-all-products v-if="showComponentAllProducts" />
+    <br />
     <project-view-assemble v-if="showComponentAssemble" />
   </panel>
 </template>
@@ -75,6 +80,7 @@
 import ProjectViewUploadFile from "./ProjectViewUploadFile";
 import ProjectViewUploadImages from "./ProjectViewUploadImages";
 import ProjectViewBom from "./ProjectViewBom";
+import ProjectViewAllProducts from "./ProjectViewAllProducts";
 import ProjectViewAssemble from "./ProjectViewAssemble";
 import { mapGetters, mapMutations, mapActions } from "vuex";
 
@@ -83,6 +89,7 @@ export default {
     ProjectViewUploadFile,
     ProjectViewUploadImages,
     ProjectViewBom,
+    ProjectViewAllProducts,
     ProjectViewAssemble,
   },
   data() {
@@ -90,6 +97,7 @@ export default {
       showComponentUpload: false,
       showComponentUploadImages: false,
       showComponentBOM: false,
+      showComponentAllProducts: false,
       showComponentAssemble: false,
     };
   },
@@ -119,14 +127,17 @@ export default {
     toggleComponentBOM() {
       this.showComponentBOM = !this.showComponentBOM;
     },
+    toggleComponentAllProducts() {
+      this.showComponentAllProducts = !this.showComponentAllProducts;
+    },
     toggleAssemble() {
       this.showComponentAssemble = !this.showComponentAssemble;
     },
   },
   created() {
     this.setProject(this.$store.state.route.params.projectId);
-    this.fetchBom(this.getProject.uuid)
-    this.fetchAssemblableProducts(this.getProject.uuid)
+    this.fetchBom(this.getProject.uuid);
+    this.fetchAssemblableProducts(this.getProject.uuid);
   },
 };
 </script>
