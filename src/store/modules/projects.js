@@ -6,6 +6,8 @@ const state = () => ({
     projects: null,
     project: null,
     bom: [],
+    products: [],
+    productNames: [],
     assemblableProducts: [],
     root: null,
     assembly: null,
@@ -19,6 +21,8 @@ const getters = {
     getProjects: state => state.projects,
     getProject: state => state.project,
     getBom: state => state.bom,
+    getAllProducts: state => state.products,
+    getAllProductNames: state => state.productNames,
     getAssemblableProducts: state => state.assemblableProducts,
     getAssembly: state => state.assembly,
     getLoading: state => state.loading,
@@ -69,10 +73,10 @@ const actions = {
             if (response.status == 201) {
                 const newstate = 'assembling'
                 commit('updateState', newstate)
-                const retBom = await ProjectService.getBom(state.project.uuid)
-                commit('setBom', retBom.data)
-                const retAssemblbales = await ProjectService.getAssemblableProducts(state.project.uuid)
-                commit('setAssemblableProducts', retAssemblbales.data)
+                // const retBom = await ProjectService.getBom(state.project.uuid)
+                // commit('setBom', retBom.data)
+                // const retAssemblbales = await ProjectService.getAssemblableProducts(state.project.uuid)
+                // commit('setAssemblableProducts', retAssemblbales.data)
             }
         } catch (error) {
             commit('setErrorBom', error.response.data)
@@ -91,6 +95,18 @@ const actions = {
             commit('setLoading', false)
         }
     },
+    async fetchAllProducts({ commit }, projectId) {
+        try {
+            commit('setLoading', true)
+            const response = await ProjectService.getAllProducts(projectId)
+            commit('setProducts', response.data)
+            commit('setProductNames', response.data)
+        } catch (error) {
+            commit('setError', error)
+        } finally {
+            commit('setLoading', false)
+        }
+    },
     async uploadImages({ state, commit }, formData) {
         try {
             commit('setLoading', true)
@@ -99,6 +115,8 @@ const actions = {
             if (response.status == 201) {
                 const retBom = await ProjectService.getBom(state.project.uuid)
                 commit('setBom', retBom.data)
+                const retProducts = await ProjectService.getAllProducts(state.project.uuid)
+                commit('setAllProducts', retProducts.data)
                 const retAssemblbales = await ProjectService.getAssemblableProducts(state.project.uuid)
                 commit('setAssemblableProducts', retAssemblbales.data)
             }
@@ -162,11 +180,21 @@ const mutations = {
     setBom: (state, bom) => {
         state.bom = bom
     },
+    setProducts: (state, products) => {
+        state.products = products
+    },
+    setProductNames: (state, products) => {
+        state.productNames = products.map(node => node.name)
+    },
+    addProductName: (state, name) => {
+        return state.productNames.push(name)
+    },
     setAssemblableProducts: (state, products) => {
         state.assemblableProducts = products
     },
     delProject: (state, projectID) => {
         state.bom = []
+        state.products = []
         state.project = null
         state.assemblableProducts = []
         state.projects = state.projects.filter(el => { return el.uuid != projectID })

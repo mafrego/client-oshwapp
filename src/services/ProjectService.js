@@ -11,16 +11,12 @@ export default {
     })  
   },
 
-  // getBom (projectID) {
-  //   return Api().get('projectBOM', {
-  //     params: {
-  //       projectID: projectID
-  //     }
-  //   })  
-  // },
-
   getBom (projectID) {
     return Api().get(`projectBOM/${projectID}`)  
+  },
+
+  getAllProducts(projectId){
+    return Api().get(`productsbyproject/${projectId}`)
   },
 
   getAssemblableProducts(projectId){
