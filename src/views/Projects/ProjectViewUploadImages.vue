@@ -33,6 +33,7 @@
           </div>
         </label>
         <v-btn class="cyan" @click="submitMultipleFiles">Send</v-btn>
+      <v-progress-circular class="ml-10" v-if="loading" :indeterminate="loading" color="light-blue"></v-progress-circular>
       </div>
     </form>
     <div v-if="message" :class="`message ${error ? 'invalid' : 'message-success'}`">
@@ -45,7 +46,7 @@
 <script>
 // import FileService from "@/services/FileService";
 // import ProjectService from "@/services/ProjectService";
-import {mapGetters, mapActions} from 'vuex'
+import {mapGetters, mapActions, mapState} from 'vuex'
 
 export default {
   name: "ProjectViewUploadImages",
@@ -59,7 +60,10 @@ export default {
     };
   },
   computed: {
-    ...mapGetters(['getProject'])
+    ...mapGetters(['getProject']),
+    ...mapState({
+      loading: (state) => state.projects.loading,
+    }),
   },
   methods: {
     ...mapActions(['fetchAssemblableProducts', 'uploadImages']),
