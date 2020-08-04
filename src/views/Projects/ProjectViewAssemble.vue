@@ -1,24 +1,24 @@
 <template>
   <div>
-    <panel v-if="getAssemblableProducts.length != 0" title="Assembly metadata">
-      <v-text-field 
-      label="name" 
-      :rules="[rules.singleName, rules.required]" 
-      v-model="assembly.name" 
-      id="id"
-      >
-      </v-text-field>
+    <panel v-if="getAssemblableProducts.length != 0" title="Assembly">
+      <v-text-field
+        label="name"
+        :rules="[rules.singleName, rules.required]"
+        v-model="assembly.name"
+        
+      ></v-text-field>
       <v-text-field
         label="description"
         :rules="[rules.required]"
         v-model="assembly.description"
-        id="id"
+        
       ></v-text-field>
       <v-text-field
         label="quantity to assemble"
         :rules="[rules.required, rules.natural]"
         v-model="assembly.quantity_to_assemble"
-        id="id"
+        @input="resetQuantities"
+        
       ></v-text-field>
       <div class="danger-alert" v-if="msg">{{msg}}</div>
       <v-btn class="cyan" @click="create">Create assembly</v-btn>
@@ -34,20 +34,28 @@
           <v-flex xs3>
             <div class="atom-name">{{value.name}} - pieces left: {{value.quantity_to_assemble}}</div>
             <input
-              v-on:click="toggleQuantity(key)"
+              @click="toggleQuantity(key)"
               type="checkbox"
-              :id="key"
               :value="value.uuid"
               v-model="assembly.parts"
             />
             <br />
-            <input
+            <!-- <input
               v-if="assembly.parts.includes(value.uuid)"
               type="number"
               :id="key"
               min="1"
               max="100"
               step="1"
+              v-model="assembly.quantities[key]"
+            /> -->
+            <v-text-field
+              v-if="assembly.parts.includes(value.uuid)"
+              :rules="[maxQuantity(value.quantity_to_assemble)]"
+              type="number"
+              min=1
+              max=100
+              step=1
               v-model="assembly.quantities[key]"
             />
           </v-flex>
@@ -82,8 +90,12 @@ export default {
       atoms: [],
       rules: {
         required: (value) => !!value || "Required.",
-        natural : (value) => {const pattern = /^([1-9]\d*)$/; return pattern.test(value) || "entry must be a positive integer"},
-        singleName: (value) => !this.productNames.includes(value) || "name already taken!"
+        natural: (value) => {
+          const pattern = /^([1-9]\d*)$/;
+          return pattern.test(value) || "entry must be a positive integer";
+        },
+        singleName: (value) =>
+          !this.productNames.includes(value) || "name already taken!",
       },
     };
   },
@@ -93,12 +105,12 @@ export default {
       "getAssemblableProducts",
       "getLoading",
       "getError",
-      "getAllProductNames"
+      "getAllProductNames",
     ]),
     ...mapState({
       assemblables: (state) => state.projects.assemblableProducts,
       loading: (state) => state.projects.loading,
-      productNames: (state) => state.projects.productNames
+      productNames: (state) => state.projects.productNames,
     }),
   },
   created() {
@@ -107,7 +119,16 @@ export default {
   },
   methods: {
     ...mapActions(["fetchAssemblableProducts", "assemble", "fetchAllProducts"]),
-    ...mapMutations(['addProductName']),
+    ...mapMutations(["addProductName"]),
+    maxQuantity(maxQty) {
+      return (value) =>
+        value * this.assembly.quantity_to_assemble <= maxQty ||
+        "max quantity exceeded";
+    },
+    resetQuantities() {
+      this.assembly.parts = []
+      this.assembly.quantities = []
+    },
     async create() {
       this.msg = null;
       const areAllFieldsFilledIn = Object.keys(this.assembly).every(
@@ -126,10 +147,11 @@ export default {
         this.assembly.quantities = this.assembly.quantities.filter((n) => n);
         this.assembly.quantity = this.assembly.quantity_to_assemble;
         const ret = await this.assemble(this.assembly);
-        if (ret) {
-          this.addProductName(this.assembly.name)
-          this.assembly.name = ""
-          this.assembly.description = ""
+        // console.log(ret)
+        if (ret == 201) {
+          this.addProductName(this.assembly.name);
+          this.assembly.name = "";
+          this.assembly.description = "";
           this.assembly.parts = [];
           this.assembly.quantities = [];
           this.assembly.quantity_to_assemble = 1;
@@ -140,8 +162,11 @@ export default {
       }
     },
     toggleQuantity: function (key) {
-      if (this.assembly.quantities[key]) this.assembly.quantities[key] = null;
-      else this.assembly.quantities[key] = 1;
+      if (this.assembly.quantities[key]) {
+        this.assembly.quantities[key] = null;
+      } else {
+        this.assembly.quantities[key] = 1;
+      }
     },
   },
 };
