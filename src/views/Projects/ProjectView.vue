@@ -38,12 +38,21 @@
       </v-btn>
       <v-btn
         v-if="getProject.state === 'assembling'"
-        @click="toggleAssemble"
+        @click="toggleComponentAssemble"
         class="cyan ml-2"
         title="assemble"
         light
       >
-        <v-icon>build</v-icon>
+        <v-icon>construction</v-icon>
+      </v-btn>
+      <v-btn
+        v-if="getProject.state === 'assembling'"
+        @click="toggleComponentAssembleCopy"
+        class="cyan ml-2"
+        title="assemble copy"
+        light
+      >
+        <v-icon>handyman</v-icon>
       </v-btn>
       <v-btn
         v-if="$store.state.isUserLoggedIn"
@@ -78,6 +87,8 @@
     <project-view-all-products v-if="showComponentAllProducts" />
     <br />
     <project-view-assemble v-if="showComponentAssemble" />
+    <br />
+    <project-view-assemble-copy v-if="showComponentAssembleCopy" />
   </panel>
 </template>
 
@@ -87,6 +98,7 @@ import ProjectViewUploadImages from "./ProjectViewUploadImages";
 import ProjectViewBom from "./ProjectViewBom";
 import ProjectViewAllProducts from "./ProjectViewAllProducts";
 import ProjectViewAssemble from "./ProjectViewAssemble";
+import ProjectViewAssembleCopy from "./ProjectViewAssembleCopy";
 import { mapGetters, mapMutations, mapActions } from "vuex";
 
 export default {
@@ -96,6 +108,7 @@ export default {
     ProjectViewBom,
     ProjectViewAllProducts,
     ProjectViewAssemble,
+    ProjectViewAssembleCopy,
   },
   data() {
     return {
@@ -104,6 +117,7 @@ export default {
       showComponentBOM: false,
       showComponentAllProducts: false,
       showComponentAssemble: false,
+      showComponentAssembleCopy: false,
     };
   },
   computed: {
@@ -135,8 +149,11 @@ export default {
     toggleComponentAllProducts() {
       this.showComponentAllProducts = !this.showComponentAllProducts;
     },
-    toggleAssemble() {
+    toggleComponentAssemble() {
       this.showComponentAssemble = !this.showComponentAssemble;
+    },
+    toggleComponentAssembleCopy() {
+      this.showComponentAssembleCopy = !this.showComponentAssembleCopy;
     },
   },
   created() {
