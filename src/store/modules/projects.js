@@ -173,11 +173,12 @@ const actions = {
             const response = await AssemblyService.assemble(assembly, state.project.uuid)
             commit('setAssemblableProducts', response.data)
             if (response.status === 201) {
-                const response = await ProjectService.getAllProducts(state.project.uuid)
-                commit('setProducts', response.data)
-                commit('setProductNames', response.data)
+                const ret = await ProjectService.getAllProducts(state.project.uuid)
+                commit('setProducts', ret.data)
+                commit('setProductNames', ret.data)
+                return response.status
             }
-            return true
+            // return true
         } catch (error) {
             commit('setError', error)
         } finally {
