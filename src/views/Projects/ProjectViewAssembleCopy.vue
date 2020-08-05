@@ -13,10 +13,12 @@
         type="number"
         min="1"
         v-model="assembly.quantity_to_assemble"
-        @click="recomputeQuantities"
+        @input="recomputeQuantities"
+        
       />
       <div class="danger-alert" v-if="msg">{{msg}}</div>
-      <v-btn class="cyan" @click="create">Create assembly</v-btn>
+      <div class="danger-alert" v-if="overlimits.length != 0">{{overlimits.join(", ")}}</div>
+      <v-btn class="cyan" @click="startAssembling">assemble</v-btn>
       <v-progress-circular class="ml-10" v-if="loading" :indeterminate="loading" color="light-blue"></v-progress-circular>
       <br />
       <span>assembly.parts: {{ assembly.parts }}</span>
@@ -43,7 +45,8 @@
               max="100"
               step="1"
               v-model="quantities[index]"
-              @input="setValue(item.uuid, index)"
+              @input="setValue(item, index)"
+              
             />
           </v-flex>
           <v-flex xs2>
@@ -66,16 +69,13 @@ export default {
         name: null,
         description: null,
         parts: [],
-        // quantities: [],
         quantity_to_assemble: 1,
-        // quantity: 1,
         version: "0.0.1",
         type: "child",
       },
-      qty: null,
       quantities: [],
       msg: null,
-      atoms: [],
+      overlimits: [],
       rules: {
         required: (value) => !!value || "Required.",
         natural: (value) => {
@@ -95,6 +95,7 @@ export default {
       "getError",
       "getAllProductNames",
     ]),
+    // TODO find substitute with getters and remove states
     ...mapState({
       assemblables: (state) => state.projects.assemblableProducts,
       loading: (state) => state.projects.loading,
@@ -106,75 +107,76 @@ export default {
     this.fetchAllProducts(this.getProject.uuid);
   },
   methods: {
-    ...mapActions(["fetchAssemblableProducts", "assemble", "fetchAllProducts"]),
+    ...mapActions(["fetchAssemblableProducts", "assembleCopy", "fetchAllProducts"]),
     ...mapMutations(["addProductName"]),
-    // ATTENTION check this function
+    
     maxQuantity(maxQty) {
       return (value) =>
         value * this.assembly.quantity_to_assemble <= maxQty ||
-        "max quantity exceeded";
+        "not enough pieces!";
     },
     // TODO refactor this function to make it work with the new arrays
-    async create() {
+    async startAssembling() {
       this.msg = null;
       const areAllFieldsFilledIn = Object.keys(this.assembly).every(
         (key) => !!this.assembly[key]
       );
       if (!areAllFieldsFilledIn) {
-        this.msg = "Please fill in all the required fields.";
+        this.msg = "Please fill in all the required fields";
         return;
       }
       if (this.getAllProductNames.includes(this.assembly.name)) {
         this.msg = "Please change assembly name";
         return;
       }
+      if (this.overlimits.length != 0 ) {
+        this.msg = "Please check if there are enough pieces"
+        return;
+      }
+      if (this.assembly.parts.length == 0){
+        this.msg = "Please select parts to assemble!"
+        return
+      }
       try {
-        // allign parts elements with quantities elements: TODO find a better solution
-        // this.assembly.quantities = this.assembly.quantities.filter((n) => n);
-        this.assembly.quantity = this.assembly.quantity_to_assemble;
-        const ret = await this.assemble(this.assembly);
-        // console.log(ret)
+        this.assembly.parts = this.assembly.parts.filter(el => {return el != null})
+        const ret = await this.assembleCopy(this.assembly);
         if (ret == 201) {
+          // check if following line is necessary
           this.addProductName(this.assembly.name);
           this.assembly.name = "";
           this.assembly.description = "";
           this.assembly.parts = [];
-          // this.assembly.quantities = [];
           this.assembly.quantity_to_assemble = 1;
-          this.assembly.quantity = 1;
+          this.quantities = [];
         }
       } catch (error) {
         console.log(error);
       }
     },
-    //ATTENTION it breaks the logic, find another solution to remove element from array of parts
-    // maybe remove this function
-    toggleQuantity: function (key) {
-      if (this.quantities[key]) {
-        this.quantities[key] = null;
-      } else {
-        this.quantities[key] = 1;
-      }
-    },
-    setValue(uuid, index) {
-      // TODO if this.quantities[index] == 0 or null remove item from parts and return
+    setValue(item, index) {
+      // remove object from parts if its quantity == 0
       if(this.quantities[index] == 0){
-        const ret = this.assembly.parts.splice(index, 1)
-        console.log("element removed: ")
-        console.log(ret[0])
+        this.assembly.parts.splice(index, 1)
         return
       }
       this.assembly.parts[index] = {
-        uuid: uuid,
+        uuid: item.uuid,
+        name: item.name,
+        quantity_to_assemble: item.quantity_to_assemble,
         quantity_single: this.quantities[index],
         quantity_total: this.quantities[index] * this.assembly.quantity_to_assemble,
       };
     },
     recomputeQuantities() {
+      this.overlimits = []
       if (this.assembly.quantity_to_assemble == 0) return;
       else {
         this.assembly.parts = this.assembly.parts.map((el) => {
           if (el != null) {
+            const total = el.quantity_single * this.assembly.quantity_to_assemble
+            if(total > el.quantity_to_assemble){
+              this.overlimits.push(`${el.name} has not enough pieces left`)
+            }
             el.quantity_total = el.quantity_single * this.assembly.quantity_to_assemble;
           }
           return el;
