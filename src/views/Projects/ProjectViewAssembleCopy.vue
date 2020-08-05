@@ -1,5 +1,6 @@
 <template>
   <div>
+      
     <panel v-if="getAssemblableProducts.length != 0" title="Assembly Copy">
       <v-text-field
         label="name"
@@ -70,6 +71,7 @@ export default {
         description: null,
         parts: [],
         quantity_to_assemble: 1,
+        quantity: 1,
         version: "0.0.1",
         type: "child",
       },
@@ -139,6 +141,7 @@ export default {
       }
       try {
         this.assembly.parts = this.assembly.parts.filter(el => {return el != null})
+        this.assembly.quantity = this.assembly.quantity_to_assemble;
         const ret = await this.assembleCopy(this.assembly);
         if (ret == 201) {
           // check if following line is necessary
@@ -148,13 +151,15 @@ export default {
           this.assembly.parts = [];
           this.assembly.quantity_to_assemble = 1;
           this.quantities = [];
+
         }
       } catch (error) {
         console.log(error);
       }
     },
+    // there's something wrong with this function
     setValue(item, index) {
-      // remove object from parts if its quantity == 0
+      // BUG BUG BUG quantities and parts don't match: use only parts
       if(this.quantities[index] == 0){
         this.assembly.parts.splice(index, 1)
         return
