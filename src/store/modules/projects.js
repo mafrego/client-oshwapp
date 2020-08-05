@@ -178,7 +178,24 @@ const actions = {
                 commit('setProductNames', ret.data)
                 return response.status
             }
-            // return true
+        } catch (error) {
+            commit('setError', error)
+        } finally {
+            commit('setLoading', false)
+        }
+    },
+    // TODO modify accordingly
+    async assembleCopy({ state, commit }, assembly) {
+        try {
+            commit('setLoading', true)
+            const response = await AssemblyService.assembleCopy(assembly, state.project.uuid)
+            commit('setAssemblableProducts', response.data)
+            if (response.status === 201) {
+                const ret = await ProjectService.getAllProducts(state.project.uuid)
+                commit('setProducts', ret.data)
+                commit('setProductNames', ret.data)
+                return response.status
+            }
         } catch (error) {
             commit('setError', error)
         } finally {

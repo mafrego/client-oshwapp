@@ -25,6 +25,11 @@ export default {
       .post(`assembly/${projectID}`, assembly, { headers: authHeader() })
   },
   
+  assembleCopy(assembly, projectID) {
+    return Api()
+      .post(`assemblycopy/${projectID}`, assembly, { headers: authHeader() })
+  },
+  
   delete(assemblyId){
     return Api().delete(`assemblies/${assemblyId}`, { headers: authHeader() })
   }
