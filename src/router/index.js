@@ -10,14 +10,11 @@ import ViewAtom from '@/views/Atoms/AtomView'
 import ViewProduct from '@/views/Products/ProductView'
 //I DONNO but you need to add ".vue" otherwise vue looks for ".js"
 import ProductTreeView from '@/views/Products/ProductTreeView.vue'
-// import ProductTreeTest from '@/views/Products/ProductTreeTest.vue'
 import CreateAtom from '@/views/Atoms/AtomCreate'
 import CreateCompound from '@/views/Compounds/CompoundCreate'
 //I DONNO but you need to add ".vue" otherwise vue looks for ".js"
 import CreateAssembly from '@/views/Assemblies/AssemblyCreate.vue'
-import CreateProject from '@/views/Projects/ProjectCreate.vue'
 import ViewProject from '@/views/Projects/ProjectView'
-// import ProjectView from '@/views/Projects/ProjectView.vue'
 import Experiments from '@/views/Experiments/Experiments.vue'
 import Todos from '@/views/Todos/Todos.vue'
 
@@ -88,11 +85,6 @@ const routes = [
     path: '/projects/:projectId',
     name: 'project',
     component: ViewProject
-  },
-  {
-    path: '/projects/create',
-    name: 'projects-create',
-    component: CreateProject
   },
   {
     path: '/experiments',
