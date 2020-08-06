@@ -2,6 +2,8 @@
   <div>
       
     <panel v-if="getAssemblableProducts.length != 0" title="Assembly Copy">
+      <v-form ref="form" > 
+        
       <v-text-field
         label="name"
         :rules="[rules.singleName, rules.required]"
@@ -30,15 +32,6 @@
         <v-layout>
           <v-flex xs3>
             <div class="atom-name">{{item.name}} - pieces left: {{item.quantity_to_assemble}}</div>
-            <!-- probably I don't need the checkbox -->
-            <!-- <input
-              type="checkbox"
-              :value="{ uuid: item.uuid, quantity: quantities[index]}"
-              v-model="assembly.parts"
-            />
-            <br /> -->
-
-            <!-- maybe add item.name as parameter of setValue for debugging -->
             <v-text-field
               :rules="[maxQuantity(item.quantity_to_assemble)]"
               type="number"
@@ -47,7 +40,6 @@
               step="1"
               v-model="quantities[index]"
               @input="setValue(item, index)"
-              
             />
           </v-flex>
           <v-flex xs2>
@@ -55,6 +47,7 @@
           </v-flex>
         </v-layout>
       </div>
+      </v-form>
     </panel>
   </div>
 </template>
@@ -77,7 +70,7 @@ export default {
       },
       quantities: [],
       msg: null,
-      overlimits: [],
+      overlimits: [],     //used for storing errror messages
       rules: {
         required: (value) => !!value || "Required.",
         natural: (value) => {
@@ -146,22 +139,22 @@ export default {
         if (ret == 201) {
           // check if following line is necessary
           this.addProductName(this.assembly.name);
-          this.assembly.name = "";
-          this.assembly.description = "";
+          this.assembly.name = null
+          this.assembly.description = null
           this.assembly.parts = [];
           this.assembly.quantity_to_assemble = 1;
           this.quantities = [];
 
+          this.$refs.form.resetValidation()
         }
       } catch (error) {
         console.log(error);
       }
     },
-    // there's something wrong with this function
+    // re-write this function
     setValue(item, index) {
-      // BUG BUG BUG quantities and parts don't match: use only parts
       if(this.quantities[index] == 0){
-        this.assembly.parts.splice(index, 1)
+        this.assembly.parts[index] = null
         return
       }
       this.assembly.parts[index] = {
