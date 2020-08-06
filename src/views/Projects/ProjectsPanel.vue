@@ -3,16 +3,19 @@
     <v-layout column>
       <v-flex xs6>
         <panel title="Projects">
-          <v-btn
-            v-if="isUserLoggedIn"
-            class="cyan ml-2"
-            :to="{name: 'projects-create'}"
-            slot="action"
-            title="create project"
-            light
-          >
-            <v-icon>add_circle</v-icon>
-          </v-btn>
+          <v-toolbar-items slot="action">
+            <v-btn
+              @click="toggleComponentCreateProject"
+              class="cyan ml-2"
+              title="create project"
+              light
+            >
+              <v-icon>add_circle</v-icon>
+            </v-btn>
+          </v-toolbar-items>
+
+          <projects-panel-create v-if="showComponentCreateProject" />
+          <br />
           <div v-for="project in getProjects" :key="project.uuid">
             <v-layout>
               <v-flex xs6>
@@ -23,11 +26,11 @@
                 <v-btn
                   class="cyan"
                   :to="{
-              name: 'project',
-              params: {
-                projectId: project.uuid
-              } 
-              }"
+                    name: 'project',
+                    params: {
+                      projectId: project.uuid
+                    } 
+                  }"
                 >manage</v-btn>
               </v-flex>
 
@@ -43,35 +46,36 @@
 </template>
 
 <script>
-// import ProjectService from "@/services/ProjectService";
-import {mapState, mapActions, mapGetters} from 'vuex'
+import ProjectsPanelCreate from "./ProjectsPanelCreate";
+import { mapState, mapActions, mapGetters } from "vuex";
 
 export default {
   name: "ProjectsPanel",
-  // data() {
-  //   return {
-  //     projects: []
-  //   };
-  // },
+  components: {
+    ProjectsPanelCreate,
+  },
+  data() {
+    return {
+      showComponentCreateProject: false,
+    };
+  },
   computed: {
+    // TODO substitute state with getters
     ...mapState(["user", "isUserLoggedIn"]),
-    ...mapGetters(['getProjects'])
+    ...mapGetters(["getProjects"]),
   },
   methods: {
-    ...mapActions(['fetchProjects'])
+    ...mapActions(["fetchProjects"]),
+    toggleComponentCreateProject() {
+      this.showComponentCreateProject = !this.showComponentCreateProject;
+    },
   },
-  created(){
+  created() {
     if (!this.user) {
       this.$router.push("/login");
     }
-    this.fetchProjects(this.user.uuid)
+    this.fetchProjects(this.user.uuid);
   },
-  // async mounted() {
-  //   if (!this.user) {
-  //     this.$router.push("/login");
-  //   }
-  //   this.projects = (await ProjectService.index(this.user.uuid)).data;
-  // },
 };
 </script>
 
