@@ -16,9 +16,10 @@ const state = () => ({
     errorBom: null
 })
 
-//  TODO implement getters properly see vuex getters
 const getters = {
     getProjects: state => state.projects,
+    getProjectNames: state => state.projects.map(node => node.name),
+
     getProject: state => state.project,
     getBom: state => state.bom,
     getAllProducts: state => state.products,
@@ -36,6 +37,22 @@ const actions = {
             commit('setLoading', true)
             const response = await ProjectService.index(userID)
             commit('setProjects', response.data)
+        } catch (error) {
+            commit('setError', error)
+        } finally {
+            commit('setLoading', false)
+        }
+    },
+    async createProject({ commit }, project) {
+        try {
+            commit('setLoading', true)
+            const response = await ProjectService.post(project)
+            // console.log(response)
+            if(response.status == 201){
+            const ret = await ProjectService.index(project.userID)
+            commit('setProjects', ret.data)
+            return response.status
+            }
         } catch (error) {
             commit('setError', error)
         } finally {
@@ -167,24 +184,6 @@ const actions = {
             commit('setLoading', false)
         }
     },
-    async assemble({ state, commit }, assembly) {
-        try {
-            commit('setLoading', true)
-            const response = await AssemblyService.assemble(assembly, state.project.uuid)
-            commit('setAssemblableProducts', response.data)
-            if (response.status === 201) {
-                const ret = await ProjectService.getAllProducts(state.project.uuid)
-                commit('setProducts', ret.data)
-                commit('setProductNames', ret.data)
-                return response.status
-            }
-        } catch (error) {
-            commit('setError', error)
-        } finally {
-            commit('setLoading', false)
-        }
-    },
-    // TODO modify accordingly
     async assembleCopy({ state, commit }, assembly) {
         try {
             commit('setLoading', true)
@@ -210,6 +209,17 @@ const mutations = {
     },
     setProject: (state, projectID) => {
         state.project = state.projects.find(el => el.uuid === projectID)
+    },
+    addProject: (state, project) => {
+        state.projects.push(project)
+    },
+    delProject: (state, projectID) => {
+        state.bom = []
+        state.products = []
+        state.productNames = []
+        state.project = null
+        state.assemblableProducts = []
+        state.projects = state.projects.filter(el => { return el.uuid != projectID })
     },
     uploadBom: (state, project) => {
         state.project = project
@@ -237,14 +247,6 @@ const mutations = {
     },
     setAssemblableProducts: (state, products) => {
         state.assemblableProducts = products
-    },
-    delProject: (state, projectID) => {
-        state.bom = []
-        state.products = []
-        state.productNames = []
-        state.project = null
-        state.assemblableProducts = []
-        state.projects = state.projects.filter(el => { return el.uuid != projectID })
     },
     setError: (state, error) => {
         state.error = error
