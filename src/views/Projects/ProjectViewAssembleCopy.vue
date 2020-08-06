@@ -6,7 +6,7 @@
         
       <v-text-field
         label="name"
-        :rules="[rules.singleName, rules.required]"
+        :rules="[rules.singleName, rules.required, rules.string]"
         v-model="assembly.name"
       ></v-text-field>
       <v-text-field label="description" :rules="[rules.required]" v-model="assembly.description"></v-text-field>
@@ -79,6 +79,10 @@ export default {
         },
         singleName: (value) =>
           !this.productNames.includes(value) || "name already taken!",
+        string: (value) => {
+          const pattern = /^[0-9a-zA-Z_]+$/;
+          return pattern.test(value) || "only alphanumericals and underscores allowed";
+        },
       },
     };
   },
