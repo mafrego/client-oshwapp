@@ -1,11 +1,11 @@
 <template>
   <panel title="Project">
     <v-toolbar-items slot="action">
-      <v-btn
-      @click="toggleComponentUpload" 
-      class="cyan ml-2" 
-      title="upload BOM" 
-      light
+      <v-btn 
+        @click="toggleComponentUpload" 
+        class="cyan ml-2" 
+        title="upload BOM" 
+        light
       >
         <v-icon>attach_file</v-icon>
       </v-btn>
@@ -35,15 +35,6 @@
         light
       >
         <v-icon>account_tree</v-icon>
-      </v-btn>
-      <v-btn
-        v-if="getProject.state === 'assembling'"
-        @click="toggleComponentAssemble"
-        class="cyan ml-2"
-        title="assemble"
-        light
-      >
-        <v-icon>construction</v-icon>
       </v-btn>
       <v-btn
         v-if="getProject.state === 'assembling'"
@@ -86,8 +77,6 @@
     <br />
     <project-view-all-products v-if="showComponentAllProducts" />
     <br />
-    <project-view-assemble v-if="showComponentAssemble" />
-    <br />
     <project-view-assemble-copy v-if="showComponentAssembleCopy" />
   </panel>
 </template>
@@ -97,7 +86,6 @@ import ProjectViewUploadFile from "./ProjectViewUploadFile";
 import ProjectViewUploadImages from "./ProjectViewUploadImages";
 import ProjectViewBom from "./ProjectViewBom";
 import ProjectViewAllProducts from "./ProjectViewAllProducts";
-import ProjectViewAssemble from "./ProjectViewAssemble";
 import ProjectViewAssembleCopy from "./ProjectViewAssembleCopy";
 import { mapGetters, mapMutations, mapActions } from "vuex";
 
@@ -107,7 +95,6 @@ export default {
     ProjectViewUploadImages,
     ProjectViewBom,
     ProjectViewAllProducts,
-    ProjectViewAssemble,
     ProjectViewAssembleCopy,
   },
   data() {
@@ -116,7 +103,6 @@ export default {
       showComponentUploadImages: false,
       showComponentBOM: false,
       showComponentAllProducts: false,
-      showComponentAssemble: false,
       showComponentAssembleCopy: false,
     };
   },
@@ -124,9 +110,14 @@ export default {
     ...mapGetters(["getProject", "getBom", "getAssemblableProducts"]),
   },
   methods: {
-    // TODO add actions to populate project in case of user log out
-    ...mapActions(["deleteProject", "fetchBom", "fetchAssemblableProducts", "fetchAllProducts"]),
+    ...mapActions([
+      "deleteProject",
+      "fetchBom",
+      "fetchAssemblableProducts",
+      "fetchAllProducts",
+    ]),
     ...mapMutations(["setProject"]),
+    // TODO add alert pop up to confirm project deletion
     del() {
       try {
         this.deleteProject(this.getProject.uuid);
@@ -148,9 +139,6 @@ export default {
     },
     toggleComponentAllProducts() {
       this.showComponentAllProducts = !this.showComponentAllProducts;
-    },
-    toggleComponentAssemble() {
-      this.showComponentAssemble = !this.showComponentAssemble;
     },
     toggleComponentAssembleCopy() {
       this.showComponentAssembleCopy = !this.showComponentAssembleCopy;
