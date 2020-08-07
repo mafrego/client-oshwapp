@@ -100,8 +100,8 @@ const actions = {
             commit('setLoading', true)
             const response = await FileService.sendBom(formData, state.project.uuid)
             if (response.status == 201) {
-                const response = await ProjectService.put({ state: 'assembling' }, state.project.uuid)
-                commit('updateState', response.data.state)
+                const ret0 = await ProjectService.put({ state: 'assembling' }, state.project.uuid)
+                commit('updateState', ret0.data.state)
                 // http 304 instead of 200 that's why I don't get data from actual project
                 const ret1 = await ProjectService.getAllProducts(state.project.uuid)
                 commit('setProducts', ret1.data)
@@ -192,6 +192,10 @@ const actions = {
             const response = await AssemblyService.assembleCopy(assembly, state.project.uuid)
             // console.log(response.data)
             commit('setAssemblableProducts', response.data)
+            if (response.data.length === 1 && response.data[0].quantity_to_assemble === 1) {
+                const ret = await ProjectService.put({ state: 'rooted' }, state.project.uuid)
+                commit('updateState', ret.data.state)
+            }
             if (response.status === 201) {
                 const ret = await ProjectService.getAllProducts(state.project.uuid)
                 commit('setProducts', ret.data)
@@ -212,6 +216,10 @@ const actions = {
                 const ret = await ProjectService.getAssemblableProducts(state.project.uuid)
                 commit('setAssemblableProducts', ret.data)
                 commit('deleteAssembly', assemblyID)
+                if (state.project.state === 'rooted') {
+                    const ret = await ProjectService.put({ state: 'assembling' }, state.project.uuid)
+                    commit('updateState', ret.data.state)
+                }
             }
         } catch (error) {
             commit('setError', error)
@@ -240,7 +248,7 @@ const mutations = {
         state.projects = state.projects.filter(el => { return el.uuid != projectID })
     },
     deleteAssembly: (state, assemblyID) => {
-        state.products = state.products.filter( product => product.uuid != assemblyID)
+        state.products = state.products.filter(product => product.uuid != assemblyID)
     },
     uploadBom: (state, project) => {
         state.project = project
