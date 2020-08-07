@@ -30,6 +30,7 @@ export default {
       .post(`assemblycopy/${projectID}`, assembly, { headers: authHeader() })
   },
 
+  // check axios docs for deleting
   disassemble(assemblyId, projectID){
     return Api().delete(`assembly/${assemblyId}`, { headers: authHeader() }, { projectID: projectID})
   },

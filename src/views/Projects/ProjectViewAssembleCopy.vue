@@ -132,10 +132,10 @@ export default {
     },
     async takeApart(uuid){
       console.log("disassembling..."+uuid)
-      await this.disassemble(uuid)
-      // if(response == 201){
-      //   console.log("disassemble succeeded!")
-      // }
+      const response = await this.disassemble(uuid)
+      if(response == 201){
+        console.log("disassemble succeeded!")
+      }
     },
     async startAssembling() {
       this.msg = null;

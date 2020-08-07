@@ -205,8 +205,9 @@ const actions = {
     async disassemble({ state, commit }, assemblyID) {
         try {
             commit('setLoading', true)
-            console.log(assemblyID)
-            console.log(state.project.uuid)
+            // console.log(assemblyID)
+            // console.log(state.project.uuid)
+            // probably I don't need projectID
             const response = await AssemblyService.disassemble(assemblyID, state.project.uuid)
             commit('setMockAssemblables', response)
             console.log('response:', response)
