@@ -24,7 +24,8 @@ const getters = {
     getProject: state => state.project,
     getBom: state => state.bom,
     getAllProducts: state => state.products,
-    getAllProductNames: state => state.productNames,
+    // getAllProductNames: state => state.productNames,
+    getAllProductNames: state => state.products.map(product => product.name),
     getAssemblableProducts: state => state.assemblableProducts,
     getAssembly: state => state.assembly,
     getLoading: state => state.loading,
@@ -49,10 +50,10 @@ const actions = {
             commit('setLoading', true)
             const response = await ProjectService.post(project)
             // console.log(response)
-            if(response.status == 201){
-            const ret = await ProjectService.index(project.userID)
-            commit('setProjects', ret.data)
-            return response.status
+            if (response.status == 201) {
+                const ret = await ProjectService.index(project.userID)
+                commit('setProjects', ret.data)
+                return response.status
             }
         } catch (error) {
             commit('setError', error)
@@ -104,7 +105,7 @@ const actions = {
                 // http 304 instead of 200 that's why I don't get data from actual project
                 const ret1 = await ProjectService.getAllProducts(state.project.uuid)
                 commit('setProducts', ret1.data)
-                commit('setProductNames', ret1.data)
+                // commit('setProductNames', ret1.data)
                 const ret2 = await ProjectService.getAssemblableProducts(state.project.uuid)
                 commit('setAssemblableProducts', ret2.data)
                 const ret3 = await ProjectService.getBom(state.project.uuid)
@@ -147,7 +148,7 @@ const actions = {
             commit('setLoading', true)
             const response = await ProjectService.getAllProducts(projectId)
             commit('setProducts', response.data)
-            commit('setProductNames', response.data)
+            // commit('setProductNames', response.data)
         } catch (error) {
             commit('setError', error)
         } finally {
@@ -189,11 +190,12 @@ const actions = {
         try {
             commit('setLoading', true)
             const response = await AssemblyService.assembleCopy(assembly, state.project.uuid)
+            // console.log(response.data)
             commit('setAssemblableProducts', response.data)
             if (response.status === 201) {
                 const ret = await ProjectService.getAllProducts(state.project.uuid)
                 commit('setProducts', ret.data)
-                commit('setProductNames', ret.data)
+                // commit('setProductNames', ret.data)
                 return response.status
             }
         } catch (error) {
@@ -205,17 +207,11 @@ const actions = {
     async disassemble({ state, commit }, assemblyID) {
         try {
             commit('setLoading', true)
-            // console.log(assemblyID)
-            // console.log(state.project.uuid)
-            // probably I don't need projectID
-            const response = await AssemblyService.disassemble(assemblyID, state.project.uuid)
-            commit('setMockAssemblables', response)
-            console.log('response:', response)
+            const response = await AssemblyService.disassemble(assemblyID)
             if (response.status === 200) {
-                // const ret = await ProjectService.getAllProducts(state.project.uuid)
-                // commit('setProducts', ret.data)
-                // commit('setProductNames', ret.data)
-                return response.status
+                const ret = await ProjectService.getAssemblableProducts(state.project.uuid)
+                commit('setAssemblableProducts', ret.data)
+                commit('deleteAssembly', assemblyID)
             }
         } catch (error) {
             commit('setError', error)
@@ -243,6 +239,9 @@ const mutations = {
         state.assemblableProducts = []
         state.projects = state.projects.filter(el => { return el.uuid != projectID })
     },
+    deleteAssembly: (state, assemblyID) => {
+        state.products = state.products.filter( product => product.uuid != assemblyID)
+    },
     uploadBom: (state, project) => {
         state.project = project
     },
@@ -261,17 +260,14 @@ const mutations = {
     setProducts: (state, products) => {
         state.products = products
     },
-    setProductNames: (state, products) => {
-        state.productNames = products.map(node => node.name)
-    },
+    // setProductNames: (state, products) => {
+    //     state.productNames = products.map(node => node.name)
+    // },
     addProductName: (state, name) => {
         return state.productNames.push(name)
     },
     setAssemblableProducts: (state, products) => {
         state.assemblableProducts = products
-    },
-    setMockAssemblables: (state, ret) => {
-        state.dummy = ret
     },
     setError: (state, error) => {
         state.error = error

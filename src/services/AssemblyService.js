@@ -31,8 +31,8 @@ export default {
   },
 
   // check axios docs for deleting
-  disassemble(assemblyId, projectID){
-    return Api().delete(`assembly/${assemblyId}`, { headers: authHeader() }, { projectID: projectID})
+  disassemble(assemblyId){
+    return Api().delete(`assembly/${assemblyId}`, { headers: authHeader() })
   },
   
   delete(assemblyId){

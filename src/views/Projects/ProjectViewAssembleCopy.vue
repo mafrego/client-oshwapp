@@ -131,11 +131,7 @@ export default {
         "not enough pieces!";
     },
     async takeApart(uuid){
-      console.log("disassembling..."+uuid)
-      const response = await this.disassemble(uuid)
-      if(response == 201){
-        console.log("disassemble succeeded!")
-      }
+      await this.disassemble(uuid)
     },
     async startAssembling() {
       this.msg = null;
