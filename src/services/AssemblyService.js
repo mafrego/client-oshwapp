@@ -20,14 +20,18 @@ export default {
       .post('assemblies', assembly, { headers: authHeader() })
   },
 
-  assemble(assembly, projectID) {
-    return Api()
-      .post(`assembly/${projectID}`, assembly, { headers: authHeader() })
-  },
+  // assemble(assembly, projectID) {
+  //   return Api()
+  //     .post(`assembly/${projectID}`, assembly, { headers: authHeader() })
+  // },
   
   assembleCopy(assembly, projectID) {
     return Api()
       .post(`assemblycopy/${projectID}`, assembly, { headers: authHeader() })
+  },
+
+  disassemble(assemblyId, projectID){
+    return Api().delete(`assembly/${assemblyId}`, { headers: authHeader() }, { projectID: projectID})
   },
   
   delete(assemblyId){

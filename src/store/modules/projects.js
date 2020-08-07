@@ -13,7 +13,8 @@ const state = () => ({
     assembly: null,
     loading: false,
     error: null,
-    errorBom: null
+    errorBom: null,
+    dummy: null
 })
 
 const getters = {
@@ -75,6 +76,17 @@ const actions = {
             commit('setLoading', true)
             const response = await ProjectService.put(project, project.uuid)
             commit('updateState', response.data.state)
+        } catch (error) {
+            commit('setError', error)
+        } finally {
+            commit('setLoading', false)
+        }
+    },
+    async deleteProject({ commit }, projectId) {
+        try {
+            commit('setLoading', true)
+            await ProjectService.delete(projectId)
+            commit('delProject', projectId)
         } catch (error) {
             commit('setError', error)
         } finally {
@@ -173,17 +185,6 @@ const actions = {
             commit('setLoading', false)
         }
     },
-    async deleteProject({ commit }, projectId) {
-        try {
-            commit('setLoading', true)
-            await ProjectService.delete(projectId)
-            commit('delProject', projectId)
-        } catch (error) {
-            commit('setError', error)
-        } finally {
-            commit('setLoading', false)
-        }
-    },
     async assembleCopy({ state, commit }, assembly) {
         try {
             commit('setLoading', true)
@@ -193,6 +194,26 @@ const actions = {
                 const ret = await ProjectService.getAllProducts(state.project.uuid)
                 commit('setProducts', ret.data)
                 commit('setProductNames', ret.data)
+                return response.status
+            }
+        } catch (error) {
+            commit('setError', error)
+        } finally {
+            commit('setLoading', false)
+        }
+    },
+    async disassemble({ state, commit }, assemblyID) {
+        try {
+            commit('setLoading', true)
+            console.log(assemblyID)
+            console.log(state.project.uuid)
+            const response = await AssemblyService.disassemble(assemblyID, state.project.uuid)
+            commit('setMockAssemblables', response)
+            console.log('response:', response)
+            if (response.status === 200) {
+                // const ret = await ProjectService.getAllProducts(state.project.uuid)
+                // commit('setProducts', ret.data)
+                // commit('setProductNames', ret.data)
                 return response.status
             }
         } catch (error) {
@@ -247,6 +268,9 @@ const mutations = {
     },
     setAssemblableProducts: (state, products) => {
         state.assemblableProducts = products
+    },
+    setMockAssemblables: (state, ret) => {
+        state.dummy = ret
     },
     setError: (state, error) => {
         state.error = error
