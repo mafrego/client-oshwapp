@@ -10,7 +10,7 @@
         <v-icon>attach_file</v-icon>
       </v-btn>
       <v-btn
-        v-if="getProject.state === 'assembling'"
+        v-if="getProject.state === 'assembling' || getProject.state === 'rooted'"
         @click="toggleComponentUploadImages"
         class="cyan ml-2"
         title="upload images"
@@ -19,7 +19,7 @@
         <v-icon>add_a_photo</v-icon>
       </v-btn>
       <v-btn
-        v-if="getProject.state === 'assembling'"
+        v-if="getProject.state === 'assembling' || getProject.state === 'rooted'"
         @click="toggleComponentBOM"
         class="cyan ml-2"
         title="BOM"
@@ -28,7 +28,7 @@
         <v-icon>list</v-icon>
       </v-btn>
       <v-btn
-        v-if="getProject.state === 'assembling'"
+        v-if="getProject.state === 'assembling' || getProject.state === 'rooted'"
         @click="toggleComponentAllProducts"
         class="cyan ml-2"
         title="all products"
@@ -37,7 +37,7 @@
         <v-icon>account_tree</v-icon>
       </v-btn>
       <v-btn
-        v-if="getProject.state === 'assembling'"
+        v-if="getProject.state === 'assembling' || getProject.state === 'rooted'"
         @click="toggleComponentAssembleCopy"
         class="cyan ml-2"
         title="assemble copy"
