@@ -45,6 +45,17 @@
           <v-flex xs2>
             <img class="atom-image" :src="item.imageUrl" />
           </v-flex>
+          <v-flex xs1>
+            
+              <v-btn
+              v-if="!item._labels.includes('Atom')"
+              color="blue"
+              @click="takeApart(item.uuid)"
+              >
+              disassemble
+              </v-btn>
+          
+          </v-flex>
         </v-layout>
       </div>
       </v-form>
@@ -106,7 +117,12 @@ export default {
     this.fetchAllProducts(this.getProject.uuid);
   },
   methods: {
-    ...mapActions(["fetchAssemblableProducts", "assembleCopy", "fetchAllProducts"]),
+    ...mapActions([
+      "fetchAssemblableProducts", 
+      "assembleCopy", 
+      "fetchAllProducts",
+      "disassemble"
+      ]),
     ...mapMutations(["addProductName"]),
     
     maxQuantity(maxQty) {
@@ -114,7 +130,13 @@ export default {
         value * this.assembly.quantity_to_assemble <= maxQty ||
         "not enough pieces!";
     },
-    // TODO refactor this function to make it work with the new arrays
+    async takeApart(uuid){
+      console.log("disassembling..."+uuid)
+      await this.disassemble(uuid)
+      // if(response == 201){
+      //   console.log("disassemble succeeded!")
+      // }
+    },
     async startAssembling() {
       this.msg = null;
       const areAllFieldsFilledIn = Object.keys(this.assembly).every(
