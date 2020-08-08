@@ -22,11 +22,6 @@ export default {
   getTree(productId){
     return Api().get(`products/tree/${productId}`)
   },
-  // no-sense
-  // post(product){
-  //   return Api()
-  //     .post('products', product, { headers: authHeader() })
-  // },
   
   delete(productId){
     return Api().delete(`products/${productId}`, { headers: authHeader() })
