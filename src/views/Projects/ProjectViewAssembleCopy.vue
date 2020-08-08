@@ -1,12 +1,11 @@
 <template>
   <div>
     <div v-if="getProject.state == 'rooted'">
-      <!-- make new component to display toggling it?? -->
       <img
         src="https://oshwapp.s3.eu-central-1.amazonaws.com/service/openproject.svg"
         class="openproject"
       />
-      <v-btn color="blue">release</v-btn>
+      <v-btn @click="release" color="blue">release</v-btn>
     </div>
     <br />
     <panel v-if="getAssemblableProducts.length" title="Assembly panel">
@@ -51,7 +50,9 @@
         <div v-for="(item, index) in getAssemblableProducts" :key="index">
           <v-layout>
             <v-flex xs3>
-              <div class="atom-name">{{item.name}} - pieces left: {{item.quantity_to_assemble}}</div>
+              <div
+                class="atom-name"
+              >{{item.name}} - #pieces to assemble: {{item.quantity_to_assemble}}</div>
               <v-text-field
                 :rules="[maxQuantity(item.quantity_to_assemble)]"
                 type="number"
@@ -80,7 +81,7 @@
 </template>
 
 <script>
-import { mapGetters, mapActions, mapState, mapMutations } from "vuex";
+import { mapGetters, mapActions, mapState } from "vuex";
 1;
 export default {
   name: "ProjectViewAssembleCopy",
@@ -126,9 +127,7 @@ export default {
     ]),
     // TODO find substitute with getters and remove states
     ...mapState({
-      // assemblables: (state) => state.projects.assemblableProducts,
       loading: (state) => state.projects.loading,
-      // productNames: (state) => state.projects.productNames,
     }),
   },
   created() {
@@ -141,9 +140,16 @@ export default {
       "assembleCopy",
       "fetchAllProducts",
       "disassemble",
+      "updateProjectState",
     ]),
-    ...mapMutations(["addProductName"]),
-
+    async release() {
+      const args = {
+        state: "released",
+        relationType: "root",
+        assemblyID: this.getAssemblableProducts[0].uuid,
+      };
+      await this.updateProjectState(args);
+    },
     maxQuantity(maxQty) {
       return (value) =>
         value * this.assembly.quantity_to_assemble <= maxQty ||
@@ -170,7 +176,7 @@ export default {
         return;
       }
       if (this.overlimits.length != 0) {
-        this.msg = "Please check part quantities and try again!"
+        this.msg = "Please check part quantities and try again!";
         return;
       }
       if (this.assembly.parts.length === 0) {
@@ -181,7 +187,7 @@ export default {
         const ret = await this.assembleCopy(this.assembly);
         if (ret == 201) {
           // check if following line is necessary
-          this.addProductName(this.assembly.name);
+          // this.addProductName(this.assembly.name);
           this.assembly.name = null;
           this.assembly.description = null;
           this.assembly.parts = [];
