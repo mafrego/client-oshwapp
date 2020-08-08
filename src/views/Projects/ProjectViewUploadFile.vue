@@ -51,7 +51,7 @@ export default {
   },
   methods: {
     ...mapActions([
-      "updateProjectState",
+      // "updateProjectState",
       "sendBom",
       "fetchAssemblableProducts",
     ]),
