@@ -10,7 +10,7 @@
         :key="child.uuid"
         :node="child"
         :depth="depth + 1"
-        @onClick="(node) => $emit('onClick', node)"
+        @onClick="(node) => $emit('on-click', node)"
       />
     </div>
   </div>
@@ -36,7 +36,7 @@ export default {
     nodeClicked() {
       this.expanded = !this.expanded;
       if (!this.hasChildren) {
-        this.$emit("onClick", this.node);
+        this.$emit("on-click", this.node);
       }
     },
   },
