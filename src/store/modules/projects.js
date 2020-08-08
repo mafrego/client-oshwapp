@@ -72,11 +72,12 @@ const actions = {
             commit('setLoading', false)
         }
     },
-    async updateProjectState({ commit }, project) {
+    async updateProjectState({state, commit }, updates) {
         try {
             commit('setLoading', true)
-            const response = await ProjectService.put(project, project.uuid)
+            const response = await ProjectService.put(updates, state.project.uuid)
             commit('updateState', response.data.state)
+            console.log(response)
         } catch (error) {
             commit('setError', error)
         } finally {
@@ -94,6 +95,7 @@ const actions = {
             commit('setLoading', false)
         }
     },
+    // TODO check-refctor to make sure that functions in if block return something
     async sendBom({ state, commit }, formData) {
         try {
             commit('setErrorBom', null)
@@ -190,16 +192,17 @@ const actions = {
         try {
             commit('setLoading', true)
             const response = await AssemblyService.assembleCopy(assembly, state.project.uuid)
-            // console.log(response.data)
             commit('setAssemblableProducts', response.data)
+            // if response is the root assembly: the only part left to assemble
             if (response.data.length === 1 && response.data[0].quantity_to_assemble === 1) {
-                const ret = await ProjectService.put({ state: 'rooted' }, state.project.uuid)
+                const ret = await ProjectService.put(
+                    {state: 'rooted'},
+                    state.project.uuid)
                 commit('updateState', ret.data.state)
             }
             if (response.status === 201) {
                 const ret = await ProjectService.getAllProducts(state.project.uuid)
                 commit('setProducts', ret.data)
-                // commit('setProductNames', ret.data)
                 return response.status
             }
         } catch (error) {
@@ -271,9 +274,9 @@ const mutations = {
     // setProductNames: (state, products) => {
     //     state.productNames = products.map(node => node.name)
     // },
-    addProductName: (state, name) => {
-        return state.productNames.push(name)
-    },
+    // addProductName: (state, name) => {
+    //     return state.productNames.push(name)
+    // },
     setAssemblableProducts: (state, products) => {
         state.assemblableProducts = products
     },
