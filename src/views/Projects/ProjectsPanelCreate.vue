@@ -18,6 +18,13 @@
     </panel>
     <div class="danger-alert" v-if="error">{{error}}</div>
     <v-btn class="cyan" @click="create">Create project</v-btn>
+          <v-progress-circular
+            class="ml-10"
+            v-if="getLoading"
+            :indeterminate="getLoading"
+            color="light-blue"
+          ></v-progress-circular>
+          <br />
   </div>
 </template>
 
@@ -48,7 +55,8 @@ export default {
   computed: {
     ...mapGetters([
       "getProjectNames", 
-      "getProjects"
+      "getProjects",
+      "getLoading"
       ]),
   },
   methods: {
@@ -70,7 +78,7 @@ export default {
         this.project.state = "created";
         this.project.dateTime = new Date();
         const response = await this.createProject(this.project)
-        if(response.status == 201){
+        if(response == 201){
 
           this.project.name = null
           this.project.description = null
