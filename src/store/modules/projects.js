@@ -77,7 +77,7 @@ const actions = {
             commit('setLoading', true)
             const response = await ProjectService.put(updates, state.project.uuid)
             commit('updateState', response.data.state)
-            console.log(response)
+            // console.log(response)
         } catch (error) {
             commit('setError', error)
         } finally {

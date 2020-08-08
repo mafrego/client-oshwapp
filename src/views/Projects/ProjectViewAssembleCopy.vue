@@ -93,8 +93,8 @@ export default {
         parts: [],
         quantity_to_assemble: 1,
         quantity: 1,
-        version: "0.0.1",
-        type: "child",
+        // version: "0.0.1",
+        // type: "child",
       },
       quantities: [],
       msg: null,
@@ -145,7 +145,7 @@ export default {
     async release() {
       const args = {
         state: "released",
-        relationType: "root",
+        version: "0.0.1",
         assemblyID: this.getAssemblableProducts[0].uuid,
       };
       await this.updateProjectState(args);
