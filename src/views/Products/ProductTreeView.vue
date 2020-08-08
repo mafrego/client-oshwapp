@@ -32,11 +32,11 @@ export default {
 
   data() {
     return {
-      root: null,
+      root: {},       //not null otherwise vue error!
       toggle_exclusive: 0
     };
   },
-  async mounted() {
+  async created() {
     const productId = this.$store.state.route.params.productId;
     this.root = (await ProductService.getTree(productId)).data;
 
