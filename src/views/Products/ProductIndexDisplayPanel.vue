@@ -2,7 +2,7 @@
   <v-layout column>
     <v-flex xs6>
       <panel title="Product">
-        <v-btn
+        <!-- <v-btn
           v-if="$store.state.isUserLoggedIn"
           class="cyan ml-2"
           :to="{name: 'atoms-create'}"
@@ -21,7 +21,7 @@
           light
         >
           <v-icon>group_work</v-icon>
-        </v-btn>
+        </v-btn> -->
         <div v-for="product in products" :key="product.uuid">
           <v-layout>
             <v-flex xs6>
