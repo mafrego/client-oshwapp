@@ -2,6 +2,7 @@
   <panel title="Project">
     <v-toolbar-items slot="action">
       <v-btn 
+        v-if="getProject.state != 'released'"
         @click="toggleComponentUpload" 
         class="cyan ml-2" 
         title="upload BOM" 
@@ -10,7 +11,7 @@
         <v-icon>attach_file</v-icon>
       </v-btn>
       <v-btn
-        v-if="getProject.state === 'assembling' || getProject.state === 'rooted'"
+        v-if="getProject.state === 'assembling' || getProject.state === 'rooted' || getProject.state === 'released'"
         @click="toggleComponentUploadImages"
         class="cyan ml-2"
         title="upload images"
@@ -19,7 +20,7 @@
         <v-icon>add_a_photo</v-icon>
       </v-btn>
       <v-btn
-        v-if="getProject.state === 'assembling' || getProject.state === 'rooted'"
+        v-if="getProject.state === 'assembling' || getProject.state === 'rooted' || getProject.state === 'released' "
         @click="toggleComponentBOM"
         class="cyan ml-2"
         title="BOM"
@@ -28,7 +29,7 @@
         <v-icon>list</v-icon>
       </v-btn>
       <v-btn
-        v-if="getProject.state === 'assembling' || getProject.state === 'rooted'"
+        v-if="getProject.state === 'assembling' || getProject.state === 'rooted' || getProject.state === 'released'"
         @click="toggleComponentAllProducts"
         class="cyan ml-2"
         title="all products"
@@ -46,7 +47,7 @@
         <v-icon>handyman</v-icon>
       </v-btn>
       <v-btn
-        v-if="$store.state.isUserLoggedIn"
+        v-if="getProject.state != 'released'"
         class="cyan ml-2"
         @click="del"
         title="delete project"
@@ -67,6 +68,12 @@
       <v-col md6>
         <img class="project-image" :src="getProject.imageUrl" />
       </v-col>
+          <v-progress-circular
+            class="ml-10"
+            v-if="getLoading"
+            :indeterminate="getLoading"
+            color="light-blue"
+          ></v-progress-circular>
     </v-row>
 
     <project-view-upload-file v-if="showComponentUpload" />
@@ -107,7 +114,7 @@ export default {
     };
   },
   computed: {
-    ...mapGetters(["getProject", "getBom", "getAssemblableProducts"]),
+    ...mapGetters(["getProject", "getBom", "getAssemblableProducts", "getLoading"]),
   },
   methods: {
     ...mapActions([
