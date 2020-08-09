@@ -1,6 +1,6 @@
 <template>
   <panel :title="productType">
-    <v-toolbar-items slot="action">
+    <!-- <v-toolbar-items slot="action">
       <v-btn
         v-if="$store.state.isUserLoggedIn"
         class="cyan ml-2"
@@ -28,7 +28,7 @@
       >
         <v-icon>delete</v-icon>
       </v-btn>
-    </v-toolbar-items>
+    </v-toolbar-items> -->
     <v-row>
       <v-col md6>
         <div class="product-name">{{product.name}}</div>
