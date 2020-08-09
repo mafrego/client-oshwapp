@@ -16,6 +16,7 @@ import CreateCompound from '@/views/Compounds/CompoundCreate'
 import CreateAssembly from '@/views/Assemblies/AssemblyCreate.vue'
 import ViewProject from '@/views/Projects/ProjectView'
 import Experiments from '@/views/Experiments/Experiments.vue'
+import AdminBoard from '@/views/Admin/AdminBoard.vue'
 import Todos from '@/views/Todos/Todos.vue'
 
 Vue.use(VueRouter)
@@ -90,6 +91,11 @@ const routes = [
     path: '/experiments',
     name: 'experiments',
     component: Experiments
+  },
+  {
+    path: '/adminboard',
+    name: 'adminboard',
+    component: AdminBoard
   },
   {
     path: '/todos',
