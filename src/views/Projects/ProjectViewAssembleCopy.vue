@@ -148,7 +148,12 @@ export default {
         version: "0.0.1",
         assemblyID: this.getAssemblableProducts[0].uuid,
       };
-      await this.updateProjectState(args);
+      const ret = await this.updateProjectState(args)
+      if(ret === 200){
+          this.$router.push({
+            name: "projects"
+          });
+      }
     },
     maxQuantity(maxQty) {
       return (value) =>
