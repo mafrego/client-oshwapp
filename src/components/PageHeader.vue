@@ -12,7 +12,7 @@
       <router-link class="home" tag="span" :to="{name: 'products'}">Browser</router-link>
     </v-toolbar-items>
 
-    <v-toolbar-items
+    <!-- <v-toolbar-items
       v-if="isUserLoggedIn && currentRoles.includes('assembler')"
       class="mt-10 mr-4"
     >
@@ -24,7 +24,7 @@
       class="mt-10 mr-4"
     >
       <router-link class="home" tag="span" :to="{name: 'admin'}">Board Admin</router-link>
-    </v-toolbar-items>
+    </v-toolbar-items> -->
 
     <v-toolbar-items v-if="isUserLoggedIn" class="mt-10 mr-4">
       <router-link class="home" tag="span" :to="{name: 'profile'}">profile</router-link>
@@ -34,7 +34,8 @@
       <router-link class="home" tag="span" :to="{name: 'projects'}">projects</router-link>
     </v-toolbar-items>
 
-    <v-toolbar-items
+    <!-- 
+      <v-toolbar-items
       v-if="isUserLoggedIn && currentRoles.includes('admin')"
       class="mt-10 mr-4"
     >
@@ -46,6 +47,13 @@
       class="mt-10 mr-4"
     >
       <router-link class="home" tag="span" :to="{name: 'todos'}">todos</router-link>
+    </v-toolbar-items> -->
+
+      <v-toolbar-items
+      v-if="isUserLoggedIn && currentRoles.includes('admin')"
+      class="mt-10 mr-4"
+    >
+      <router-link class="home" tag="span" :to="{name: 'adminboard'}">ADMIN BOARD</router-link>
     </v-toolbar-items>
 
     <v-spacer></v-spacer>
