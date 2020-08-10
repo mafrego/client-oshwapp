@@ -1,9 +1,9 @@
 <template>
 <div>
-    <admin-board-users>
-    </admin-board-users>
-    <admin-board-projects>
-    </admin-board-projects>
+    <admin-board-users/>
+    <!-- </admin-board-users> -->
+    <admin-board-projects/>
+    <!-- </admin-board-projects> -->
 </div>
 </template>
 

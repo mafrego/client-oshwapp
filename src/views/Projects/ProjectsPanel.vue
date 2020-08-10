@@ -61,7 +61,7 @@ export default {
   },
   computed: {
     // TODO substitute state with getters
-    ...mapState(["user", "isUserLoggedIn"]),
+    ...mapState(["user"]),
     ...mapGetters(["getProjects"]),
   },
   methods: {

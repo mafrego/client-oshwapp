@@ -7,6 +7,7 @@
         <v-btn @click="delUser(user.uuid)" color="red">delete</v-btn>
       </div>
     </div>
+    <!-- <div v-for="user in users" :key="user.uuid">{{user}}</div> -->
   </v-container>
 </template>
 
