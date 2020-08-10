@@ -1,6 +1,6 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
-import createPersistedState from 'vuex-persistedstate'
+// import createPersistedState from 'vuex-persistedstate'
 // import todos from './modules/todos'
 import projects from './modules/projects'
 // import users from './modules/users'
@@ -19,17 +19,18 @@ export default new Vuex.Store({
     // users: users
   },
 
-  plugins: [
-    createPersistedState({
-      paths: [
-        'token', 
-        'user', 
-        'isUserLoggedIn', 
-        'projects.projects', 
-        'projects.project'
-      ]
-    })
-  ],
+  // KEEP in case you need vuex-persistedstate
+  // plugins: [
+  //   createPersistedState({
+  //     paths: [
+        // 'token', 
+        // 'user', 
+        // 'isUserLoggedIn', 
+        // 'projects.projects', 
+        // 'projects.project'
+  //     ]
+  //   })
+  // ],
 
   state: {
     token: null,
