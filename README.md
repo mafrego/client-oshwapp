@@ -1,24 +1,4 @@
 # client
 
-## Project setup
-```
-npm install
-```
-
-### Compiles and hot-reloads for development
-```
-npm run serve
-```
-
-### Compiles and minifies for production
-```
-npm run build
-```
-
-### Lints and fixes files
-```
-npm run lint
-```
-
-### Customize configuration
-See [Configuration Reference](https://cli.vuejs.org/config/).
+## Project setup: install, configure and run locally
+See [README.md](https://git.uibk.ac.at/csav4508/oshwapp-docs)
