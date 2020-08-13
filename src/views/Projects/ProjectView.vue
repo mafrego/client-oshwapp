@@ -41,7 +41,7 @@
         v-if="getProject.state === 'assembling' || getProject.state === 'rooted'"
         @click="toggleComponentAssembleCopy"
         class="green ml-2"
-        title="assemble copy"
+        title="assemble"
         light
       >
         <v-icon>handyman</v-icon>
