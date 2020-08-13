@@ -34,15 +34,15 @@
       <router-link class="home" tag="span" :to="{name: 'projects'}">projects</router-link>
     </v-toolbar-items>
 
-    <!-- 
-      <v-toolbar-items
+    
+      <!-- <v-toolbar-items
       v-if="isUserLoggedIn && currentRoles.includes('admin')"
       class="mt-10 mr-4"
     >
       <router-link class="home" tag="span" :to="{name: 'experiments'}">experiments</router-link>
-    </v-toolbar-items>
+    </v-toolbar-items> -->
 
-    <v-toolbar-items
+    <!-- <v-toolbar-items
       v-if="isUserLoggedIn && currentRoles.includes('admin')"
       class="mt-10 mr-4"
     >
