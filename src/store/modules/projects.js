@@ -1,11 +1,13 @@
 import ProjectService from '@/services/ProjectService'
 import AssemblyService from '@/services/AssemblyService'
+import AtomService from '@/services/AtomService'
 import FileService from '@/services/FileService'
 
 const state = () => ({
     projects: null,
     project: null,
     bom: [],
+    atom: null,
     products: [],
     productNames: [],
     assemblableProducts: [],
@@ -20,11 +22,10 @@ const state = () => ({
 const getters = {
     getProjects: state => state.projects,
     getProjectNames: state => state.projects.map(node => node.name),
-
     getProject: state => state.project,
     getBom: state => state.bom,
+    getAtom: state => state.atom,
     getAllProducts: state => state.products,
-    // getAllProductNames: state => state.productNames,
     getAllProductNames: state => state.products.map(product => product.name),
     getAssemblableProducts: state => state.assemblableProducts,
     getAssembly: state => state.assembly,
@@ -72,7 +73,7 @@ const actions = {
             commit('setLoading', false)
         }
     },
-    async updateProjectState({state, commit }, updates) {
+    async updateProjectState({ state, commit }, updates) {
         try {
             commit('setLoading', true)
             const response = await ProjectService.put(updates, state.project.uuid)
@@ -145,6 +146,19 @@ const actions = {
             commit('setLoading', false)
         }
     },
+    async reviseAtom({ commit }, atom) {
+        try {
+            commit('setLoading', true)
+            const response = await AtomService.put(atom)
+            // console.log(response.data)
+            commit('updateAtom', response.data)
+            return response
+        } catch (error) {
+            commit('setError', error)
+        } finally {
+            commit('setLoading', false)
+        }
+    },
     async fetchAllProducts({ commit }, projectId) {
         try {
             commit('setLoading', true)
@@ -196,7 +210,7 @@ const actions = {
             // if response is the root assembly: the only part left to assemble
             if (response.data.length === 1 && response.data[0].quantity_to_assemble === 1) {
                 const ret = await ProjectService.put(
-                    {state: 'rooted'},
+                    { state: 'rooted' },
                     state.project.uuid)
                 commit('updateState', ret.data.state)
             }
@@ -271,12 +285,16 @@ const mutations = {
     setProducts: (state, products) => {
         state.products = products
     },
-    // setProductNames: (state, products) => {
-    //     state.productNames = products.map(node => node.name)
-    // },
-    // addProductName: (state, name) => {
-    //     return state.productNames.push(name)
-    // },
+    setAtom: (state, atom) => {
+        state.atom = atom
+    },
+    updateAtom: (state, atom) => {
+        state.atom = atom
+        state.bom.forEach((item, i) => { if(item.uuid == atom.uuid) state.bom[i] = atom})
+    },
+    updateAtomDescription: (state, description) => {
+        state.atom.description = description
+    },
     setAssemblableProducts: (state, products) => {
         state.assemblableProducts = products
     },
