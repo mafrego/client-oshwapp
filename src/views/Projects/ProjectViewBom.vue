@@ -37,12 +37,12 @@
               <v-btn
                 color="yellow"
                 class="ml-2"
-                @click="selectAtomToUpdate(atom.uuid)"
+                @click="selectAtomToUpdate(atom)"
                 title="update atom"
               >
                 <v-icon>update</v-icon>
               </v-btn>
-              <project-view-bom-atom-update v-if="atomToUpdate === atom.uuid" v-bind:atom="atom" />
+              <project-view-bom-atom-update v-if="atomToUpdate === atom.uuid" v-bind:atom="atom"/>
               <v-btn
                 v-if="atomToUpdate === atom.uuid"
                 @click="hideUpdate"
@@ -74,7 +74,7 @@
 </template>
 
 <script>
-import { mapGetters, mapActions } from "vuex";
+import { mapGetters, mapActions, mapMutations } from "vuex";
 import AtomService from "@/services/AtomService";
 import ProjectViewBomAtomDetails from "./ProjectViewBomAtomDetails";
 import ProjectViewBomAtomUpdate from "./ProjectViewBomAtomUpdate";
@@ -101,8 +101,10 @@ export default {
       "deleteBom",
       "fetchAllProducts",
     ]),
-    selectAtomToUpdate(i) {
-      this.atomToUpdate = i;
+    ...mapMutations(["setAtom"]),
+    selectAtomToUpdate(atom) {
+      this.atomToUpdate = atom.uuid;
+      this.setAtom(atom)
     },
     hideUpdate() {
       this.atomToUpdate = null;
