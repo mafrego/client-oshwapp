@@ -20,6 +20,11 @@ export default {
       .post('atoms', atom, { headers: authHeader() })
   },
   
+  put (atom) {
+    return Api()
+      .put('atom', atom, { headers: authHeader() })
+  },
+  
   delete(atomId){
     return Api().delete(`atoms/${atomId}`, { headers: authHeader() })
   }
