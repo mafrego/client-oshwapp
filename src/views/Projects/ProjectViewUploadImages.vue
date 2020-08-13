@@ -32,7 +32,13 @@
             </div>
           </div>
         </label>
-        <v-btn class="cyan" @click="submitMultipleFiles">Send</v-btn>
+        <v-btn 
+          class="green" 
+          @click="submitMultipleFiles"
+          title="upload images"
+          >
+          <v-icon>cloud_upload</v-icon>
+          </v-btn>
       <v-progress-circular class="ml-10" v-if="loading" :indeterminate="loading" color="light-blue"></v-progress-circular>
       </div>
     </form>

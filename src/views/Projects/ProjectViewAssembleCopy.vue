@@ -31,7 +31,9 @@
           />
           <div class="danger-alert" v-if="msg">{{msg}}</div>
           <div class="danger-alert" v-if="overlimits.length != 0">{{overlimits.join(", ")}}</div>
-          <v-btn class="cyan" @click="startAssembling">assemble</v-btn>
+          <v-btn class="green" @click="startAssembling" title="assemble">
+            <v-icon>build</v-icon>
+          </v-btn>
           <v-progress-circular
             class="ml-10"
             v-if="getLoading"
@@ -69,9 +71,12 @@
             <v-flex xs1>
               <v-btn
                 v-if="!item._labels.includes('Atom')"
-                color="blue"
+                color="red"
                 @click="takeApart(item.uuid)"
-              >disassemble</v-btn>
+                title="disassemble"
+              >
+                <v-icon>construction</v-icon>
+              </v-btn>
             </v-flex>
           </v-layout>
         </div>
@@ -148,11 +153,11 @@ export default {
         version: "0.0.1",
         assemblyID: this.getAssemblableProducts[0].uuid,
       };
-      const ret = await this.updateProjectState(args)
-      if(ret === 200){
-          this.$router.push({
-            name: "projects"
-          });
+      const ret = await this.updateProjectState(args);
+      if (ret === 200) {
+        this.$router.push({
+          name: "projects",
+        });
       }
     },
     maxQuantity(maxQty) {

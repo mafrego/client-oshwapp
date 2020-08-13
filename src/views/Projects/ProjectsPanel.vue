@@ -6,7 +6,7 @@
           <v-toolbar-items slot="action">
             <v-btn
               @click="toggleComponentCreateProject"
-              class="cyan ml-2"
+              class="green ml-2"
               title="create project"
               light
             >
@@ -24,14 +24,17 @@
                 <div class="project-state">{{project.state}}</div>
                 <div class="project-datetime">{{project.dateTime}}</div>
                 <v-btn
-                  class="cyan"
+                  class="blue"
                   :to="{
                     name: 'project',
                     params: {
                       projectId: project.uuid
                     } 
                   }"
-                >manage</v-btn>
+                  title="view project"
+                >
+                <v-icon>pageview</v-icon>
+                </v-btn>
               </v-flex>
 
               <v-flex xs6>

@@ -4,7 +4,7 @@
       <v-btn 
         v-if="getProject.state != 'released'"
         @click="toggleComponentUpload" 
-        class="cyan ml-2" 
+        class="green ml-2" 
         title="upload BOM" 
         light
       >
@@ -13,7 +13,7 @@
       <v-btn
         v-if="getProject.state === 'assembling' || getProject.state === 'rooted' || getProject.state === 'released'"
         @click="toggleComponentUploadImages"
-        class="cyan ml-2"
+        class="green ml-2"
         title="upload images"
         light
       >
@@ -22,7 +22,7 @@
       <v-btn
         v-if="getProject.state === 'assembling' || getProject.state === 'rooted' || getProject.state === 'released' "
         @click="toggleComponentBOM"
-        class="cyan ml-2"
+        class="blue ml-2"
         title="BOM"
         light
       >
@@ -31,7 +31,7 @@
       <v-btn
         v-if="getProject.state === 'assembling' || getProject.state === 'rooted' || getProject.state === 'released'"
         @click="toggleComponentAllProducts"
-        class="cyan ml-2"
+        class="blue ml-2"
         title="all products"
         light
       >
@@ -40,7 +40,7 @@
       <v-btn
         v-if="getProject.state === 'assembling' || getProject.state === 'rooted'"
         @click="toggleComponentAssembleCopy"
-        class="cyan ml-2"
+        class="green ml-2"
         title="assemble copy"
         light
       >
@@ -48,7 +48,7 @@
       </v-btn>
       <v-btn
         v-if="getProject.state != 'released'"
-        class="cyan ml-2"
+        class="red ml-2"
         @click="del"
         title="delete project"
         light

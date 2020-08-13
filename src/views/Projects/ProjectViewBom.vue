@@ -6,7 +6,7 @@
           <v-btn
             v-if="getBom.length == getAllProducts.length"
             @click="deleteBom"
-            class="cyan ml-2"
+            class="red ml-2"
             title="delete BOM"
             light
           >
@@ -20,33 +20,47 @@
               <div class="atom-name">{{atom.name}}</div>
               <div class="atom-description">{{atom.description}}</div>
               <div class="atom-material">{{atom.material}}</div>
-              <!-- <v-btn
-                class="cyan"
-                :to="{
-              name: 'product',
-              params: {
-                productId: atom.uuid
-              } 
-              }"
-              >View</v-btn>-->
-              <v-btn color="blue" class @click="selectAtomDetails(atom.uuid)">Details</v-btn>
-              <div v-if="atomDetails === atom.uuid">
-                Details!
-                <!-- TODO component ProjectViewBomAtomUpdate and pass as props atom   -->
-                <v-btn @click="hideDetails" color="grey">hide</v-btn>
-              </div>
-              <v-btn color="blue" class="ml-2" @click="selectAtomToUpdate(atom.uuid)">update</v-btn>
-              <div v-if="atomToUpdate === atom.uuid">
-                Update!
-                <!-- TODO component ProjectViewBomAtomDetails and pass as props atom   -->
-                <v-btn @click="hideUpdate" color="grey">hide</v-btn>
-              </div>
+
+              <v-btn color="blue" @click="selectAtomDetails(atom.uuid)" title="atom details">
+                <v-icon>article</v-icon>
+              </v-btn>
+              <project-view-bom-atom-details v-if="atomDetails === atom.uuid" v-bind:atom="atom" />
+              <v-btn
+                v-if="atomDetails === atom.uuid"
+                @click="hideDetails"
+                color="grey"
+                title="hide"
+              >
+                <v-icon>close</v-icon>
+              </v-btn>
+
+              <v-btn
+                color="yellow"
+                class="ml-2"
+                @click="selectAtomToUpdate(atom.uuid)"
+                title="update atom"
+              >
+                <v-icon>update</v-icon>
+              </v-btn>
+              <project-view-bom-atom-update v-if="atomToUpdate === atom.uuid" v-bind:atom="atom" />
+              <v-btn
+                v-if="atomToUpdate === atom.uuid"
+                @click="hideUpdate"
+                color="grey"
+                title="hide"
+              >
+                <v-icon>close</v-icon>
+              </v-btn>
+
               <v-btn
                 v-if="atom.quantity === atom.quantity_to_assemble"
                 class="ml-2"
                 color="red"
                 @click="deleteAtom(atom.uuid)"
-              >delete</v-btn>
+                title="delete atom"
+              >
+                <v-icon>delete</v-icon>
+              </v-btn>
             </v-flex>
 
             <v-flex xs6>
@@ -61,10 +75,16 @@
 
 <script>
 import { mapGetters, mapActions } from "vuex";
-import AtomService from '@/services/AtomService'
+import AtomService from "@/services/AtomService";
+import ProjectViewBomAtomDetails from "./ProjectViewBomAtomDetails";
+import ProjectViewBomAtomUpdate from "./ProjectViewBomAtomUpdate";
 
 export default {
   name: "ProjectViewBom",
+  components: {
+    ProjectViewBomAtomDetails,
+    ProjectViewBomAtomUpdate,
+  },
   data() {
     return {
       atomToUpdate: null,
@@ -75,7 +95,12 @@ export default {
     ...mapGetters(["getBom", "getProject", "getAllProducts"]),
   },
   methods: {
-    ...mapActions(["fetchBom", "fetchAssemblableProducts", "deleteBom", "fetchAllProducts"]),
+    ...mapActions([
+      "fetchBom",
+      "fetchAssemblableProducts",
+      "deleteBom",
+      "fetchAllProducts",
+    ]),
     selectAtomToUpdate(i) {
       this.atomToUpdate = i;
     },
@@ -88,17 +113,17 @@ export default {
     hideDetails() {
       this.atomDetails = null;
     },
-    async deleteAtom(atomID){
+    async deleteAtom(atomID) {
       try {
-        const ret = await AtomService.delete(atomID)
+        const ret = await AtomService.delete(atomID);
         // console.log(ret)
-        if(ret.status === 200){
-        this.fetchBom(this.getProject.uuid);
+        if (ret.status === 200) {
+          this.fetchBom(this.getProject.uuid);
         }
       } catch (err) {
         console.log(err);
       }
-    }
+    },
   },
   created() {
     this.fetchBom(this.getProject.uuid);
