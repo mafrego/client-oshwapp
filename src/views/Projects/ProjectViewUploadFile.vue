@@ -2,7 +2,7 @@
   <form @submit.prevent="submitFile" enctype="multipart/form-data">
     <div v-if="getErrorBom" class="message-error">{{getErrorBom.join(", ")}}</div>
     <div v-if="message" class="message-error">{{message}}</div>
-    <div v-if="getProject.state === 'assembling'" class="message-success">bom uploaded!</div>
+    <div v-if="getProject.state === 'assembling'" class="message-success">BOM uploaded!</div>
     <div v-if="getProject.state != 'assembling'" class="field">
       <label for="file" class="label">
         <!-- the v-file-input works with v-model -->
