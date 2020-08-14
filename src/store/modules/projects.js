@@ -144,6 +144,19 @@ const actions = {
             commit('setLoading', false)
         }
     },
+    async createAtom({ commit, state }, atom) {
+        try {
+            commit('setLoading', true)
+            const response = await AtomService.addAtomToBom(atom, state.project.uuid)
+            // console.log(response.data)
+            commit('updateBom', response.data)
+            return response
+        } catch (error) {
+            commit('setError', error)
+        } finally {
+            commit('setLoading', false)
+        }
+    },
     async reviseAtom({ commit }, atom) {
         try {
             commit('setLoading', true)
@@ -267,6 +280,10 @@ const mutations = {
     },
     uploadBom: (state, project) => {
         state.project = project
+    },
+    updateBom: (state, atom) => {
+        state.bom.unshift(atom)     // add at the beginning of array
+        // state.bom.push(atom)     // add at the end of array
     },
     updateState: (state, projectState) => {
         state.project.state = projectState

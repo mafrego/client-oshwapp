@@ -20,6 +20,11 @@ export default {
       .post('atoms', atom, { headers: authHeader() })
   },
   
+  addAtomToBom (atom, projectID) {
+    return Api()
+      .post(`atom/${projectID}`, atom, { headers: authHeader() })
+  },
+  
   put (atom) {
     return Api()
       .put('atom', atom, { headers: authHeader() })

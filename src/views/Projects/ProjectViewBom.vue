@@ -12,7 +12,17 @@
           >
             <v-icon>delete</v-icon>
           </v-btn>
+          <v-btn
+            @click="toggleCreateAtom"
+            class="green ml-2"
+            title="add atom"
+            light
+          >
+            <v-icon>add</v-icon>
+          </v-btn>
         </v-toolbar-items>
+
+        <project-view-bom-atom-create v-if="showCreateAtom" />
 
         <div v-for="atom in getBom" :key="atom.uuid">
           <v-layout>
@@ -76,17 +86,20 @@
 <script>
 import { mapGetters, mapActions, mapMutations } from "vuex";
 import AtomService from "@/services/AtomService";
+import ProjectViewBomAtomCreate from "./ProjectViewBomAtomCreate";
 import ProjectViewBomAtomDetails from "./ProjectViewBomAtomDetails";
 import ProjectViewBomAtomUpdate from "./ProjectViewBomAtomUpdate";
 
 export default {
   name: "ProjectViewBom",
   components: {
+    ProjectViewBomAtomCreate,
     ProjectViewBomAtomDetails,
     ProjectViewBomAtomUpdate,
   },
   data() {
     return {
+      showCreateAtom: false,
       atomToUpdate: null,
       atomDetails: null,
     };
@@ -102,6 +115,9 @@ export default {
       "fetchAllProducts",
     ]),
     ...mapMutations(["setAtom"]),
+    toggleCreateAtom(){
+      this.showCreateAtom = !this.showCreateAtom
+    },
     selectAtomToUpdate(atom) {
       this.atomToUpdate = atom.uuid;
       this.setAtom(atom)
@@ -115,10 +131,10 @@ export default {
     hideDetails() {
       this.atomDetails = null;
     },
+    // TODO refactor the function: add deleteAtom in projects.js and update BOM there after atom deletion
     async deleteAtom(atomID) {
       try {
         const ret = await AtomService.delete(atomID);
-        // console.log(ret)
         if (ret.status === 200) {
           this.fetchBom(this.getProject.uuid);
         }
