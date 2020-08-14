@@ -96,7 +96,7 @@ const actions = {
             commit('setLoading', false)
         }
     },
-    // TODO check-refctor to make sure that functions in if block return something
+    // refactor this mess!!!
     async sendBom({ state, commit }, formData) {
         try {
             commit('setErrorBom', null)
@@ -105,14 +105,12 @@ const actions = {
             if (response.status == 201) {
                 const ret0 = await ProjectService.put({ state: 'assembling' }, state.project.uuid)
                 commit('updateState', ret0.data.state)
-                // http 304 instead of 200 that's why I don't get data from actual project
-                const ret1 = await ProjectService.getAllProducts(state.project.uuid)
-                commit('setProducts', ret1.data)
-                // commit('setProductNames', ret1.data)
-                const ret2 = await ProjectService.getAssemblableProducts(state.project.uuid)
-                commit('setAssemblableProducts', ret2.data)
-                const ret3 = await ProjectService.getBom(state.project.uuid)
-                commit('setBom', ret3.data)
+                // const ret1 = await ProjectService.getAllProducts(state.project.uuid)
+                // commit('setProducts', ret1.data)
+                // const ret2 = await ProjectService.getAssemblableProducts(state.project.uuid)
+                // commit('setAssemblableProducts', ret2.data)
+                // const ret3 = await ProjectService.getBom(state.project.uuid)
+                // commit('setBom', ret3.data)
             }
         } catch (error) {
             commit('setErrorBom', error.response.data)
