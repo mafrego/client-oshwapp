@@ -6,14 +6,18 @@
           upload images
           <v-file-input
             v-model="uploadFiles"
+            counter
+            accept=".png,.svg"
             multiple
             value
             @change="selectFile"
             label="images"
-            chips
+            small-chips
             show-size
             truncate-length="10"
+            prepend-icon="mdi-camera"
           />
+          <!-- TODO simplify all this using :rules in v-file-input -->
           <div v-for="(file, index) in files" :key="index" :class="`level ${file.invalidMessage}`">
             <div v-if="file.invalidMessage" class="level-left">
               <div class="level-item">
@@ -86,7 +90,7 @@ export default {
     },
     validate(file) {
       // check that MAX_SIZE matches MAX_SIZE in FileUpload middleware in server
-      const MAX_SIZE = 500000;
+      const MAX_SIZE = 50000;
       const allowedTypes = ["image/png", "image/svg", "image/jpg", "image/jpeg"];
       if (file.size > MAX_SIZE) {
         return `Max size allowed: ${MAX_SIZE / 1000}Kb!`;
