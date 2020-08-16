@@ -112,7 +112,7 @@ export default {
         }
       });
       try {
-        //TODO add uploadImages() to vuex projects.js(not necessary for the moment)
+        //TODO add uploadImages() to vuex projects.js
         // const res = await FileService.uploadImages(formData, this.getProject.uuid);
         const res = await this.uploadImages(formData);
         // console.log(res.data)

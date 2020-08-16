@@ -96,7 +96,6 @@ const actions = {
             commit('setLoading', false)
         }
     },
-    // refactor this mess!!!
     async sendBom({ state, commit }, formData) {
         try {
             commit('setErrorBom', null)
@@ -105,6 +104,7 @@ const actions = {
             if (response.status == 201) {
                 const ret0 = await ProjectService.put({ state: 'assembling' }, state.project.uuid)
                 commit('updateState', ret0.data.state)
+                // TODO check if following code is necessary
                 // const ret1 = await ProjectService.getAllProducts(state.project.uuid)
                 // commit('setProducts', ret1.data)
                 // const ret2 = await ProjectService.getAssemblableProducts(state.project.uuid)
