@@ -66,7 +66,7 @@
               />
             </v-flex>
             <v-flex xs2>
-              <img class="atom-image" :src="item.imageUrl" />
+              <img class="atom-image" :src="item.imageUrl" :alt="item.name" />
             </v-flex>
             <v-flex xs1>
               <v-btn

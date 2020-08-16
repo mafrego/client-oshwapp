@@ -74,7 +74,7 @@
             </v-flex>
 
             <v-flex xs6>
-              <img class="atom-image" :src="atom.imageUrl" />
+              <img class="atom-image" :src="atom.imageUrl" :alt="atom.name" />
             </v-flex>
           </v-layout>
         </div>

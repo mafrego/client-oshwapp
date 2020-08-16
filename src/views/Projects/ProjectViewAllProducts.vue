@@ -20,7 +20,7 @@
             </v-flex>
 
             <v-flex xs6>
-              <img class="product-image" :src="product.imageUrl" />
+              <img class="product-image" :src="product.imageUrl" :alt="product.name" />
             </v-flex>
           </v-layout>
         </div>
