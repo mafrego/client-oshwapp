@@ -13,6 +13,7 @@
         <v-text-field v-model="atomToUpdate.description" label="description" ></v-text-field>
         <!-- TODO if quantity can be updated then update quantity_to_assemble as well -->
         <v-text-field v-model="atomToUpdate.quantity" label="quantity" type="number" min="1"></v-text-field>
+        <v-text-field v-model="atomToUpdate.cost" label="cost" type="number" min="0" step="any"></v-text-field>
 
         <v-btn class="yellow" @click="update()">
           <v-icon>save</v-icon>
