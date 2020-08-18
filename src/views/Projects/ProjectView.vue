@@ -20,7 +20,6 @@
         <v-icon>add_a_photo</v-icon>
       </v-btn>
       <v-btn
-        v-if="getProject.state === 'assembling' || getProject.state === 'rooted' || getProject.state === 'released' "
         @click="toggleComponentBOM"
         class="blue ml-2"
         title="BOM"
