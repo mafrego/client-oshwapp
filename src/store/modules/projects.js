@@ -314,6 +314,30 @@ const mutations = {
     updateAtomCost: (state, cost) => {
         state.atom.cost = cost
     },
+    updateAtomCurrency: (state, currency) => {
+        state.atom.currency = currency
+    },
+    updateAtomLink: (state, link) => {
+        state.atom.link = link
+    },
+    updateAtomVendorURL: (state, vendorUrl) => {
+        state.atom.vendorUrl = vendorUrl
+    },
+    updateAtomMOQ: (state, moq) => {
+        state.atom.moq = moq
+    },
+    updateAtomLeadTime: (state, leadTime) => {
+        state.atom.leadTime = leadTime
+    },
+    updateAtomMaterial: (state, material) => {
+        state.atom.material = material
+    },
+    updateAtomWeight: (state, weight) => {
+        state.atom.weight = weight
+    },
+    updateAtomNotes: (state, notes) => {
+        state.atom.notes = notes
+    },
     setAssemblableProducts: (state, products) => {
         state.assemblableProducts = products
     },

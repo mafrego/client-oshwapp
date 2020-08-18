@@ -11,10 +11,10 @@
         <v-text-field v-model="currency" :rules="[rules.isCurrency]" label="currency"></v-text-field>
         <v-text-field v-model="link" :rules="[rules.isURL]" label="link"></v-text-field>
         <v-text-field v-model="vendorUrl" :rules="[rules.isURL]" label="vendor"></v-text-field>
-        <v-text-field v-model="moq" :rules="[rules.positiveInt]" label="mimimum quantity order"></v-text-field>
+        <v-text-field v-model="moq" :rules="[rules.isPositiveInt]" label="mimimum quantity order"></v-text-field>
         <v-text-field v-model="leadTime" :rules="[rules.isDuration]" label="lead time"></v-text-field>
         <v-text-field v-model="material" :rules="[rules.isAlphanumeric]" label="material"></v-text-field>
-        <v-text-field v-model="weight" :rules="[rules.positiveFloat]" label="weight"></v-text-field>
+        <v-text-field v-model="weight" :rules="[rules.isPositiveFloat]" label="weight"></v-text-field>
         <v-text-field v-model="notes" :rules="[rules.isDescription]" label="notes"></v-text-field>
 
         <v-btn class="yellow" @click="update()">
@@ -45,6 +45,16 @@ export default {
           if(value) return pattern.test(value) || "Only alphanumeric, dots, hyphens, underscore chars";
           else return true
         },
+        isAlphanumeric: (value) => {
+          const pattern = /^[a-zA-Z0-9_]*$/;
+          if(value) return pattern.test(value) || "Only alphanumeric, dots, hyphens, underscore chars";
+          else return true
+        },
+        isCurrency: (value) => {
+          const pattern = /[A-Z]{3}/;
+          if(value) return pattern.test(value) || "only currency ISO 4217";
+          else return true
+        },
         isURL: (value) => {
           const pattern = /https?:\/\/(www\.)?[-a-zA-Z0-9@:%._+~#=]{1,256}\.[a-zA-Z0-9()]{1,6}\b([-a-zA-Z0-9()@:%_+.~#?&//=]*)/;
           if(value) return pattern.test(value) || "invalid URL";
@@ -58,6 +68,11 @@ export default {
         isPositiveInt: (value) => {
           const pattern = /^[1-9]+[0-9]*$/;
           if(value) return pattern.test(value) || "only positive integers > 0";
+          else return true
+        },
+        isDuration: (value) => {
+          const pattern = /^P(?!$)(\d+(?:\.\d+)?Y)?(\d+(?:\.\d+)?M)?(\d+(?:\.\d+)?W)?(\d+(?:\.\d+)?D)?(T(?=\d)(\d+(?:\.\d+)?H)?(\d+(?:\.\d+)?M)?(\d+(?:\.\d+)?S)?)?$/;
+          if(value) return pattern.test(value) || "only duration ISO 8601";
           else return true
         }
       }
@@ -82,66 +97,66 @@ export default {
       },
       currency: {
         get() {
-          return this.$store.state.projects.atom.cost
+          return this.$store.state.projects.atom.currency
         },
         set (value) {
-          this.$store.commit('updateAtomCost', value)
+          this.$store.commit('updateAtomCurrency', value)
         }
       },
       link: {
         get() {
-          return this.$store.state.projects.atom.cost
+          return this.$store.state.projects.atom.link
         },
         set (value) {
-          this.$store.commit('updateAtomCost', value)
+          this.$store.commit('updateAtomLink', value)
         }
       },
       vendorUrl: {
         get() {
-          return this.$store.state.projects.atom.cost
+          return this.$store.state.projects.atom.vendorUrl
         },
         set (value) {
-          this.$store.commit('updateAtomCost', value)
+          this.$store.commit('updateAtomVendorURL', value)
         }
       },
       moq: {
         get() {
-          return this.$store.state.projects.atom.cost
+          return this.$store.state.projects.atom.moq
         },
         set (value) {
-          this.$store.commit('updateAtomCost', value)
+          this.$store.commit('updateAtomMOQ', value)
         }
       },
       leadTime: {
         get() {
-          return this.$store.state.projects.atom.cost
+          return this.$store.state.projects.atom.leadTime
         },
         set (value) {
-          this.$store.commit('updateAtomCost', value)
+          this.$store.commit('updateAtomLeadTime', value)
         }
       },
       material: {
         get() {
-          return this.$store.state.projects.atom.cost
+          return this.$store.state.projects.atom.material
         },
         set (value) {
-          this.$store.commit('updateAtomCost', value)
+          this.$store.commit('updateAtomMaterial', value)
         }
       },
       weight: {
         get() {
-          return this.$store.state.projects.atom.cost
+          return this.$store.state.projects.atom.weight
         },
         set (value) {
-          this.$store.commit('updateAtomCost', value)
+          this.$store.commit('updateAtomWeight', value)
         }
       },
       notes: {
         get() {
-          return this.$store.state.projects.atom.cost
+          return this.$store.state.projects.atom.notes
         },
         set (value) {
-          this.$store.commit('updateAtomCost', value)
+          this.$store.commit('updateAtomNotes', value)
         }
       },
   },
