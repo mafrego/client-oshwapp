@@ -157,10 +157,11 @@ const actions = {
             commit('setLoading', false)
         }
     },
-    async reviseAtom({ commit }, atom) {
+    async reviseAtom({ commit, state }) {
         try {
             commit('setLoading', true)
-            const response = await AtomService.put(atom)
+            console.log('state.atom:', state.atom)
+            const response = await AtomService.put(state.atom)
             // console.log(response.data)
             commit('updateAtom', response.data)
             return response
@@ -309,6 +310,9 @@ const mutations = {
     },
     updateAtomDescription: (state, description) => {
         state.atom.description = description
+    },
+    updateAtomCost: (state, cost) => {
+        state.atom.cost = cost
     },
     setAssemblableProducts: (state, products) => {
         state.assemblableProducts = products
