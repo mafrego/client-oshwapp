@@ -1,10 +1,10 @@
 <template>
   <v-layout column>
     <v-flex xs6>
-      <panel title="BOM" v-if="getBom.length">
+      <panel title="BOM" >
         <v-toolbar-items slot="action">
           <v-btn
-            v-if="getBom.length == getAllProducts.length"
+            v-if="getBom.length > 0 && getBom.length == getAllProducts.length"
             @click="deleteBom"
             class="red ml-2"
             title="delete BOM"
