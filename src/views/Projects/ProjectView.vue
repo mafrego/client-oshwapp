@@ -60,7 +60,6 @@
       <v-col md6>
         <div class="project-name">{{getProject.name}}</div>
         <div class="project-description">{{getProject.description}}</div>
-        <div class="project-material">{{getProject.material}}</div>
         <div class="project-state">{{getProject.state}}</div>
         <div class="project-datetime">{{getProject.dateTime}}</div>
       </v-col>
