@@ -27,10 +27,6 @@
     </v-toolbar-items> -->
 
     <v-toolbar-items v-if="isUserLoggedIn" class="mt-10 mr-4">
-      <router-link class="home" tag="span" :to="{name: 'profile'}">profile</router-link>
-    </v-toolbar-items>
-
-    <v-toolbar-items v-if="isUserLoggedIn" class="mt-10 mr-4">
       <router-link class="home" tag="span" :to="{name: 'projects'}">projects</router-link>
     </v-toolbar-items>
 
@@ -58,10 +54,12 @@
 
     <v-spacer></v-spacer>
 
-    <v-toolbar-items
-      v-if="isUserLoggedIn"
-      class="mt-10 mr-4"
-    >hi {{user.username}}!</v-toolbar-items>
+    <v-toolbar-items v-if="isUserLoggedIn" class="mt-10 mr-4">
+      <router-link class="home" tag="span" :to="{name: 'profile'}">
+        <v-icon>sentiment_satisfied</v-icon>
+        hi {{user.username}}!
+        </router-link>
+    </v-toolbar-items>
 
     <v-toolbar-items>
       <v-btn v-if="!isUserLoggedIn" text dark :to="{name: 'login'}">Login</v-btn>
