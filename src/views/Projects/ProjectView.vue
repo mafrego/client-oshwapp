@@ -1,11 +1,11 @@
 <template>
   <panel title="Project">
     <v-toolbar-items slot="action">
-      <v-btn 
+      <v-btn
         v-if="getProject.state != 'released'"
-        @click="toggleComponentUpload" 
-        class="green ml-2" 
-        title="upload BOM" 
+        @click="toggleComponentUpload"
+        class="green ml-2"
+        title="upload BOM"
         light
       >
         <v-icon>attach_file</v-icon>
@@ -19,12 +19,7 @@
       >
         <v-icon>add_a_photo</v-icon>
       </v-btn>
-      <v-btn
-        @click="toggleComponentBOM"
-        class="blue ml-2"
-        title="BOM"
-        light
-      >
+      <v-btn @click="toggleComponentBOM" class="blue ml-2" title="BOM" light>
         <v-icon>list</v-icon>
       </v-btn>
       <v-btn
@@ -66,12 +61,12 @@
       <v-col md6>
         <img class="project-image" :src="getProject.imageUrl" />
       </v-col>
-          <v-progress-circular
-            class="ml-10"
-            v-if="getLoading"
-            :indeterminate="getLoading"
-            color="light-blue"
-          ></v-progress-circular>
+      <v-progress-circular
+        class="ml-10"
+        v-if="getLoading"
+        :indeterminate="getLoading"
+        color="light-blue"
+      ></v-progress-circular>
     </v-row>
 
     <project-view-upload-file v-if="showComponentUpload" />
@@ -112,7 +107,12 @@ export default {
     };
   },
   computed: {
-    ...mapGetters(["getProject", "getBom", "getAssemblableProducts", "getLoading"]),
+    ...mapGetters([
+      "getProject",
+      "getBom",
+      "getAssemblableProducts",
+      "getLoading",
+    ]),
   },
   methods: {
     ...mapActions([
@@ -122,13 +122,14 @@ export default {
       "fetchAllProducts",
     ]),
     ...mapMutations(["setProject"]),
-    // TODO add alert pop up to confirm project deletion
     del() {
       try {
-        this.deleteProject(this.getProject.uuid);
-        this.$router.push({
-          name: "projects",
-        });
+        if (confirm("are you sure?")) {
+          this.deleteProject(this.getProject.uuid);
+          this.$router.push({
+            name: "projects",
+          });
+        }
       } catch (err) {
         console.log(err);
       }
