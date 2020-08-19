@@ -55,7 +55,7 @@
     <v-spacer></v-spacer>
 
     <v-toolbar-items v-if="isUserLoggedIn" class="mt-10 mr-4">
-      <router-link class="home" tag="span" :to="{name: 'profile'}">
+      <router-link class="home" tag="span" :to="{name: 'userPanel'}">
         <v-icon>sentiment_satisfied</v-icon>
         hi {{user.username}}!
         </router-link>
@@ -79,6 +79,7 @@
 import {mapActions, mapState} from 'vuex' 
 
 export default {
+  name: "PageHeader",
   methods: {
     ...mapActions(["setUser", "setToken"]),
     // ...mapActions('users',[
