@@ -109,8 +109,8 @@ const actions = {
                 // commit('setProducts', ret1.data)
                 // const ret2 = await ProjectService.getAssemblableProducts(state.project.uuid)
                 // commit('setAssemblableProducts', ret2.data)
-                // const ret3 = await ProjectService.getBom(state.project.uuid)
-                // commit('setBom', ret3.data)
+                const ret3 = await ProjectService.getBom(state.project.uuid)
+                commit('setBom', ret3.data)
             }
         } catch (error) {
             commit('setErrorBom', error.response.data)
@@ -160,11 +160,20 @@ const actions = {
     async reviseAtom({ commit, state }) {
         try {
             commit('setLoading', true)
-            console.log('state.atom:', state.atom)
             const response = await AtomService.put(state.atom)
-            // console.log(response.data)
             commit('updateAtom', response.data)
             return response
+        } catch (error) {
+            commit('setError', error)
+        } finally {
+            commit('setLoading', false)
+        }
+    },
+    async deleteAtom({ commit }, atomID) {
+        try {
+            commit('setLoading', true)
+            const response = await AtomService.delete(atomID)
+            commit('deleteAtom', response.data)
         } catch (error) {
             commit('setError', error)
         } finally {
@@ -279,9 +288,6 @@ const mutations = {
     deleteAssembly: (state, assemblyID) => {
         state.products = state.products.filter(product => product.uuid != assemblyID)
     },
-    uploadBom: (state, project) => {
-        state.project = project
-    },
     updateBom: (state, atom) => {
         state.bom.unshift(atom)     // add at the beginning of array
         // state.bom.push(atom)     // add at the end of array
@@ -306,7 +312,13 @@ const mutations = {
     },
     updateAtom: (state, atom) => {
         state.atom = atom
-        state.bom.forEach((item, i) => { if(item.uuid == atom.uuid) state.bom[i] = atom})
+        state.bom.forEach((item, i) => { if (item.uuid == atom.uuid) state.bom[i] = atom })
+    },
+    deleteAtom: (state, atom) => {
+        state.bom = state.bom.filter(item => { return item.uuid != atom.uuid })
+        state.products = state.products.filter(item => { return item.uuid != atom.uuid })
+        state.assemblableProducts = state.assemblableProducts.filter(item => { return item.uuid != atom.uuid })
+        state.productNames = state.productNames.filter(item => { return item != atom.name })
     },
     updateAtomDescription: (state, description) => {
         state.atom.description = description
