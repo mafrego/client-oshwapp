@@ -1,4 +1,5 @@
 import axios from 'axios';
+import Api from '@/services/Api'
 import authHeader from './AuthHeader';
 
 let url = null
@@ -27,6 +28,12 @@ class UserService {
   getAdminBoard() {
     return axios.get(API_URL + 'admin', { headers: authHeader() });
   }
+
+  put (user) {
+    return Api()
+      .put('user', user, { headers: authHeader() })
+  }
+  
 }
 
 export default new UserService();

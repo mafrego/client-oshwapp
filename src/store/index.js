@@ -4,6 +4,7 @@ import createPersistedState from 'vuex-persistedstate'
 // import todos from './modules/todos'
 import projects from './modules/projects'
 // import users from './modules/users'
+import UserService from '@/services/UserService'
 
 Vue.use(Vuex)
 
@@ -35,7 +36,9 @@ export default new Vuex.Store({
   state: {
     token: null,
     user: null,
-    isUserLoggedIn: false
+    isUserLoggedIn: false,
+    userLoading: false,
+    userError: null
   },
 
   actions: {
@@ -44,6 +47,18 @@ export default new Vuex.Store({
     },
     setUser({ commit }, user) {
       commit('setUser', user)
+    },
+    async reviseUser({commit, state}) {
+        try {
+            commit('setUserLoading', true)
+            const response = await UserService.put(state.user)
+            commit('updateUser', response.data)
+            return response
+        } catch (error) {
+            commit('setUserError', error)
+        } finally {
+            commit('setUserLoading', false)
+        }
     }
   },
 
@@ -59,7 +74,19 @@ export default new Vuex.Store({
     },
     setUser(state, user) {
       state.user = user
-    }
+    },
+    updateUser(state, user){
+      state.user = user
+    },
+    updateUserDescription(state, description) {
+      state.user.description = description
+    },
+    setUserLoading(state, userLoading){
+      state.userLoading = userLoading
+    },
+    setUserError(state, userError){
+      state.userError = userError
+    },
   }
 
 })
