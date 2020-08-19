@@ -1,23 +1,18 @@
 <template>
   <v-layout column>
     <v-flex xs6>
-      <panel title="BOM" >
+      <panel title="BOM">
         <v-toolbar-items slot="action">
           <v-btn
             v-if="getBom.length > 0 && getBom.length == getAllProducts.length"
-            @click="deleteBom"
+            @click="deleteBOM"
             class="red ml-2"
             title="delete BOM"
             light
           >
             <v-icon>delete</v-icon>
           </v-btn>
-          <v-btn
-            @click="toggleCreateAtom"
-            class="green ml-2"
-            title="add atom"
-            light
-          >
+          <v-btn @click="toggleCreateAtom" class="green ml-2" title="add atom" light>
             <v-icon>add</v-icon>
           </v-btn>
         </v-toolbar-items>
@@ -28,8 +23,6 @@
           <v-layout>
             <v-flex xs6>
               <div class="atom-name">{{atom.name}}</div>
-              <!-- <div class="atom-description">{{atom.description}}</div> -->
-              <!-- <div class="atom-material">{{atom.material}}</div> -->
 
               <v-btn color="blue" @click="selectAtomDetails(atom.uuid)" title="atom details">
                 <v-icon>article</v-icon>
@@ -52,7 +45,7 @@
               >
                 <v-icon>update</v-icon>
               </v-btn>
-              <project-view-bom-atom-update v-if="atomToUpdate === atom.uuid" v-bind:atom="atom"/>
+              <project-view-bom-atom-update v-if="atomToUpdate === atom.uuid" v-bind:atom="atom" />
               <v-btn
                 v-if="atomToUpdate === atom.uuid"
                 @click="hideUpdate"
@@ -66,7 +59,7 @@
                 v-if="atom.quantity === atom.quantity_to_assemble"
                 class="ml-2"
                 color="red"
-                @click="deleteAtom(atom.uuid)"
+                @click="deleteATOM(atom.uuid)"
                 title="delete atom"
               >
                 <v-icon>delete</v-icon>
@@ -85,7 +78,6 @@
 
 <script>
 import { mapGetters, mapActions, mapMutations } from "vuex";
-import AtomService from "@/services/AtomService";
 import ProjectViewBomAtomCreate from "./ProjectViewBomAtomCreate";
 import ProjectViewBomAtomDetails from "./ProjectViewBomAtomDetails";
 import ProjectViewBomAtomUpdate from "./ProjectViewBomAtomUpdate";
@@ -112,15 +104,16 @@ export default {
       "fetchBom",
       "fetchAssemblableProducts",
       "deleteBom",
+      "deleteAtom",
       "fetchAllProducts",
     ]),
     ...mapMutations(["setAtom"]),
-    toggleCreateAtom(){
-      this.showCreateAtom = !this.showCreateAtom
+    toggleCreateAtom() {
+      this.showCreateAtom = !this.showCreateAtom;
     },
     selectAtomToUpdate(atom) {
       this.atomToUpdate = atom.uuid;
-      this.setAtom(atom)
+      this.setAtom(atom);
     },
     hideUpdate() {
       this.atomToUpdate = null;
@@ -131,12 +124,19 @@ export default {
     hideDetails() {
       this.atomDetails = null;
     },
-    // TODO refactor the function: add deleteAtom in projects.js and update BOM there after atom deletion
-    async deleteAtom(atomID) {
+    async deleteBOM(){
       try {
-        const ret = await AtomService.delete(atomID);
-        if (ret.status === 200) {
-          this.fetchBom(this.getProject.uuid);
+        if(confirm("are you sure?")){
+          await this.deleteBom()
+        }
+      } catch (error) {
+        console.log('error:', error)
+      }
+    },
+    async deleteATOM(atomID) {
+      try {
+        if (confirm("are you sure?")) {
+          await this.deleteAtom(atomID);
         }
       } catch (err) {
         console.log(err);
