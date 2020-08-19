@@ -18,6 +18,7 @@ import ViewProject from '@/views/Projects/ProjectView'
 import Experiments from '@/views/Experiments/Experiments.vue'
 import AdminBoard from '@/views/Admin/AdminBoard.vue'
 import Todos from '@/views/Todos/Todos.vue'
+import UserPanel from '@/views/Users/UserPanel.vue'
 
 Vue.use(VueRouter)
 
@@ -101,6 +102,11 @@ const routes = [
     path: '/todos',
     name: 'todos',
     component: Todos
+  },
+  {
+    path: '/userPanel',
+    name: 'userPanel',
+    component: UserPanel
   },
   {
     path: '*',
