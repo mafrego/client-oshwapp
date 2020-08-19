@@ -28,8 +28,8 @@
           <v-layout>
             <v-flex xs6>
               <div class="atom-name">{{atom.name}}</div>
-              <div class="atom-description">{{atom.description}}</div>
-              <div class="atom-material">{{atom.material}}</div>
+              <!-- <div class="atom-description">{{atom.description}}</div> -->
+              <!-- <div class="atom-material">{{atom.material}}</div> -->
 
               <v-btn color="blue" @click="selectAtomDetails(atom.uuid)" title="atom details">
                 <v-icon>article</v-icon>
@@ -39,7 +39,7 @@
                 v-if="atomDetails === atom.uuid"
                 @click="hideDetails"
                 color="grey"
-                title="hide"
+                title="hide details"
               >
                 <v-icon>close</v-icon>
               </v-btn>
@@ -57,7 +57,7 @@
                 v-if="atomToUpdate === atom.uuid"
                 @click="hideUpdate"
                 color="grey"
-                title="hide"
+                title="hide update"
               >
                 <v-icon>close</v-icon>
               </v-btn>
