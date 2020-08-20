@@ -79,7 +79,7 @@ export default {
     ...mapGetters(["getUser"]),
     ...mapActions(["reviseUser"]),
     async update() {
-      console.log("calling update...")
+      // console.log("calling update...")
       try {
         this.message = "";
         this.error = "";
