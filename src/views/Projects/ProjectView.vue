@@ -41,6 +41,14 @@
         <v-icon>handyman</v-icon>
       </v-btn>
       <v-btn
+        @click="toggleComponentProjectUpdate"
+        class="yellow ml-2"
+        title="update project"
+        light
+      >
+        <v-icon>update</v-icon>
+      </v-btn>
+      <v-btn
         v-if="getProject.state != 'released'"
         class="red ml-2"
         @click="del"
@@ -69,6 +77,8 @@
       ></v-progress-circular>
     </v-row>
 
+    <project-view-update v-if="showComponentUpdate" />
+    <br />
     <project-view-upload-file v-if="showComponentUpload" />
     <br />
     <project-view-upload-images v-if="showComponentUploadImages" />
@@ -82,6 +92,7 @@
 </template>
 
 <script>
+import ProjectViewUpdate from "./ProjectViewUpdate";
 import ProjectViewUploadFile from "./ProjectViewUploadFile";
 import ProjectViewUploadImages from "./ProjectViewUploadImages";
 import ProjectViewBom from "./ProjectViewBom";
@@ -91,6 +102,7 @@ import { mapGetters, mapMutations, mapActions } from "vuex";
 
 export default {
   components: {
+    ProjectViewUpdate,
     ProjectViewUploadFile,
     ProjectViewUploadImages,
     ProjectViewBom,
@@ -99,6 +111,7 @@ export default {
   },
   data() {
     return {
+      showComponentUpdate: false,
       showComponentUpload: false,
       showComponentUploadImages: false,
       showComponentBOM: false,
@@ -133,6 +146,9 @@ export default {
       } catch (err) {
         console.log(err);
       }
+    },
+    toggleComponentProjectUpdate() {
+      this.showComponentUpdate = !this.showComponentUpdate;
     },
     toggleComponentUpload() {
       this.showComponentUpload = !this.showComponentUpload;
