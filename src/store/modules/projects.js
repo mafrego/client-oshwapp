@@ -73,10 +73,11 @@ const actions = {
             commit('setLoading', false)
         }
     },
-    async updateProjectState({ state, commit }, updates) {
+    // projectState is an object
+    async updateProjectState({ state, commit }, projectState) {
         try {
             commit('setLoading', true)
-            const response = await ProjectService.updateProjectState(updates, state.project.uuid)
+            const response = await ProjectService.updateProjectState(projectState, state.project.uuid)
             commit('updateState', response.data.state)
             return response.status
         } catch (error) {
@@ -113,7 +114,7 @@ const actions = {
             commit('setLoading', true)
             const response = await FileService.sendBom(formData, state.project.uuid)
             if (response.status == 201) {
-                const ret0 = await ProjectService.put({ state: 'assembling' }, state.project.uuid)
+                const ret0 = await ProjectService.updateProjectState({ state: 'assembling' }, state.project.uuid)
                 commit('updateState', ret0.data.state)
                 // TODO check if following code is necessary
                 // const ret1 = await ProjectService.getAllProducts(state.project.uuid)
@@ -146,7 +147,7 @@ const actions = {
             const response = await ProjectService.deleteBom(state.project.uuid)
             if (response.status === 200) {
                 commit('deleteBom')
-                const ret = await ProjectService.put({ state: 'created' }, state.project.uuid)
+                const ret = await ProjectService.updateProjectState({ state: 'created' }, state.project.uuid)
                 commit('updateState', ret.data.state)
             }
         } catch (error) {
@@ -241,7 +242,7 @@ const actions = {
             commit('setAssemblableProducts', response.data)
             // if response is the root assembly: the only part left to assemble
             if (response.data.length === 1 && response.data[0].quantity_to_assemble === 1) {
-                const ret = await ProjectService.put(
+                const ret = await ProjectService.updateProjectState(
                     { state: 'rooted' },
                     state.project.uuid)
                 commit('updateState', ret.data.state)
@@ -266,7 +267,7 @@ const actions = {
                 commit('setAssemblableProducts', ret.data)
                 commit('deleteAssembly', assemblyID)
                 if (state.project.state === 'rooted') {
-                    const ret = await ProjectService.put({ state: 'assembling' }, state.project.uuid)
+                    const ret = await ProjectService.updateProjectState({ state: 'assembling' }, state.project.uuid)
                     commit('updateState', ret.data.state)
                 }
             }
