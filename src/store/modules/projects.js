@@ -76,9 +76,20 @@ const actions = {
     async updateProjectState({ state, commit }, updates) {
         try {
             commit('setLoading', true)
-            const response = await ProjectService.put(updates, state.project.uuid)
+            const response = await ProjectService.updateProjectState(updates, state.project.uuid)
             commit('updateState', response.data.state)
             return response.status
+        } catch (error) {
+            commit('setError', error)
+        } finally {
+            commit('setLoading', false)
+        }
+    },
+    async updateProject({ state, commit }) {
+        try {
+            commit('setLoading', true)
+            const response = await ProjectService.updateProject(state.project, state.project.uuid)
+            return response
         } catch (error) {
             commit('setError', error)
         } finally {
@@ -276,6 +287,9 @@ const mutations = {
     },
     addProject: (state, project) => {
         state.projects.push(project)
+    },
+    updateProjectDescription: (state, description) => {
+        state.project.description = description
     },
     delProject: (state, projectID) => {
         state.bom = []

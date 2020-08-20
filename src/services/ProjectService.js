@@ -32,7 +32,12 @@ export default {
       .post('projects', project, { headers: authHeader() })
   },
 
-  put(project, projectId) {
+  updateProjectSate(project, projectId) {
+    return Api()
+      .put(`projectstate/${projectId}`, project, { headers: authHeader() })
+  },
+
+  updateProject(project, projectId) {
     return Api()
       .put(`project/${projectId}`, project, { headers: authHeader() })
   },
