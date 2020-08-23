@@ -1,29 +1,25 @@
 <template>
   <div>
-    <ul>
+    <!-- <ul>
       <li v-for="(value, name) in atom" :key="name">
-        {{name}}: {{value}}
-        <!-- <ul>
-          <li>name: {{atom.name}}</li>
-          <li>uuid: {{atom.uuid}}</li>
-          <li>code: {{atom.code}}</li>
-          <li>description: {{atom.description}}</li>
-          <li>link: {{atom.link}}</li>
-          <li>vendor URL:{{atom.vendorUrl}}</li>
-          <li>minimum order quantity: {{atom.moq}}</li>
-          <li>lead time: {{atom.leadTime}}</li>
-          <li>notes: {{atom.notes}}</li>
+        {{name}}: {{value}} -->
+        <ul>
+          <!-- <li>name: {{atom.name}}</li> -->
+          <!-- <li>uuid: {{atom.uuid}}</li> -->
+          <li v-if="atom.description" >description: {{atom.description}}</li>
+          <li v-if="atom.link" ><a :href="atom.link" target="_blank" >official page</a></li>
+          <li v-if="atom.vendorUrl"><a :href="atom.vendorUrl" target="_blank" >vendor</a></li>
+          <li v-if="atom.code" >vendor code: {{atom.code}}</li>
+          <li v-if="atom.moq">minimum order quantity: {{atom.moq}}</li>
+          <li v-if="atom.leadTime">lead time: {{atom.leadTime}}</li>
+          <li v-if="atom.notes">notes: {{atom.notes}}</li>
           <li>quantity: {{atom.quantity}}</li>
-          <li>quantity left to assemble: {{atom.quantity_to_assemble}}</li>
-          <li>material: {{atom.material}}</li>
-          <li>weight: {{atom.weight}}</li>
-          <li>weight unit: {{atom.weightUnit}}</li>
-          <li>cost per unit: {{atom.costUnit}}</li>
-          <li>currency: {{atom.currency}}</li>
-          <li>image URL: {{atom.imageUrl}}</li>
-        </ul> -->
-      </li>
-    </ul>
+          <li v-if="atom.material">material: {{atom.material}}</li>
+          <li v-if="atom.weight">weight: {{atom.weight}}</li>
+          <li>cost per unit: {{atom.cost}} {{atom.currency}}</li>
+        </ul>
+      <!-- </li>
+    </ul> -->
   </div>
 </template>
 
