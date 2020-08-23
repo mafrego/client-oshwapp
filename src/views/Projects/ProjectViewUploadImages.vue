@@ -90,7 +90,7 @@ export default {
     },
     validate(file) {
       // check that MAX_SIZE matches MAX_SIZE in FileUpload middleware in server
-      const MAX_SIZE = 50000;
+      const MAX_SIZE = 70000;
       const allowedTypes = ["image/png", "image/svg", "image/jpg", "image/jpeg"];
       if (file.size > MAX_SIZE) {
         return `Max size allowed: ${MAX_SIZE / 1000}Kb!`;
