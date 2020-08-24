@@ -12,7 +12,7 @@
         <ul>
           <li>language</li>
           <li>system of measurement adopted: metric system SI</li>
-          <li>headers: regex for each one gives allowed chars and explanation</li>
+          <li>headers camelcase: regex for each one gives allowed chars and explanation</li>
         </ul>
           for improvement and suggestion: link to contact 
       </li>
