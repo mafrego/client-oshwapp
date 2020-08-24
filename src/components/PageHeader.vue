@@ -4,8 +4,12 @@
       <router-link class="home" tag="span" :to="{name: 'home'}">Home</router-link>
     </v-toolbar-items>
 
-    <v-toolbar-items class="mt-10 mr-4">
+    <!-- <v-toolbar-items class="mt-10 mr-4">
       <router-link class="home" tag="span" :to="{name: 'About'}">About</router-link>
+    </v-toolbar-items> -->
+
+    <v-toolbar-items class="mt-10 mr-4">
+      <router-link class="home" tag="span" :to="{name: 'howto'}">how-to</router-link>
     </v-toolbar-items>
 
     <v-toolbar-items class="mt-10 mr-4">

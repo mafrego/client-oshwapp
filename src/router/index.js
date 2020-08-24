@@ -3,6 +3,7 @@ import VueRouter from 'vue-router'
 import Home from '../views/general/Home.vue'
 import Register from '@/views/general/Register'
 import Login from '@/views/general/Login'
+import HowTo from '@/views/Instructional/HowTo.vue'
 import Atoms from '@/views/Atoms/Index'
 import Products from '@/views/Products/ProductIndex.vue'
 import Projects from '@/views/Projects/ProjectsPanel'
@@ -37,6 +38,11 @@ const routes = [
     path: '/login',
     name: 'login',
     component: Login
+  },
+   {
+    path: '/howto',
+    name: 'howto',
+    component: HowTo
   },
    {
     path: '/atoms',
@@ -130,14 +136,14 @@ const routes = [
     // lazy-loaded
     component: () => import('../views/general/BoardAssembler.vue')
   },
-  {
-    path: '/about',
-    name: 'About',
-    // route level code-splitting
-    // this generates a separate chunk (about.[hash].js) for this route
-    // which is lazy-loaded when the route is visited.
-    component: () => import(/* webpackChunkName: "about" */ '../views/general/About.vue')
-  }
+  // {
+  //   path: '/about',
+  //   name: 'About',
+  //   // route level code-splitting
+  //   // this generates a separate chunk (about.[hash].js) for this route
+  //   // which is lazy-loaded when the route is visited.
+  //   component: () => import(/* webpackChunkName: "about" */ '../views/general/About.vue')
+  // }
 ]
 
 const router = new VueRouter({
