@@ -9,7 +9,7 @@
     </v-toolbar-items> -->
 
     <v-toolbar-items class="mt-10 mr-4">
-      <router-link class="home" tag="span" :to="{name: 'howto'}">how-to</router-link>
+      <router-link class="home" tag="span" :to="{name: 'howto'}">HOW-TO</router-link>
     </v-toolbar-items>
 
     <v-toolbar-items class="mt-10 mr-4">
