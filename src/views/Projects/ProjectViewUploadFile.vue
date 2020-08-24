@@ -1,17 +1,20 @@
 <template>
   <form @submit.prevent="submitFile" enctype="multipart/form-data">
-    <div v-if="getErrorBom" class="message-error">{{getErrorBom.join(", ")}}</div>
+    <div v-if="getErrorBom" class="message-error">
+      <ul>
+        <li v-for="error in getErrorBom" :key="error">{{error}}</li>
+      </ul>
+      </div>
     <div v-if="message" class="message-error">{{message}}</div>
     <div v-if="getProject.state === 'assembling'" class="message-success">BOM uploaded!</div>
     <div v-if="getProject.state != 'assembling'" class="field">
       <label for="file" class="label">
         <!-- the v-file-input works with v-model -->
-        upload BOM
         <v-file-input
           v-model="file"
           value
           accept=".csv"
-          label=".csv file"
+          label="select BOM.csv"
           ref="file"
           chips
           show-size
