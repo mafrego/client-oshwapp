@@ -19,7 +19,7 @@
 
         <project-view-bom-atom-create v-if="showCreateAtom" />
 
-        <div v-for="atom in getBom" :key="atom.uuid">
+        <div v-for="atom in getBom" :key="atom.itemNumber">
           <v-layout>
             <v-flex xs6>
               <div class="atom-name">{{atom.name}}</div>
@@ -124,13 +124,13 @@ export default {
     hideDetails() {
       this.atomDetails = null;
     },
-    async deleteBOM(){
+    async deleteBOM() {
       try {
-        if(confirm("are you sure?")){
-          await this.deleteBom()
+        if (confirm("are you sure?")) {
+          await this.deleteBom();
         }
       } catch (error) {
-        console.log('error:', error)
+        console.log("error:", error);
       }
     },
     async deleteATOM(atomID) {
