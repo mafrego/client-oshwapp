@@ -10,6 +10,7 @@
         <v-text-field v-model="cost" :rules="[rules.isPositiveFloat]" label="cost" ></v-text-field>
         <v-text-field v-model="currency" :rules="[rules.isCurrency]" label="currency"></v-text-field>
         <v-text-field v-model="link" :rules="[rules.isURL]" label="link"></v-text-field>
+        <v-text-field v-model="vendorCode" :rules="[rules.isAlphanumeric]" label="vendor code"></v-text-field>
         <v-text-field v-model="vendorUrl" :rules="[rules.isURL]" label="vendor"></v-text-field>
         <v-text-field v-model="moq" :rules="[rules.isPositiveInt]" label="mimimum quantity order"></v-text-field>
         <v-text-field v-model="leadTime" :rules="[rules.isDuration]" label="lead time"></v-text-field>
@@ -46,7 +47,7 @@ export default {
           else return true
         },
         isAlphanumeric: (value) => {
-          const pattern = /^[a-zA-Z0-9_]*$/;
+          const pattern = /^[-a-zA-Z0-9_]*$/;
           if(value) return pattern.test(value) || "Only alphanumeric, dots, hyphens, underscore chars";
           else return true
         },
@@ -109,6 +110,14 @@ export default {
         },
         set (value) {
           this.$store.commit('updateAtomLink', value)
+        }
+      },
+      vendorCode: {
+        get() {
+          return this.$store.state.projects.atom.vendorCode
+        },
+        set (value) {
+          this.$store.commit('updateAtomVendorCode', value)
         }
       },
       vendorUrl: {

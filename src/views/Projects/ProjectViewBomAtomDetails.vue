@@ -6,10 +6,11 @@
         <ul>
           <!-- <li>name: {{atom.name}}</li> -->
           <!-- <li>uuid: {{atom.uuid}}</li> -->
+          <li >item #{{atom.itemNumber}}</li>
           <li v-if="atom.description" >description: {{atom.description}}</li>
           <li v-if="atom.link" ><a :href="atom.link" target="_blank" >official page</a></li>
           <li v-if="atom.vendorUrl"><a :href="atom.vendorUrl" target="_blank" >vendor</a></li>
-          <li v-if="atom.code" >vendor code: {{atom.code}}</li>
+          <li v-if="atom.vendorCode" >vendor code: {{atom.vendorCode}}</li>
           <li v-if="atom.moq">minimum order quantity: {{atom.moq}}</li>
           <li v-if="atom.leadTime">lead time: {{atom.leadTime}}</li>
           <li v-if="atom.notes">notes: {{atom.notes}}</li>
