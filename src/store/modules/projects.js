@@ -311,6 +311,7 @@ const mutations = {
         state.project.state = projectState
     },
     setBom: (state, bom) => {
+        bom.sort((a, b) => a.itemNumber > b.itemNumber ? 1 : b.itemNumber > a.itemNumber ? -1 : 0)
         state.bom = bom
     },
     deleteBom: (state) => {
@@ -346,6 +347,9 @@ const mutations = {
     },
     updateAtomLink: (state, link) => {
         state.atom.link = link
+    },
+    updateAtomVendorCode: (state, vendorCode) => {
+        state.atom.vendorCode = vendorCode
     },
     updateAtomVendorURL: (state, vendorUrl) => {
         state.atom.vendorUrl = vendorUrl
