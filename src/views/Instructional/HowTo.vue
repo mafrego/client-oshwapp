@@ -8,13 +8,13 @@
         </v-btn>
       </li>
       <li>write and upload a bom</li>
-      <li>oshwbp 
+      <li>oshwbp
         <ul>
           <li>language</li>
           <li>system of measurement adopted: metric system SI</li>
-          <li>headers: regex for each one <code>regex example: ^[a-zA-Z0-9]{3}</code></li>
+          <li>headers: regex for each one gives allowed chars and explanation</li>
         </ul>
-          for improvement and suggestion link to contact 
+          for improvement and suggestion: link to contact 
       </li>
       <li>take and upload images</li>
       <li>standard images: size, format and background</li>
