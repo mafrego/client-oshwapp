@@ -1,6 +1,9 @@
 <template>
   <panel title="Project">
     <v-toolbar-items slot="action">
+      <v-btn @click="toggleComponentValidateBOM" class="grey ml-2" title="validate BOM" light>
+        <v-icon>done</v-icon>
+      </v-btn>
       <v-btn
         v-if="getProject.state != 'released'"
         @click="toggleComponentUpload"
@@ -10,6 +13,9 @@
       >
         <v-icon>attach_file</v-icon>
       </v-btn>
+      <v-btn @click="toggleComponentBOM" class="blue ml-2" title="BOM list" light>
+        <v-icon>list</v-icon>
+      </v-btn>
       <v-btn
         v-if="getProject.state === 'assembling' || getProject.state === 'rooted' || getProject.state === 'released'"
         @click="toggleComponentUploadImages"
@@ -18,9 +24,6 @@
         light
       >
         <v-icon>add_a_photo</v-icon>
-      </v-btn>
-      <v-btn @click="toggleComponentBOM" class="blue ml-2" title="BOM" light>
-        <v-icon>list</v-icon>
       </v-btn>
       <v-btn
         v-if="getProject.state === 'assembling' || getProject.state === 'rooted' || getProject.state === 'released'"
@@ -77,6 +80,8 @@
       ></v-progress-circular>
     </v-row>
 
+    <project-view-validate-bom v-if="showComponentValidateBOM" />
+    <br />
     <project-view-update v-if="showComponentUpdate" />
     <br />
     <project-view-upload-file v-if="showComponentUpload" />
@@ -92,6 +97,7 @@
 </template>
 
 <script>
+import ProjectViewValidateBom from "./ProjectViewValidateBom";
 import ProjectViewUpdate from "./ProjectViewUpdate";
 import ProjectViewUploadFile from "./ProjectViewUploadFile";
 import ProjectViewUploadImages from "./ProjectViewUploadImages";
@@ -102,6 +108,7 @@ import { mapGetters, mapMutations, mapActions } from "vuex";
 
 export default {
   components: {
+    ProjectViewValidateBom,
     ProjectViewUpdate,
     ProjectViewUploadFile,
     ProjectViewUploadImages,
@@ -111,6 +118,7 @@ export default {
   },
   data() {
     return {
+      showComponentValidateBOM: false,
       showComponentUpdate: false,
       showComponentUpload: false,
       showComponentUploadImages: false,
@@ -146,6 +154,9 @@ export default {
       } catch (err) {
         console.log(err);
       }
+    },
+    toggleComponentValidateBOM() {
+      this.showComponentValidateBOM = !this.showComponentValidateBOM;
     },
     toggleComponentProjectUpdate() {
       this.showComponentUpdate = !this.showComponentUpdate;
