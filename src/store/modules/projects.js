@@ -339,7 +339,7 @@ const mutations = {
     updateAtomDescription: (state, description) => {
         state.atom.description = description
     },
-    updateAtomCost: (state, cost) => {
+    updateAtomUnitCost: (state, cost) => {
         state.atom.cost = cost
     },
     updateAtomCurrency: (state, currency) => {
@@ -348,8 +348,11 @@ const mutations = {
     updateAtomLink: (state, link) => {
         state.atom.link = link
     },
-    updateAtomVendorCode: (state, vendorCode) => {
-        state.atom.vendorCode = vendorCode
+    updateAtomGTIN: (state, GTIN) => {
+        state.atom.GTIN = GTIN
+    },
+    updateAtomSKU: (state, SKU) => {
+        state.atom.SKU = SKU
     },
     updateAtomVendorURL: (state, vendorUrl) => {
         state.atom.vendorUrl = vendorUrl

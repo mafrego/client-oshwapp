@@ -7,15 +7,14 @@
       <v-flex xs1>
         <!-- name, code, quantity, imageUrl cannot be updated -->
         <v-text-field v-model="description" :rules="[rules.isDescription]" label="description"></v-text-field>
-        <v-text-field v-model="cost" :rules="[rules.isPositiveFloat]" label="cost" ></v-text-field>
-        <v-text-field v-model="currency" :rules="[rules.isCurrency]" label="currency"></v-text-field>
-        <v-text-field v-model="link" :rules="[rules.isURL]" label="link"></v-text-field>
-        <v-text-field v-model="vendorCode" :rules="[rules.isAlphanumeric]" label="vendor code"></v-text-field>
-        <v-text-field v-model="vendorUrl" :rules="[rules.isURL]" label="vendor"></v-text-field>
         <v-text-field v-model="moq" :rules="[rules.isPositiveInt]" label="mimimum quantity order"></v-text-field>
+        <v-text-field v-model="unitCost" :rules="[rules.isPositiveFloat]" label="unit cost" ></v-text-field>
+        <v-text-field v-model="currency" :rules="[rules.isCurrency]" label="currency"></v-text-field>
+        <v-text-field v-model="GTIN" :rules="[rules.isGTIN]" label="GTIN"></v-text-field>
+        <v-text-field v-model="SKU" :rules="[rules.isSKU]" label="SKU"></v-text-field>
+        <v-text-field v-model="vendorUrl" :rules="[rules.isURL]" label="vendor URL"></v-text-field>
         <v-text-field v-model="leadTime" :rules="[rules.isDuration]" label="lead time"></v-text-field>
-        <v-text-field v-model="material" :rules="[rules.isAlphanumeric]" label="material"></v-text-field>
-        <v-text-field v-model="weight" :rules="[rules.isPositiveFloat]" label="weight"></v-text-field>
+        <v-text-field v-model="link" :rules="[rules.isURL]" label="link"></v-text-field>
         <v-text-field v-model="notes" :rules="[rules.isDescription]" label="notes"></v-text-field>
 
         <v-btn class="yellow" @click="update()">
@@ -42,7 +41,7 @@ export default {
       rules: {
         required: (value) => !!value || "Required.",
         isDescription: (value) => {
-          const pattern = /^[-a-zA-Z0-9 _.]*$/;
+          const pattern = /[^,;]*$/;
           if(value) return pattern.test(value) || "Only alphanumeric, dots, hyphens, underscore chars";
           else return true
         },
@@ -54,6 +53,16 @@ export default {
         isCurrency: (value) => {
           const pattern = /[A-Z]{3}/;
           if(value) return pattern.test(value) || "only currency ISO 4217";
+          else return true
+        },
+        isGTIN: (value) => {
+          const pattern = /^(\d{8}|\d{12}|\d{13}|\d{14})$/;
+          if(value) return pattern.test(value) || "only GTIN codes 8,12,13 or 14 digits";
+          else return true
+        },
+        isSKU: (value) => {
+          const pattern = /^[-a-zA-Z0-9_ ./]*$/;
+          if(value) return pattern.test(value) || "Only alphanumeric, dots, hyphens, underscore chars";
           else return true
         },
         isURL: (value) => {
@@ -88,12 +97,12 @@ export default {
           this.$store.commit('updateAtomDescription', value)
         }
       },
-      cost: {
+      unitCost: {
         get() {
-          return this.$store.state.projects.atom.cost
+          return this.$store.state.projects.atom.unitCost
         },
         set (value) {
-          this.$store.commit('updateAtomCost', value)
+          this.$store.commit('updateAtomUnitCost', value)
         }
       },
       currency: {
@@ -112,12 +121,20 @@ export default {
           this.$store.commit('updateAtomLink', value)
         }
       },
-      vendorCode: {
+      GTIN: {
         get() {
-          return this.$store.state.projects.atom.vendorCode
+          return this.$store.state.projects.atom.GTIN
         },
         set (value) {
-          this.$store.commit('updateAtomVendorCode', value)
+          this.$store.commit('updateAtomGTIN', value)
+        }
+      },
+      SKU: {
+        get() {
+          return this.$store.state.projects.atom.SKU
+        },
+        set (value) {
+          this.$store.commit('updateAtomSKU', value)
         }
       },
       vendorUrl: {
