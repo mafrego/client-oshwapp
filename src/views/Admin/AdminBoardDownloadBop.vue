@@ -8,10 +8,14 @@
         <v-btn @click="download(project, '0.0.1')" color="blue">download BOP</v-btn>
       </div>
     </div>
+    <div>
+      <a v-if="updatedBopUrl" :href="updatedBopUrl" download>updated BOP</a>
+    </div>
   </v-container>
 </template>
 
 <script>
+// TODO use vuex to sync projects when cruded in other components
 import AdminService from "@/services/AdminService.js";
 
 export default {
@@ -20,6 +24,7 @@ export default {
     return {
       projects: [],
       isOpen: false,
+      updatedBopUrl: ""
     };
   },
   methods: {
@@ -34,6 +39,7 @@ export default {
       }
       const ret = await AdminService.downloadProjectBop(data);
       console.log('ret:', ret)
+      this.updatedBopUrl = ret.data.Location
     },
   },
   async created() {
