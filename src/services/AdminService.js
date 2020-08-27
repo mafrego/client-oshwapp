@@ -11,6 +11,10 @@ export default {
     return Api().get('allprojects', { headers: authHeader() }) 
   },
 
+  downloadProjectBop(project){
+    return Api().post('downloadprojectbop', project, { headers: authHeader() })
+  },
+
   deleteProject(projectId){
     return Api().delete(`deleteproject/${projectId}`, { headers: authHeader() })
   },
