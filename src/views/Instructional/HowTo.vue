@@ -2,7 +2,7 @@
   <div>
     <ul>how-to:
       <li>search</li>
-      <li>colors: CRUD green, blue, yellow, red, SERVICE-grey and btn system e.g. 
+      <li>color and icon explanation: CRUD green, blue, yellow, red, SERVICE-grey and btn system e.g. 
         <v-btn color="grey" title="hide">
           <v-icon>close</v-icon>
         </v-btn>
@@ -21,7 +21,6 @@
       <li>take pictures with freecad: manual option and using macros</li>
       <li>start assembling</li>
       <li>video tutorial: myHouse showing all steps from bom to released project</li>
-      <li>license</li>
       <li>links to git repos</li>
       <li>contact</li>
     </ul>
