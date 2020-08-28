@@ -20,9 +20,10 @@
         v-model="project.version"
         id="id"
       ></v-text-field>
+      <!-- add drop down list for license -->
       <v-text-field
         label="license"
-        :rules="[rules.required]"
+        :rules="[rules.required, rules.isAlphanumeric]"
         v-model="project.license"
         id="id"
       ></v-text-field>
@@ -44,12 +45,12 @@
         v-model="project.projectUrl"
         id="id"
       ></v-text-field>
-      <v-text-field
+      <!-- <v-text-field
         label="bop link"
         :rules="[rules.isHTTP]"
         v-model="project.bopUrl"
         id="id"
-      ></v-text-field>
+      ></v-text-field> -->
       </v-form>
     </panel>
     <div class="danger-alert" v-if="error">{{error}}</div>
@@ -87,7 +88,6 @@ export default {
         userID: this.$store.state.user.uuid,
       },
       error: null,
-      // required: value => !!value || "Required"
       rules: {
         required: (value) => !!value || "Required.",
         singleName: (value) =>
@@ -102,7 +102,7 @@ export default {
           return pattern.test(value) || "only alphanumericals and underscores allowed";
         },
         isDescription: (value) => {
-          const pattern = /[^,;]*$/;
+          const pattern = /^[^,;]+$/;
           if(value) return pattern.test(value) || "any char but commas and semicolons"
           else return true
         },

@@ -46,7 +46,7 @@ export default {
           return pattern.test(value) || "Invalid e-mail.";
         },
         isDescription: (value) => {
-          const pattern = /[^,;]*$/;
+          const pattern = /^[^,;]+$/;
           if(value) return pattern.test(value) || "any char but commas and semicolons"
           else return true
         },
