@@ -46,8 +46,8 @@ export default {
           return pattern.test(value) || "Invalid e-mail.";
         },
         isDescription: (value) => {
-          const pattern = /^[-a-zA-Z0-9 _.]*$/;
-          if(value) return pattern.test(value) || "only alphanumericals dots hyphens underscores"
+          const pattern = /[^,;]*$/;
+          if(value) return pattern.test(value) || "any char but commas and semicolons"
           else return true
         },
         isCurrency: (value) => {
