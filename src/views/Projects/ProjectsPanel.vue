@@ -4,6 +4,9 @@
       <v-flex xs6>
         <panel title="Projects">
           <v-toolbar-items slot="action">
+      <v-btn @click="toggleComponentValidateBOM" class="grey ml-2" title="validate BOM" light>
+        <v-icon>done</v-icon>
+      </v-btn>
             <v-btn
               @click="toggleComponentCreateProject"
               class="green ml-2"
@@ -13,6 +16,9 @@
               <v-icon>add_circle</v-icon>
             </v-btn>
           </v-toolbar-items>
+
+
+    <project-view-validate-bom v-if="showComponentValidateBOM" />
 
           <projects-panel-create v-if="showComponentCreateProject" />
           <br />
@@ -49,16 +55,19 @@
 </template>
 
 <script>
+import ProjectViewValidateBom from "./ProjectViewValidateBom";
 import ProjectsPanelCreate from "./ProjectsPanelCreate";
 import { mapState, mapActions, mapGetters } from "vuex";
 
 export default {
   name: "ProjectsPanel",
   components: {
+    ProjectViewValidateBom,
     ProjectsPanelCreate,
   },
   data() {
     return {
+      showComponentValidateBOM: false,
       showComponentCreateProject: false,
     };
   },
@@ -69,6 +78,9 @@ export default {
   },
   methods: {
     ...mapActions(["fetchProjects"]),
+    toggleComponentValidateBOM() {
+      this.showComponentValidateBOM = !this.showComponentValidateBOM;
+    },
     toggleComponentCreateProject() {
       this.showComponentCreateProject = !this.showComponentCreateProject;
     },
