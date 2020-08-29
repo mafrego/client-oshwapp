@@ -13,7 +13,13 @@
       >
         <v-icon>attach_file</v-icon>
       </v-btn>
-      <v-btn @click="toggleComponentBOM" class="blue ml-2" title="list BOM" light>
+      <v-btn 
+        v-if="getProject.state === 'assembling' || getProject.state === 'rooted' || getProject.state === 'released'"
+        @click="toggleComponentBOM" 
+        class="blue ml-2" 
+        title="list BOM" 
+        light
+      >
         <v-icon>list</v-icon>
       </v-btn>
       <v-btn
