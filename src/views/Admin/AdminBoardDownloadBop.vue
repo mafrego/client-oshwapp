@@ -4,8 +4,7 @@
     <div v-if="isOpen">
       <div v-for="project in projects" :key="project.uuid">
         {{project.name}}: {{project.uuid}}
-        <!-- version: {{project.version}} -->
-        <v-btn @click="download(project, '0.0.1')" color="blue">download BOP</v-btn>
+        <v-btn @click="download(project)" color="blue">download BOP</v-btn>
       </div>
     </div>
     <div>
@@ -31,11 +30,10 @@ export default {
     toggle: function () {
       this.isOpen = !this.isOpen;
     },
-    async download(project, version) {
+    async download(project) {
       const data = {
         uuid: project.uuid,
         name: project.name,
-        version: version
       }
       const ret = await AdminService.downloadProjectBop(data);
       console.log('ret:', ret)
