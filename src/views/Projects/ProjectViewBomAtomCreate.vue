@@ -2,7 +2,6 @@
   <div>
     <panel title="Create atom">
       <v-form ref="form">
-        <!-- check if atom name is already taken with getBOM -->
       <v-text-field
         label="name"
         :rules="[rules.required, rules.isAlphanumeric, rules.uniqueName]"
