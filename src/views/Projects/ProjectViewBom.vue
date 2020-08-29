@@ -1,7 +1,7 @@
 <template>
-  <v-layout column>
+  <v-layout column >
     <v-flex xs6>
-      <panel title="BOM">
+      <panel title="BOM"  v-if="getBom.length > 0">
         <v-toolbar-items slot="action">
           <v-btn
             v-if="getBom.length > 0 && getBom.length == getAllProducts.length"
@@ -12,9 +12,14 @@
           >
             <v-icon>delete</v-icon>
           </v-btn>
-          <v-btn @click="toggleCreateAtom" class="green ml-2" title="add atom" light>
-            <v-icon>add</v-icon>
+          <v-btn class="grey ml-2" title="download BOM" light>
+            <a :href="getProject.bopUrl" download >
+            <v-icon>cloud_download</v-icon>
+            </a>
           </v-btn>
+          <!-- <v-btn @click="toggleCreateAtom" class="green ml-2" title="add atom" light>
+            <v-icon>add</v-icon>
+          </v-btn> -->
         </v-toolbar-items>
 
         <project-view-bom-atom-create v-if="showCreateAtom" />
