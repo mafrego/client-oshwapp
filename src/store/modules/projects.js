@@ -116,14 +116,10 @@ const actions = {
             const response = await FileService.sendBom(formData, state.project.uuid)
             if (response.status == 201) {
                 const ret0 = await ProjectService.updateProjectState({ state: 'assembling' }, state.project.uuid)
-                commit('updateState', ret0.data.state)
-                // TODO check if following code is necessary
-                // const ret1 = await ProjectService.getAllProducts(state.project.uuid)
-                // commit('setProducts', ret1.data)
-                // const ret2 = await ProjectService.getAssemblableProducts(state.project.uuid)
-                // commit('setAssemblableProducts', ret2.data)
+                commit('updateProject', ret0.data.project)
                 const ret3 = await ProjectService.getBom(state.project.uuid)
                 commit('setBom', ret3.data)
+                commit('setProducts', ret3.data)
             }
         } catch (error) {
             commit('setErrorBom', error.response.data)
@@ -289,6 +285,9 @@ const mutations = {
     },
     addProject: (state, project) => {
         state.projects.push(project)
+    },
+    updateProject: (state, project) => {
+        state.project = project
     },
     updateProjectDescription: (state, description) => {
         state.project.description = description
