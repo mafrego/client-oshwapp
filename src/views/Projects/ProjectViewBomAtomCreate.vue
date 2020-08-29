@@ -5,7 +5,7 @@
         <!-- check if atom name is already taken with getBOM -->
       <v-text-field
         label="name"
-        :rules="[rules.required, rules.isAlphanumeric]"
+        :rules="[rules.required, rules.isAlphanumeric, rules.uniqueName]"
         v-model="atom.name"
       ></v-text-field>
       <v-text-field
@@ -50,7 +50,7 @@
 </template>
 
 <script>
-import { mapActions } from "vuex";
+import { mapActions, mapGetters } from "vuex";
 
 export default {
   name: "ProjectViewBomAtomCreate",
@@ -66,6 +66,8 @@ export default {
           const pattern = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
           return pattern.test(value) || "Invalid e-mail.";
         },
+        uniqueName: (value) =>
+          !this.getAtomNames.includes(value) || "name already taken!",
         isDescription: (value) => {
           const pattern = /^[^,;]+$/;
           if (value)
@@ -110,6 +112,11 @@ export default {
         },
       },
     };
+  },
+  computed: {
+    ...mapGetters([
+      "getAtomNames",
+    ]),
   },
   methods: {
     ...mapActions(["createAtom"]),

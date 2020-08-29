@@ -4,7 +4,7 @@
       <v-form ref="form">
         <v-text-field
           label="project name"
-          :rules="[rules.required, rules.singleName, rules.isAlphanumeric]"
+          :rules="[rules.required, rules.uniqueName, rules.isAlphanumeric]"
           v-model="project.name"
           id="id"
         ></v-text-field>
@@ -75,7 +75,7 @@ export default {
       message: "",
       rules: {
         required: (value) => !!value || "Required.",
-        singleName: (value) =>
+        uniqueName: (value) =>
           !this.getProjectNames.includes(value) || "name already taken!",
         isAlphanumeric: (value) => {
           const pattern = /^[-0-9a-zA-Z_]+$/;

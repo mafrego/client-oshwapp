@@ -25,6 +25,7 @@ const getters = {
     getProject: state => state.project,
     getBom: state => state.bom,
     getAtom: state => state.atom,
+    getAtomNames: state => state.bom.map(atom => atom.name),
     getAllProducts: state => state.products,
     getAllProductNames: state => state.products.map(product => product.name),
     getAssemblableProducts: state => state.assemblableProducts,
