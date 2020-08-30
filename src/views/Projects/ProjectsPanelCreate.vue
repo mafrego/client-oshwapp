@@ -20,14 +20,14 @@
           v-model="project.version"
           id="id"
         ></v-text-field>
-        <!-- add drop down list for license -->
-        <v-text-field
+        <!-- does it make sense? -->
+        <!-- <v-text-field
           label="license"
           :rules="[rules.required, rules.isAlphanumeric]"
           v-model="project.license"
           id="id"
-        ></v-text-field>
-        <v-text-field label="country" :rules="[rules.isISO31661]" v-model="project.country" id="id"></v-text-field>
+        ></v-text-field> -->
+        <v-text-field label="country" :rules="[rules.required, rules.isISO31661]" v-model="project.country" id="id"></v-text-field>
         <v-text-field label="region" :rules="[rules.isISO31662]" v-model="project.region" id="id"></v-text-field>
         <v-text-field
           label="project link"
@@ -65,7 +65,7 @@ export default {
         name: null,
         description: null,
         version: null,
-        license: null,
+        // license: null,
         country: null,
         region: null,
         projectUrl: null,
@@ -151,7 +151,8 @@ export default {
         this.project.name &&
         this.project.description &&
         this.project.version &&
-        this.project.license
+        // this.project.license &&
+        this.project.country
       ) {
         this.error = null;
       } else {
@@ -168,7 +169,7 @@ export default {
           this.project.name = null;
           this.project.description = null;
           this.project.version = null;
-          this.project.license = null;
+          // this.project.license = null;
           this.project.country = null;
           this.project.region = null;
           this.project.projectUrl = null;
