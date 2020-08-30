@@ -142,11 +142,7 @@ const actions = {
         try {
             commit('setLoading', true)
             const response = await ProjectService.deleteBom(state.project.uuid)
-            if (response.status === 200) {
-                commit('deleteBom')
-                const ret = await ProjectService.updateProjectState({ state: 'created' }, state.project.uuid)
-                commit('updateState', ret.data.state)
-            }
+            commit('deleteBom', response.data)
         } catch (error) {
             commit('setError', error)
         } finally {
@@ -314,7 +310,8 @@ const mutations = {
         bom.sort((a, b) => a.itemNumber > b.itemNumber ? 1 : b.itemNumber > a.itemNumber ? -1 : 0)
         state.bom = bom
     },
-    deleteBom: (state) => {
+    deleteBom: (state, project) => {
+        state.project.state = project.state
         state.bom = []
         state.products = []
         state.productNames = []
