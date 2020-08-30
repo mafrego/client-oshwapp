@@ -288,6 +288,18 @@ const mutations = {
     updateProjectDescription: (state, description) => {
         state.project.description = description
     },
+    updateProjectVersion: (state, version) => {
+        state.project.version = version
+    },
+    updateProjectCountry: (state, country) => {
+        state.project.country = country
+    },
+    updateProjectRegion: (state, region) => {
+        state.project.region = region
+    },
+    updateProjectLink: (state, link) => {
+        state.project.link = link
+    },
     delProject: (state, projectID) => {
         state.bom = []
         state.products = []
