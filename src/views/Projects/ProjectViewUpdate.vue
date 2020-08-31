@@ -143,7 +143,14 @@ export default {
       try {
         this.message = "";
         this.error = "";
-        const response = await this.updateProject();
+        const project = {
+          description: this.description,
+          version: this.version,
+          country: this.country,
+          region: this.region,
+          link: this.link
+        }
+        const response = await this.updateProject(project);
         if (response.status === 200) {
           this.message = "project updated";
         } else {
