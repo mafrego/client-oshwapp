@@ -8,6 +8,7 @@
         <!-- name, code, quantity, imageUrl cannot be updated -->
         <v-text-field v-model="description" :rules="[rules.isDescription]" label="description"></v-text-field>
         <v-text-field v-model="moq" :rules="[rules.isPositiveInt]" label="mimimum quantity order"></v-text-field>
+        <v-text-field v-if="quantity === quantity_to_assemble" v-model="quantity" :rules="[rules.isPositiveInt]" label="quantity"></v-text-field>
         <v-text-field v-model="unitCost" :rules="[rules.isPositiveFloat]" label="unit cost" ></v-text-field>
         <v-text-field v-model="currency" :rules="[rules.isCurrency]" label="currency"></v-text-field>
         <v-text-field v-model="GTIN" :rules="[rules.isGTIN]" label="GTIN"></v-text-field>
@@ -96,6 +97,19 @@ export default {
         set (value) {
           this.$store.commit('updateAtomDescription', value)
         }
+      },
+      quantity: {
+        get() {
+          return this.$store.state.projects.atom.quantity
+        },
+        set (value) {
+          this.$store.commit('updateAtomQuantity', value)
+        }
+      },
+      quantity_to_assemble: {
+        get() {
+          return this.$store.state.projects.atom.quantity_to_assemble
+        },
       },
       unitCost: {
         get() {
