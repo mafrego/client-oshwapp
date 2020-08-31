@@ -43,6 +43,11 @@ export default {
       .put(`project/${projectId}`, project, { headers: authHeader() })
   },
 
+  // projectId = { projectId: projectId}
+  updateProjectBom(projectId) {
+    return Api().put('projectbom', projectId, { headers: authHeader() })
+  },
+
   delete(projectId){
     return Api().delete(`projects/${projectId}`, { headers: authHeader() })
   },
