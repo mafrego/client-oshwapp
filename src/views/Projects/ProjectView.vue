@@ -1,71 +1,87 @@
 <template>
   <panel title="Project">
     <v-toolbar-items slot="action">
-      <v-btn @click="toggleComponentValidateBOM" class="grey ml-2" title="validate BOM" light>
+      <div>
+      <v-btn @click="toggleComponentValidateBOM" class="grey ml-2 mt-1" title="validate BOM" light>
         <v-icon>done</v-icon>
       </v-btn>
+      </div>
+      <div>
       <v-btn
         v-if="getProject.state != 'released'"
         @click="toggleComponentUpload"
-        class="green ml-2"
+        class="green ml-2 mt-1"
         title="upload BOM"
         light
       >
         <v-icon>attach_file</v-icon>
       </v-btn>
+      </div>
+      <div>
       <v-btn 
         v-if="getProject.state === 'assembling' || getProject.state === 'rooted' || getProject.state === 'released'"
         @click="toggleComponentBOM" 
-        class="blue ml-2" 
+        class="blue ml-2 mt-1" 
         title="list BOM" 
         light
       >
         <v-icon>list</v-icon>
       </v-btn>
+      </div>
+      <div>
       <v-btn
         v-if="getProject.state === 'assembling' || getProject.state === 'rooted' || getProject.state === 'released'"
         @click="toggleComponentUploadImages"
-        class="green ml-2"
+        class="green ml-2 mt-1"
         title="upload images"
         light
       >
         <v-icon>add_a_photo</v-icon>
       </v-btn>
+      </div>
+      <div>
       <v-btn
         v-if="getProject.state === 'assembling' || getProject.state === 'rooted' || getProject.state === 'released'"
         @click="toggleComponentAllProducts"
-        class="blue ml-2"
+        class="blue ml-2 mt-1"
         title="all products"
         light
       >
         <v-icon>account_tree</v-icon>
       </v-btn>
+      </div>
+      <div>
       <v-btn
         v-if="getProject.state === 'assembling' || getProject.state === 'rooted'"
         @click="toggleComponentAssembleCopy"
-        class="green ml-2"
+        class="green ml-2 mt-1"
         title="assemble"
         light
       >
         <v-icon>handyman</v-icon>
       </v-btn>
+      </div>
+      <div>
       <v-btn
         @click="toggleComponentProjectUpdate"
-        class="yellow ml-2"
+        class="yellow ml-2 mt-1"
         title="update project"
         light
       >
         <v-icon>update</v-icon>
       </v-btn>
+      </div>
+      <div>
       <v-btn
         v-if="getProject.state != 'released'"
-        class="red ml-2"
-        @click="del"
+        class="red ml-2 mt-1"
+        @click="del" 
         title="delete project"
         light
       >
         <v-icon>delete</v-icon>
       </v-btn>
+      </div>
     </v-toolbar-items>
 
     <v-row>

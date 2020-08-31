@@ -4,21 +4,29 @@
       <v-flex xs6>
         <panel title="Projects">
           <v-toolbar-items slot="action">
-      <v-btn @click="toggleComponentValidateBOM" class="grey ml-2" title="validate BOM" light>
-        <v-icon>done</v-icon>
-      </v-btn>
-            <v-btn
-              @click="toggleComponentCreateProject"
-              class="green ml-2"
-              title="create project"
-              light
-            >
-              <v-icon>add_circle</v-icon>
-            </v-btn>
+            <div>
+              <v-btn
+                @click="toggleComponentValidateBOM"
+                class="grey ml-2 mt-1"
+                title="validate BOM"
+                light
+              >
+                <v-icon>done</v-icon>
+              </v-btn>
+            </div>
+            <div>
+              <v-btn
+                @click="toggleComponentCreateProject"
+                class="green ml-2 mt-1"
+                title="create project"
+                light
+              >
+                <v-icon>add_circle</v-icon>
+              </v-btn>
+            </div>
           </v-toolbar-items>
 
-
-    <project-view-validate-bom v-if="showComponentValidateBOM" />
+          <project-view-validate-bom v-if="showComponentValidateBOM" />
 
           <projects-panel-create v-if="showComponentCreateProject" />
           <br />
@@ -39,7 +47,7 @@
                   }"
                   title="view project"
                 >
-                <v-icon>pageview</v-icon>
+                  <v-icon>pageview</v-icon>
                 </v-btn>
               </v-flex>
 
