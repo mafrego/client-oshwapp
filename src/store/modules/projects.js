@@ -243,6 +243,9 @@ const actions = {
             if (response.status === 201) {
                 const ret = await ProjectService.getAllProducts(state.project.uuid)
                 commit('setProducts', ret.data)
+                // update BOM as well
+                const ret0 = await ProjectService.getBom(state.project.uuid)
+                commit('setBom', ret0.data)
                 return response.status
             }
         } catch (error) {
@@ -259,6 +262,8 @@ const actions = {
                 const ret = await ProjectService.getAssemblableProducts(state.project.uuid)
                 commit('setAssemblableProducts', ret.data)
                 commit('deleteAssembly', assemblyID)
+                const ret0 = await ProjectService.getBom(state.project.uuid)
+                commit('setBom', ret0.data)
                 if (state.project.state === 'rooted') {
                     const ret = await ProjectService.updateProjectState({ state: 'assembling' }, state.project.uuid)
                     commit('updateState', ret.data.state)
@@ -347,6 +352,10 @@ const mutations = {
     },
     updateAtomDescription: (state, description) => {
         state.atom.description = description
+    },
+    updateAtomQuantity: (state, quantity) => {
+        state.atom.quantity = quantity
+        state.atom.quantity_to_assemle = quantity
     },
     updateAtomUnitCost: (state, cost) => {
         state.atom.cost = cost
