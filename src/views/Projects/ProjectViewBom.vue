@@ -1,25 +1,44 @@
 <template>
-  <v-layout column >
+  <v-layout column>
     <v-flex xs6>
-      <panel title="BOM"  v-if="getBom.length > 0">
+      <panel title="BOM" v-if="getBom.length > 0">
         <v-toolbar-items slot="action">
-          <v-btn
-            v-if="getBom.length > 0 && getBom.length == getAllProducts.length"
-            @click="deleteBOM"
-            class="red ml-2"
-            title="delete BOM"
-            light
-          >
-            <v-icon>delete</v-icon>
-          </v-btn>
-          <v-btn class="grey ml-2" title="download BOM" light>
-            <a :href="getProject.bopUrl" download >
-            <v-icon>cloud_download</v-icon>
-            </a>
-          </v-btn>
+          <div>
+            <v-btn
+              v-if="getBom.length > 0 && getBom.length == getAllProducts.length"
+              @click="deleteBOM"
+              class="red ml-2 mt-1"
+              title="delete all atoms"
+              light
+            >
+              <v-icon>delete</v-icon>
+            </v-btn>
+          </div>
+          <div>
+            <v-btn
+              @click="updateProjectBom(getProject.uuid)"
+              class="green ml-2 mt-1"
+              title="generate bom.csv"
+              light
+              v-if="!showDownloadBtn"
+            >
+              <v-icon>article</v-icon>
+            </v-btn>
+          </div>
+          <div>
+            <v-btn
+              :href="getProject.bopUrl"
+              v-if="showDownloadBtn"
+              @click="changeShowDownloadBtn"
+              class="grey ml-2 mt-1"
+              title="download BOM"
+            >
+              <v-icon>cloud_download</v-icon>
+            </v-btn>
+          </div>
           <!-- <v-btn @click="toggleCreateAtom" class="green ml-2" title="add atom" light>
             <v-icon>add</v-icon>
-          </v-btn> -->
+          </v-btn>-->
         </v-toolbar-items>
 
         <project-view-bom-atom-create v-if="showCreateAtom" />
@@ -86,6 +105,7 @@ import { mapGetters, mapActions, mapMutations } from "vuex";
 import ProjectViewBomAtomCreate from "./ProjectViewBomAtomCreate";
 import ProjectViewBomAtomDetails from "./ProjectViewBomAtomDetails";
 import ProjectViewBomAtomUpdate from "./ProjectViewBomAtomUpdate";
+import ProjectService from "@/services/ProjectService";
 
 export default {
   name: "ProjectViewBom",
@@ -99,6 +119,7 @@ export default {
       showCreateAtom: false,
       atomToUpdate: null,
       atomDetails: null,
+      showDownloadBtn: false,
     };
   },
   computed: {
@@ -147,6 +168,17 @@ export default {
         console.log(err);
       }
     },
+    async updateProjectBom(projectId) {
+      const data = { projectId: projectId };
+      const ret = await ProjectService.updateProjectBom(data);
+      console.log("ret:", ret);
+      if (ret.status === 200) {
+        this.showDownloadBtn = !this.showDownloadBtn;
+      }
+    },
+    changeShowDownloadBtn(){
+      this.showDownloadBtn = !this.showDownloadBtn
+    }
   },
   created() {
     this.fetchBom(this.getProject.uuid);
