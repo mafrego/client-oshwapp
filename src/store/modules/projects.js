@@ -87,10 +87,10 @@ const actions = {
             commit('setLoading', false)
         }
     },
-    async updateProject({ state, commit }) {
+    async updateProject({ state, commit }, project) {
         try {
             commit('setLoading', true)
-            const response = await ProjectService.updateProject(state.project, state.project.uuid)
+            const response = await ProjectService.updateProject(project, state.project.uuid)
             return response
         } catch (error) {
             commit('setError', error)
