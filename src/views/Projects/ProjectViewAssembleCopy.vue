@@ -13,12 +13,12 @@
         <div v-if="getProject.state != 'rooted'">
           <v-text-field
             label="name"
-            :rules="[rules.singleName, rules.required, rules.string]"
+            :rules="[rules.singleName, rules.required, rules.isAlphanumeric]"
             v-model="assembly.name"
           ></v-text-field>
           <v-text-field
             label="description"
-            :rules="[rules.required]"
+            :rules="[rules.required, rules.isDescription]"
             v-model="assembly.description"
           ></v-text-field>
           <v-text-field
@@ -110,10 +110,20 @@ export default {
           const pattern = /^([1-9]\d*)$/;
           return pattern.test(value) || "entry must be a positive integer";
         },
+        isDescription: (value) => {
+          const pattern = /^[^,;]*$/;
+          if(value) return pattern.test(value) || "Only alphanumeric, dots, hyphens, underscore chars";
+          else return true
+        },
+        isAlphanumeric: (value) => {
+          const pattern = /^[-a-zA-Z0-9_]*$/;
+          if(value) return pattern.test(value) || "Only alphanumeric, dots, hyphens, underscore chars";
+          else return true
+        },
         singleName: (value) =>
           !this.getAllProductNames.includes(value) || "name already taken!",
         string: (value) => {
-          const pattern = /^[0-9a-zA-Z_]+$/;
+          const pattern = /^[^,;"]+$/;
           return (
             pattern.test(value) ||
             "only alphanumericals and underscores allowed"
