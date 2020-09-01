@@ -238,7 +238,8 @@ const actions = {
                 const ret = await ProjectService.updateProjectState(
                     { state: 'rooted' },
                     state.project.uuid)
-                commit('updateState', ret.data.state)
+                console.log('ret: ', ret)
+                commit('updateState', ret.data.project.state)
             }
             if (response.status === 201) {
                 const ret = await ProjectService.getAllProducts(state.project.uuid)
@@ -266,7 +267,7 @@ const actions = {
                 commit('setBom', ret0.data)
                 if (state.project.state === 'rooted') {
                     const ret = await ProjectService.updateProjectState({ state: 'assembling' }, state.project.uuid)
-                    commit('updateState', ret.data.state)
+                    commit('updateState', ret.data.project.state)
                 }
             }
         } catch (error) {
