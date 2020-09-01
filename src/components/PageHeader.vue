@@ -1,60 +1,29 @@
 <template>
   <v-toolbar fixed class="cyan" color="primary">
-    <v-toolbar-items class="mt-10 mr-4">
-      <router-link class="home" tag="span" :to="{name: 'home'}">Home</router-link>
-    </v-toolbar-items>
+    <v-btn title="home" class="grey" :to="{name: 'home'}">
+      <v-icon>home</v-icon>
+    </v-btn>
 
-    <!-- <v-toolbar-items class="mt-10 mr-4">
-      <router-link class="home" tag="span" :to="{name: 'About'}">About</router-link>
-    </v-toolbar-items> -->
+    <v-btn title="search" :to="{name: 'products'}" class="grey ml-2">
+      <v-icon>search</v-icon>
+    </v-btn>
 
-    <v-toolbar-items class="mt-10 mr-4">
-      <router-link class="home" tag="span" :to="{name: 'howto'}">HOW-TO</router-link>
-    </v-toolbar-items>
+    <v-btn class="grey ml-2" :to="{name: 'howto'}" title="help">
+      <v-icon>help</v-icon>
+    </v-btn>
 
-    <v-toolbar-items class="mt-10 mr-4">
-      <router-link class="home" tag="span" :to="{name: 'products'}">Browser</router-link>
-    </v-toolbar-items>
+    <v-btn v-if="isUserLoggedIn" :to="{name: 'projects'}" title="projects" class="grey ml-2">
+      <v-icon>settings</v-icon>
+    </v-btn>
 
-    <!-- <v-toolbar-items
-      v-if="isUserLoggedIn && currentRoles.includes('assembler')"
-      class="mt-10 mr-4"
-    >
-      <router-link class="home" tag="span" :to="{name: 'assembler'}">Board Assembler</router-link>
-    </v-toolbar-items>
-
-    <v-toolbar-items
+    <v-btn
+      title="admin board"
       v-if="isUserLoggedIn && currentRoles.includes('admin')"
-      class="mt-10 mr-4"
+      class="grey ml-2"
+      :to="{name: 'adminboard'}"
     >
-      <router-link class="home" tag="span" :to="{name: 'admin'}">Board Admin</router-link>
-    </v-toolbar-items> -->
-
-    <v-toolbar-items v-if="isUserLoggedIn" class="mt-10 mr-4">
-      <router-link class="home" tag="span" :to="{name: 'projects'}">projects</router-link>
-    </v-toolbar-items>
-
-    
-      <!-- <v-toolbar-items
-      v-if="isUserLoggedIn && currentRoles.includes('admin')"
-      class="mt-10 mr-4"
-    >
-      <router-link class="home" tag="span" :to="{name: 'experiments'}">experiments</router-link>
-    </v-toolbar-items> -->
-
-    <!-- <v-toolbar-items
-      v-if="isUserLoggedIn && currentRoles.includes('admin')"
-      class="mt-10 mr-4"
-    >
-      <router-link class="home" tag="span" :to="{name: 'todos'}">todos</router-link>
-    </v-toolbar-items> -->
-
-      <v-toolbar-items
-      v-if="isUserLoggedIn && currentRoles.includes('admin')"
-      class="mt-10 mr-4"
-    >
-      <router-link class="home" tag="span" :to="{name: 'adminboard'}">ADMIN BOARD</router-link>
-    </v-toolbar-items>
+      <v-icon>admin_panel_settings</v-icon>
+    </v-btn>
 
     <v-spacer></v-spacer>
 
@@ -62,7 +31,7 @@
       <router-link class="home" tag="span" :to="{name: 'userPanel'}">
         <v-icon>sentiment_satisfied</v-icon>
         hi {{user.username}}!
-        </router-link>
+      </router-link>
     </v-toolbar-items>
 
     <v-toolbar-items>
@@ -70,7 +39,7 @@
     </v-toolbar-items>
 
     <v-toolbar-items>
-      <v-btn v-if="!isUserLoggedIn" text dark :to="{name:'register'}">Sign Up</v-btn>
+      <v-btn v-if="!isUserLoggedIn" text dark :to="{name:'register'}">Register</v-btn>
     </v-toolbar-items>
 
     <v-toolbar-items>
@@ -80,7 +49,7 @@
 </template>
 
 <script>
-import {mapActions, mapState} from 'vuex' 
+import { mapActions, mapState } from "vuex";
 
 export default {
   name: "PageHeader",
@@ -91,32 +60,32 @@ export default {
     //   'setToken'
     // ]),
     logout() {
-      this.setUser(null)
-      this.setToken(null)
+      this.setUser(null);
+      this.setToken(null);
       // this.$store.dispatch("setToken", null);
       // this.$store.dispatch("setUser", null);
       this.$router.push({
-        name: "products"
+        name: "products",
       });
-    }
+    },
   },
   computed: {
-      ...mapState(["user", "token", "isUserLoggedIn"]),
-      // ...mapState({
-      //   currentUser: state => state.users.user,
-      //   isUserLoggedIn: state => state.users.isUserLoggedIn
-      //   }),
+    ...mapState(["user", "token", "isUserLoggedIn"]),
+    // ...mapState({
+    //   currentUser: state => state.users.user,
+    //   isUserLoggedIn: state => state.users.isUserLoggedIn
+    //   }),
 
     currentRoles() {
       // if-else to avoid Vue warn in case user is not logged in
       if (this.user.has_role) {
         let roles = this.user.has_role;
-        return roles.map(el => el.node).map(el => el.name);
+        return roles.map((el) => el.node).map((el) => el.name);
       } else {
         return [];
       }
     },
-  }
+  },
 };
 </script>
 
