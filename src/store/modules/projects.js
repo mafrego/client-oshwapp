@@ -238,7 +238,7 @@ const actions = {
                 const ret = await ProjectService.updateProjectState(
                     { state: 'rooted' },
                     state.project.uuid)
-                console.log('ret: ', ret)
+                // console.log('ret: ', ret)
                 commit('updateState', ret.data.project.state)
             }
             if (response.status === 201) {
