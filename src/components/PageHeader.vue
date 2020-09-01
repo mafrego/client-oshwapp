@@ -8,7 +8,7 @@
       <v-icon>search</v-icon>
     </v-btn>
 
-    <v-btn class="grey ml-2" :to="{name: 'howto'}" title="help">
+    <v-btn class="grey ml-2" :to="{name: 'howto'}" title="how-to">
       <v-icon>help</v-icon>
     </v-btn>
 
