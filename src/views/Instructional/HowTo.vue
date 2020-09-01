@@ -1,5 +1,59 @@
 <template>
-  <div>
+  <panel>
+    <v-toolbar-items slot="action">
+
+      <div>
+        <v-btn class="grey mt-1 ml-2" title="colors">
+          <v-icon>palette</v-icon>
+        </v-btn>
+      </div>
+
+      <div>
+        <v-btn class="grey mt-1 ml-2" title="glossary">
+          <v-icon>sort_by_alpha</v-icon>
+        </v-btn>
+      </div>
+
+      <div>
+        <v-btn class="grey mt-1 ml-2" title="BOM">
+          <v-icon>list</v-icon>
+        </v-btn>
+      </div>
+
+      <div>
+        <v-btn class="grey mt-1 ml-2" title="images">
+          <v-icon>photo_camera</v-icon>
+        </v-btn>
+      </div>
+
+      <div>
+        <v-btn class="grey mt-1 ml-2" title="assemble">
+          <v-icon>construction</v-icon>
+        </v-btn>
+      </div>
+
+      <div>
+        <v-btn class="grey mt-1 ml-2" title="video tutorial">
+          <v-icon>video_settings</v-icon>
+        </v-btn>
+      </div>
+
+      <!-- <div>
+        <v-btn class="grey mt-1 ml-2" title="about">
+          <v-icon>settings</v-icon>
+        </v-btn>
+      </div> -->
+
+      <div>
+        <v-btn class="grey mt-1 ml-2" title="FAQs">
+          <v-icon>question_answer</v-icon>
+        </v-btn>
+      </div>
+
+
+    </v-toolbar-items>
+  </panel>
+  <!-- <div>
     <ul>how-to:
       <li>search</li>
       <li>color and icon explanation: CRUD green, blue, yellow, red, SERVICE-grey and btn system e.g. 
@@ -24,19 +78,18 @@
       <li>links to git repos</li>
       <li>contact</li>
     </ul>
-  </div>
+  </div>-->
 </template>
 
 <script>
-
-export default{
+export default {
   name: "HowTo",
-  data(){
+  data() {
     return {
       mode: process.env.NODE_ENV,
       title: process.env.VUE_APP_TITLE,
-      response: "ciao"
-    }
+      response: "ciao",
+    };
   },
-}
+};
 </script>
