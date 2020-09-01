@@ -15,7 +15,7 @@
       watch the video tutorial
       <v-btn class="grey">
         <v-icon>video_settings</v-icon>
-      </v-btn>or go to the help page
+      </v-btn> or go to the help page
       <v-btn class="grey" :to="{name: 'howto'}">
         <v-icon>help</v-icon>
       </v-btn>
@@ -31,6 +31,9 @@ export default {
 
 <style scoped>
 .logo {
-  width: 10%;
+  width: 5%;
+}
+.home {
+  font-family: monospace;
 }
 </style>
