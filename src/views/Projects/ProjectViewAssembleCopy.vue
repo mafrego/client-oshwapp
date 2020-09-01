@@ -51,7 +51,7 @@
 
         <div v-for="(item, index) in getAssemblableProducts" :key="index">
           <v-layout>
-            <v-flex xs3>
+            <v-flex xs3 v-if="getProject.state != 'rooted'">
               <div
                 class="atom-name"
               >{{item.name}} - #pieces to assemble: {{item.quantity_to_assemble}}</div>
