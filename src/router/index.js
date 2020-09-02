@@ -3,7 +3,7 @@ import VueRouter from 'vue-router'
 import Home from '../views/general/Home.vue'
 import Register from '@/views/general/Register'
 import Login from '@/views/general/Login'
-import HowTo from '@/views/Instructional/HowTo.vue'
+import Help from '@/views/Help/Help.vue'
 import Atoms from '@/views/Atoms/Index'
 import Products from '@/views/Products/ProductIndex.vue'
 import Projects from '@/views/Projects/ProjectsPanel'
@@ -40,9 +40,9 @@ const routes = [
     component: Login
   },
    {
-    path: '/howto',
-    name: 'howto',
-    component: HowTo
+    path: '/help',
+    name: 'help',
+    component: Help
   },
    {
     path: '/atoms',
