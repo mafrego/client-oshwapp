@@ -15,12 +15,18 @@
       </div>
 
       <div>
-        <v-btn class="grey mt-1 ml-2" title="BOM" @click="toggleBOMComponent">
+        <v-btn class="grey mt-1 ml-2" title="BOM protocol" @click="toggleBOMComponent">
           <v-icon>list</v-icon>
         </v-btn>
       </div>
 
       <div>
+        <v-btn class="grey mt-1 ml-2" title="HOW-TO" @click="toggleHowToComponent">
+          <v-icon>build</v-icon>
+        </v-btn>
+      </div>
+
+      <!-- <div>
         <v-btn class="grey mt-1 ml-2" title="images" @click="toggleImagesComponent">
           <v-icon>photo_camera</v-icon>
         </v-btn>
@@ -30,7 +36,7 @@
         <v-btn class="grey mt-1 ml-2" title="assemble" @click="toggleAssembleComponent">
           <v-icon>construction</v-icon>
         </v-btn>
-      </div>
+      </div> -->
 
       <div>
         <v-btn class="grey mt-1 ml-2" title="video tutorial" @click="toggleVideoComponent">
@@ -55,23 +61,14 @@
       <help-colors v-if="showColorsComponent" />
       <help-glossary v-if="showGlossaryComponent" />
       <help-bom v-if="showBOMComponent" />
-      <help-images v-if="showImagesComponent" />
-      <help-assemble v-if="showAssembleComponent" />
+      <help-how-to v-if="showHowToComponent" />
+      <!-- <help-images v-if="showImagesComponent" />
+      <help-assemble v-if="showAssembleComponent" /> -->
       <help-video v-if="showVideoComponent" />
       <help-faq v-if="showFAQComponent" />
 
   </panel>
   <!-- <div>
-    <ul>how-to:
-      <li>search</li>
-      </li>
-      <li>write and upload a bom</li>
-      <li>oshwbp
-        <ul>
-          <li>language</li>
-          <li>system of measurement adopted: metric system SI</li>
-          <li>headers camelcase: regex for each one gives allowed chars and explanation</li>
-        </ul>
           for improvement and suggestion: link to contact 
       </li>
       <li>take and upload images</li>
@@ -89,8 +86,9 @@
 import HelpColors from './HelpColors'
 import HelpGlossary from './HelpGlossary'
 import HelpBom from './HelpBom'
-import HelpImages from './HelpImages'
-import HelpAssemble from './HelpAssemble'
+import HelpHowTo from './HelpHowTo'
+// import HelpImages from './HelpImages'
+// import HelpAssemble from './HelpAssemble'
 import HelpVideo from './HelpVideo'
 import HelpFaq from './HelpFAQ'
 
@@ -100,8 +98,9 @@ export default {
     HelpColors,
     HelpGlossary,
     HelpBom,
-    HelpImages,
-    HelpAssemble,
+    HelpHowTo,
+    // HelpImages,
+    // HelpAssemble,
     HelpVideo,
     HelpFaq,
   },
@@ -112,8 +111,9 @@ export default {
       showColorsComponent: false,
       showGlossaryComponent: false,
       showBOMComponent: false,
-      showImagesComponent: false,
-      showAssembleComponent: false,
+      showHowToComponent: false,
+      // showImagesComponent: false,
+      // showAssembleComponent: false,
       showVideoComponent: false,
       showFAQComponent: false,
     };
@@ -128,12 +128,15 @@ export default {
     toggleBOMComponent() {
       this.showBOMComponent = !this.showBOMComponent;
     },
-    toggleImagesComponent() {
-      this.showImagesComponent = !this.showImagesComponent;
+    toggleHowToComponent() {
+      this.showHowToComponent = !this.showHowToComponent;
     },
-    toggleAssembleComponent() {
-      this.showAssembleComponent = !this.showAssembleComponent;
-    },
+    // toggleImagesComponent() {
+    //   this.showImagesComponent = !this.showImagesComponent;
+    // },
+    // toggleAssembleComponent() {
+    //   this.showAssembleComponent = !this.showAssembleComponent;
+    // },
     toggleVideoComponent() {
       this.showVideoComponent = !this.showVideoComponent;
     },
