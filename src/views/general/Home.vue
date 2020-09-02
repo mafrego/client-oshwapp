@@ -16,7 +16,7 @@
       <v-btn class="grey">
         <v-icon>video_settings</v-icon>
       </v-btn> or go to the help page
-      <v-btn class="grey" :to="{name: 'howto'}">
+      <v-btn class="grey" :to="{name: 'help'}">
         <v-icon>help</v-icon>
       </v-btn>
     </p>
