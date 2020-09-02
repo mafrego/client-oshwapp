@@ -1,6 +1,6 @@
 <template>
 <div>
-    hola!
+    figaa!!!
 </div>
 </template>
 
