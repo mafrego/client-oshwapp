@@ -7,7 +7,7 @@
         <li><span class="bold">BOM</span>:= bill of <span class="bold">material</span>s</li>
         <li><span class="bold">material</span>:=  <span class="bold">atom</span></li>
         <li><span class="bold">atom</span>:=  <span class="bold">relevant product</span> 
-        that cannot be disassembled and that needn't be processed</li>
+        that cannot be disassembled and that must not be processed or manufactured</li>
         <li><span class="bold">product</span>:=  <span class="bold">object</span> seen as a whole</li>
         <li><span class="bold">relevant</span>:= long-lasting
          (e.g. lubrificating oil is a <span class="bold">relevant product</span> in the <span class="bold">BOM</span> of a car engine while petrol is not)</li>
