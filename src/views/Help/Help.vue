@@ -60,7 +60,7 @@
 
       <help-colors v-if="showColorsComponent" />
       <help-glossary v-if="showGlossaryComponent" />
-      <help-bom v-if="showBOMComponent" />
+      <help-bom-protocol v-if="showBOMComponent" />
       <help-how-to v-if="showHowToComponent" />
       <!-- <help-images v-if="showImagesComponent" />
       <help-assemble v-if="showAssembleComponent" /> -->
@@ -85,7 +85,7 @@
 <script>
 import HelpColors from './HelpColors'
 import HelpGlossary from './HelpGlossary'
-import HelpBom from './HelpBom'
+import HelpBomProtocol from './HelpBomProtocol'
 import HelpHowTo from './HelpHowTo'
 // import HelpImages from './HelpImages'
 // import HelpAssemble from './HelpAssemble'
@@ -97,7 +97,7 @@ export default {
   components: {
     HelpColors,
     HelpGlossary,
-    HelpBom,
+    HelpBomProtocol,
     HelpHowTo,
     // HelpImages,
     // HelpAssemble,
