@@ -93,7 +93,7 @@ export default {
       const MAX_SIZE = 70000;
       const allowedTypes = ["image/png", "image/svg", "image/svg+xml", "image/jpg", "image/jpeg"];
       if (file.size > MAX_SIZE) {
-        return `Max size allowed: ${MAX_SIZE / 1000}Kb!`;
+        return `Max size allowed: ${MAX_SIZE / 1000}kB!`;
       }
       if (!allowedTypes.includes(file.type)) {
         return "image type not allowed!";

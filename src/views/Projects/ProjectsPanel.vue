@@ -45,7 +45,7 @@
                       projectId: project.uuid
                     } 
                   }"
-                  title="view project"
+                  title="open project"
                 >
                   <v-icon>pageview</v-icon>
                 </v-btn>

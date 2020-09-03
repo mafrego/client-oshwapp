@@ -12,17 +12,17 @@
       <v-form ref="form">
         <div v-if="getProject.state != 'rooted'">
           <v-text-field
-            label="name"
+            label="assembly name"
             :rules="[rules.singleName, rules.required, rules.isAlphanumeric]"
             v-model="assembly.name"
           ></v-text-field>
           <v-text-field
-            label="description"
+            label="assembly description"
             :rules="[rules.required, rules.isDescription]"
             v-model="assembly.description"
           ></v-text-field>
           <v-text-field
-            label="quantity to assemble"
+            label="how many identical assemblies?"
             :rules="[rules.required]"
             type="number"
             min="1"
@@ -54,10 +54,11 @@
             <v-flex xs3 v-if="getProject.state != 'rooted'">
               <div
                 class="atom-name"
-              >{{item.name}} - #pieces to assemble: {{item.quantity_to_assemble}}</div>
+              >{{item.name}} <br> items left to assemble: {{item.quantity_to_assemble}}</div>
               <v-text-field
                 :rules="[maxQuantity(item.quantity_to_assemble)]"
                 type="number"
+                label="how many items per assembly?"
                 min="0"
                 max="100"
                 step="1"

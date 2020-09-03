@@ -11,7 +11,7 @@
         v-if="getProject.state != 'released'"
         @click="toggleComponentUpload"
         class="green ml-2 mt-1"
-        title="upload BOM"
+        title="select bom.csv to upload"
         light
       >
         <v-icon>attach_file</v-icon>
@@ -33,7 +33,7 @@
         v-if="getProject.state === 'assembling' || getProject.state === 'rooted' || getProject.state === 'released'"
         @click="toggleComponentUploadImages"
         class="green ml-2 mt-1"
-        title="upload images"
+        title="select images to upload"
         light
       >
         <v-icon>add_a_photo</v-icon>
@@ -65,7 +65,7 @@
       <v-btn
         @click="toggleComponentProjectUpdate"
         class="yellow ml-2 mt-1"
-        title="update project"
+        title="update project metadata"
         light
       >
         <v-icon>update</v-icon>
