@@ -3,13 +3,13 @@
     <v-toolbar-items slot="action">
 
       <div>
-        <v-btn class="grey mt-1 ml-2" title="HOW-TO" @click="toggleHowToBomComponent">
+        <v-btn class="grey mt-1 ml-2" title="write bom.csv" @click="toggleHowToBomComponent">
           <v-icon>list</v-icon>
         </v-btn>
       </div>
 
       <div>
-        <v-btn class="grey mt-1 ml-2" title="images" @click="toggleHowToImagesComponent">
+        <v-btn class="grey mt-1 ml-2" title="save images" @click="toggleHowToImagesComponent">
           <v-icon>photo_camera</v-icon>
         </v-btn>
       </div>
