@@ -26,10 +26,9 @@
           <v-layout>
             <v-flex xs6>
               <div class="product-name">{{product.name}}</div>
-              <div class="product-description">{{product.description}}</div>
-              <div class="product-material">{{product.material}}</div>
+              <!-- <div class="product-description">{{product.description}}</div> -->
 
-              <v-btn
+              <!-- <v-btn
                 class="cyan"
                 :to="{
               name: 'product',
@@ -37,7 +36,7 @@
                 productId: product.uuid
               } 
               }"
-              >View</v-btn>
+              >View</v-btn> -->
 
               <v-btn
                 class="ml-2 cyan"
@@ -47,7 +46,8 @@
                 productId: product.uuid
               } 
               }"
-              >Tree</v-btn>
+              title="display tree structure"
+              ><v-icon>account_tree</v-icon></v-btn>
 
             </v-flex>
 
