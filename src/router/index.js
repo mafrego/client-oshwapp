@@ -5,6 +5,7 @@ import Register from '@/views/general/Register'
 import Login from '@/views/general/Login'
 import Help from '@/views/Help/Help.vue'
 import BomProtocol from '@/views/Help/HelpBomProtocol.vue'
+import VideoTutorial from '@/views/Help/HelpVideo.vue'
 import Validate from '@/views/Projects/ProjectViewValidateBom.vue'
 import Atoms from '@/views/Atoms/Index'
 import Products from '@/views/Products/ProductIndex.vue'
@@ -55,6 +56,11 @@ const routes = [
     path: '/bomprotocol',
     name: 'bomprotocol',
     component: BomProtocol
+  },
+   {
+    path: '/videotutorial',
+    name: 'videotutorial',
+    component: VideoTutorial
   },
    {
     path: '/atoms',
