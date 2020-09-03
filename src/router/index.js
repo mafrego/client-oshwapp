@@ -4,6 +4,8 @@ import Home from '../views/general/Home.vue'
 import Register from '@/views/general/Register'
 import Login from '@/views/general/Login'
 import Help from '@/views/Help/Help.vue'
+import BomProtocol from '@/views/Help/HelpBomProtocol.vue'
+import Validate from '@/views/general/Validate.vue'
 import Atoms from '@/views/Atoms/Index'
 import Products from '@/views/Products/ProductIndex.vue'
 import Projects from '@/views/Projects/ProjectsPanel'
@@ -43,6 +45,16 @@ const routes = [
     path: '/help',
     name: 'help',
     component: Help
+  },
+   {
+    path: '/validate',
+    name: 'validate',
+    component: Validate
+  },
+   {
+    path: '/bomprotocol',
+    name: 'bomprotocol',
+    component: BomProtocol
   },
    {
     path: '/atoms',
