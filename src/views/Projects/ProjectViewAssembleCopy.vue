@@ -40,13 +40,13 @@
             :indeterminate="getLoading"
             color="light-blue"
           ></v-progress-circular>
-          <br />
+          <!-- <br />
           <span>assembly.parts: {{ assembly.parts }}</span>
           <br />
           <span>quantities: {{ quantities }}</span>
           <br />
           <span>overlimits: {{ this.overlimits }}</span>
-          <br />
+          <br /> -->
         </div>
 
         <div v-for="(item, index) in getAssemblableProducts" :key="index">
