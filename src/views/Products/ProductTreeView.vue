@@ -2,14 +2,15 @@
   <div>
     <div>
       <h1>Tree view</h1>
-      <v-btn-toggle v-model="toggle_exclusive" rounded class="ml-2">
+      <!-- uncomment following lines to toggle between display options -->
+      <!-- <v-btn-toggle v-model="toggle_exclusive" rounded class="ml-2">
         <v-btn>
           <v-icon>account_tree</v-icon>
         </v-btn>
         <v-btn>
           <v-icon>device_hub</v-icon>
         </v-btn>
-      </v-btn-toggle>
+      </v-btn-toggle> -->
     </div>
     <div>
       <product-tree-view-images v-if="toggle_exclusive" :node="root" />
