@@ -28,7 +28,7 @@
     <v-btn class="grey ml-2 mt-2" title="validate resource">
       <v-icon>done</v-icon>
     </v-btn> do something but CRUD
-    <br />
+    <br><br>
   </div>
 </template>
 
