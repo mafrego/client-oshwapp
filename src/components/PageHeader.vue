@@ -8,6 +8,10 @@
       <v-icon>search</v-icon>
     </v-btn>
 
+    <v-btn title="validate bom.csv" :to="{name: 'validate'}" class="grey ml-2">
+      <v-icon>done</v-icon>
+    </v-btn>
+
     <v-btn class="grey ml-2" :to="{name: 'help'}" title="help">
       <v-icon>help</v-icon>
     </v-btn>
