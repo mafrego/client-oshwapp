@@ -1,5 +1,5 @@
 <template>
-  <v-toolbar fixed class="cyan" color="primary">
+  <v-toolbar class="cyan" rounded color="primary">
     <v-btn title="home" class="grey" :to="{name: 'home'}">
       <v-icon>home</v-icon>
     </v-btn>
