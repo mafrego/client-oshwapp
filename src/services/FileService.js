@@ -8,6 +8,11 @@ export default {
       .post(`bomupload/${projectId}`, formData, { headers: authHeader() })
   },
 
+  // checkBom (formData, projectId) {
+  //   return Api()
+  //     .post(`bomcheck/${projectId}`, formData, { headers: authHeader() })
+  // },
+
   checkBom (formData, projectId) {
     return Api()
       .post(`bomcheck/${projectId}`, formData, { headers: authHeader() })
