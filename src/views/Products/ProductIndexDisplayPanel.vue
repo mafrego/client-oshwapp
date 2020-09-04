@@ -2,41 +2,12 @@
   <v-layout column>
     <v-flex xs6>
       <panel title="Product">
-        <!-- <v-btn
-          v-if="$store.state.isUserLoggedIn"
-          class="cyan ml-2"
-          :to="{name: 'atoms-create'}"
-          slot="action"
-          title="create atom"
-          light
-        >
-          <v-icon>add_circle</v-icon>
-        </v-btn>
-        <v-btn
-          v-if="$store.state.isUserLoggedIn"
-          class="cyan ml-2"
-          :to="{name: 'assemblies-create'}"
-          slot="action"
-          title="create assembly"
-          light
-        >
-          <v-icon>group_work</v-icon>
-        </v-btn> -->
         <div v-for="product in products" :key="product.uuid">
           <v-layout>
             <v-flex xs6>
               <div class="product-name">{{product.name}}</div>
-              <!-- <div class="product-description">{{product.description}}</div> -->
-
-              <!-- <v-btn
-                class="cyan"
-                :to="{
-              name: 'product',
-              params: {
-                productId: product.uuid
-              } 
-              }"
-              >View</v-btn> -->
+              <div class="product-description">{{product.description}}</div>
+              <!-- TODO add version, link and author -->
 
               <v-btn
                 class="ml-2 cyan"
@@ -84,13 +55,10 @@ export default {
 
 <style scoped>
 .product-name {
-  font-size: 30
+  font-size: 150%;
   }
 .product-description {
-  font-size: 18px;
-}
-.product-material {
-  font-size: 24px;
+  font-size: 100%;
 }
 .product-image{
   object-fit: contain;

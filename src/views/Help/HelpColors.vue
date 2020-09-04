@@ -9,7 +9,7 @@
     <v-btn class="grey ml-8 mt-2">service</v-btn>
     <br />
     <h2>examples</h2>
-    <v-btn class="green ml-2 mt-2" title="create new item">
+    <v-btn class="green ml-2 mt-2" title="create new resource">
       <v-icon>add</v-icon>
     </v-btn> create, upload file or add new resource
     <br />
@@ -34,7 +34,7 @@
 
 <script>
 export default {
-  name: "",
+  name: "HelpColors",
 };
 </script>
 

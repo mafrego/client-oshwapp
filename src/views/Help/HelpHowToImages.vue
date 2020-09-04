@@ -10,6 +10,11 @@
         for taking pictures of all atoms
         of <a href="https://github.com/machineagency/jubilee/tree/master/frame/cads/STEP" target="_blank">Jubilee</a> 3d printer).
         </li>
+        <li>Image file name has to be an alphanumeric string comprehensive of 62 characters 
+            (A-Z+a-z+0-9, case-sensitive) plus underscores and hyphens. Blank spaces not allowed.</li>
+        <li>IMPORTANT: image file names have to be <span class="bold">exactly the same</span> as the names of the respective
+             atoms/assemblies (e. g. atom name: "aB-c_D_1x2x3", respective image file name: 
+             "aB-c_D_1x2x3.png").</li>
         <li>Allowed formats: .svg .png .jeg .jpg.</li>
         <li>Maximum file size is 70kB (enough for a 256x256 image).</li>
         <li>For better visualization transparent background is recommended
@@ -30,5 +35,8 @@ name: "HelpHowToImages"
 }
 :any-link {
   text-decoration: none;
+}
+.bold {
+    font-weight: bold;
 }
 </style>

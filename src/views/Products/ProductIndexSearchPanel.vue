@@ -2,7 +2,7 @@
    <panel title="Search">
         <v-text-field
           v-model="search"
-          label="Search by atom name or material"
+          label="Search by product name"
         ></v-text-field>
    </panel> 
 </template>
