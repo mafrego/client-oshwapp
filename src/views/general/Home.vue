@@ -17,7 +17,7 @@
         Search
         <v-btn :to="{name: 'products'}" class="grey" title="search">
           <v-icon>search</v-icon>
-        </v-btn>and visualize open source hardware products.
+        </v-btn> and visualize open source hardware products.
       </li>
       <br />
       <li>Register, upload a BOM, assemble, manage and share your project.</li>
