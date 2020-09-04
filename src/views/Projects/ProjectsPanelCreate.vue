@@ -32,7 +32,7 @@
         <v-text-field
           label="project link"
           :rules="[rules.isHTTP]"
-          v-model="project.projectUrl"
+          v-model="project.link"
           id="id"
         ></v-text-field>
       </v-form>
@@ -68,7 +68,7 @@ export default {
         // license: null,
         country: null,
         region: null,
-        projectUrl: null,
+        link: null,
         userID: this.$store.state.user.uuid,
       },
       error: "",
@@ -172,7 +172,7 @@ export default {
           // this.project.license = null;
           this.project.country = null;
           this.project.region = null;
-          this.project.projectUrl = null;
+          this.project.link = null;
           this.$refs.form.resetValidation();
         }
       } catch (err) {
