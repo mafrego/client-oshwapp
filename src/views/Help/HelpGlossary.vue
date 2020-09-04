@@ -11,7 +11,7 @@
         <li><span class="bold">product</span>:=  <span class="bold">object</span> seen as a whole</li>
         <li><span class="bold">relevant</span>:= long-lasting
          (e.g. lubrificating oil is a <span class="bold">relevant product</span> in the <span class="bold">BOM</span> of a car engine while petrol is not)</li>
-        <li><span class="bold">assembly</span>:=  <span class="bold">product</span> made of different <span class="bold">product</span>s</li>
+        <li><span class="bold">assembly</span>:=  <span class="bold">product</span> assembled from different <span class="bold">product</span>s</li>
         <li><span class="bold">object</span>:= something processed or manufactered</li>
     </ul> <br>
     According to these definitions:
