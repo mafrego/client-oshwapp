@@ -1,5 +1,5 @@
 <template>
-  <panel title="Project">
+  <panel title="Project" class="font">
     <v-toolbar-items slot="action">
       <div>
       <v-btn @click="toggleComponentValidateBOM" class="grey ml-2 mt-1" title="validate BOM" light>
@@ -86,10 +86,11 @@
 
     <v-row>
       <v-col md6>
-        <div class="project-name">{{getProject.name}}</div>
-        <div class="project-description">{{getProject.description}}</div>
-        <div class="project-state">{{getProject.state}}</div>
-        <div class="project-datetime">{{getProject.dateTime}}</div>
+        <div class="project-name">name: {{getProject.name}}</div>
+        <div class="project-description">description: {{getProject.description}}</div>
+        <div class="project-version">version: {{getProject.version}}</div>
+        <div class="project-state">status: {{getProject.state}}</div>
+        <div class="project-datetime">created: {{getProject.dateTime}}</div>
       </v-col>
       <v-col md6>
         <img class="project-image" :src="getProject.imageUrl" />
@@ -209,17 +210,20 @@ export default {
 </script>
 
 <style scoped>
+.font {
+  font-family: monospace;
+}
 .project-name {
-  font-size: 30px;
+  font-size: 170%;
 }
 .project-description {
-  font-size: 16px;
+  font-size: 100%;
 }
 .project-material {
-  font-size: 16px;
+  font-size: 100%;
 }
 .project-state {
-  font-size: 16px;
+  font-size: 100%;
 }
 .project-image {
   max-width: 200px;
@@ -228,6 +232,6 @@ export default {
   min-height: 150px;
 }
 .project-datetime {
-  font-size: 12px;
+  font-size: 100%;
 }
 </style>

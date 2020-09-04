@@ -26,7 +26,13 @@
       <v-btn class="green" @click="submitFile" title="upload BOM">
         <v-icon>cloud_upload</v-icon>
       </v-btn>
-      <v-progress-circular class="ml-10" v-if="loading" :indeterminate="loading" color="light-blue"></v-progress-circular>
+    <v-progress-circular
+      class="ml-10"
+      v-if="getLoading"
+      :indeterminate="getLoading"
+      color="light-blue"
+    ></v-progress-circular>
+      <!-- <v-progress-circular class="ml-10" v-if="loading" :indeterminate="loading" color="light-blue"></v-progress-circular> -->
     </div>
   </form>
 </template>

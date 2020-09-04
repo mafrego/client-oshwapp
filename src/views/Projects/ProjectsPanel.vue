@@ -33,9 +33,9 @@
           <div v-for="project in getProjects" :key="project.uuid">
             <v-layout>
               <v-flex xs6>
-                <div class="project-name">{{project.name}}</div>
+                <div class="project-name">project name: {{project.name}}</div>
                 <!-- <div class="project-description">{{project.description}}</div> -->
-                <div class="project-state">{{project.state}}</div>
+                <div class="project-state">status: {{project.state}}</div>
                 <!-- <div class="project-datetime">{{project.dateTime}}</div> -->
                 <v-btn
                   class="blue"
@@ -111,5 +111,8 @@ export default {
 }
 .project-datetime {
   font-size: 12px;
+}
+.container {
+  font-family: monospace;
 }
 </style>

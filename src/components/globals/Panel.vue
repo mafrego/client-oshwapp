@@ -1,6 +1,6 @@
 <template>
 
-      <div class="white elevation-2">
+      <div class="white elevation-2 font">
         <v-toolbar flat dense rounded class="cyan">
           <v-toolbar-title>{{title}}</v-toolbar-title>
           <slot name="action" />
@@ -23,6 +23,8 @@ export default {
 }
 </script>
 
-<style scoped>
-
+<style>
+.font {
+  font-family: monospace;
+}
 </style>

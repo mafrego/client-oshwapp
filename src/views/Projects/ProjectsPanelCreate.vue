@@ -39,7 +39,7 @@
     </panel>
     <div class="danger-alert" v-if="error">{{error}}</div>
     <div class="green--text" v-if="message">{{message}}</div>
-    <v-btn class="green" @click="create" title="save">
+    <v-btn class="green mt-2" @click="create" title="save">
       <v-icon>save</v-icon>
     </v-btn>
     <v-progress-circular

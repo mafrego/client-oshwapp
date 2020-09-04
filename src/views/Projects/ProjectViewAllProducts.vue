@@ -1,13 +1,13 @@
 <template>
   <v-layout column>
     <v-flex xs6>
-      <panel title="all products" v-if="getAllProducts.length">
+      <panel title="all products" v-if="getAllProducts.length" class="font">
         <div v-for="product in getAllProducts" :key="product.uuid">
           <v-layout>
             <v-flex xs6>
               <div class="product-name">{{product.name}}</div>
-              <div class="product-description">{{product.description}}</div>
-              <div class="product-material">{{product.material}}</div>
+              <!-- <div class="product-description">{{product.description}}</div> -->
+              <!-- <div class="product-material">{{product.material}}</div> -->
               <v-btn
                 class="cyan"
                 :to="{
@@ -16,7 +16,8 @@
                 productId: product.uuid
               } 
               }"
-              >View</v-btn>
+              title="view"
+              ><v-icon>pageview</v-icon></v-btn>
             </v-flex>
 
             <v-flex xs6>
@@ -47,8 +48,11 @@ export default {
 </script>
 
 <style scoped>
+.font {
+  font-family: monospace;
+}
 .product-name {
-  font-size: 30px;
+  font-size: 100%;
 }
 .product-description {
   font-size: 12px;
