@@ -18,7 +18,9 @@
               <span class="product-details">{{node.unitCost}} {{node.currency}}</span>
             </li>
             <li>
-              <span class="product-details">{{node.quantity.low}} items</span>
+              <!-- ATTENTIO!!!! accessing value of key with dot "assembled_from.quantity"
+              using square brackets like so:  node['assembled_from.quantity']-->
+              <span class="product-details">{{node['assembled_from.quantity']}} items</span>
             </li>
           </ul>
       </v-card>
