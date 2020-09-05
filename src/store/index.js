@@ -1,9 +1,7 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
-import createPersistedState from 'vuex-persistedstate'
-// import todos from './modules/todos'
+// import createPersistedState from 'vuex-persistedstate'
 import projects from './modules/projects'
-// import users from './modules/users'
 import UserService from '@/services/UserService'
 
 Vue.use(Vuex)
@@ -20,18 +18,18 @@ export default new Vuex.Store({
     // users: users
   },
 
-  // used for dev purpose but do not keep token in local storage
-  plugins: [
-    createPersistedState({
-      paths: [
-        'token', 
-        'user', 
-        'isUserLoggedIn', 
-        'projects.projects', 
-        'projects.project'
-      ]
-    })
-  ],
+  // used for dev purpose: do not keep jsw token in local storage in production!
+  // plugins: [
+  //   createPersistedState({
+  //     paths: [
+  //       'token', 
+  //       'user', 
+  //       'isUserLoggedIn', 
+  //       'projects.projects', 
+  //       'projects.project'
+  //     ]
+  //   })
+  // ],
 
   state: {
     token: null,
