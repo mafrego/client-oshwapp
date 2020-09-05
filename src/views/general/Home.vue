@@ -42,9 +42,9 @@ export default {
 </script>
 
 <style scoped>
-h1 {
+/* h1 {
   text-align: center;
-}
+} */
 h2 {
   text-align: center;
 }
@@ -53,5 +53,6 @@ h2 {
 }
 .home {
   font-family: monospace;
+  text-align: center;
 }
 </style>
