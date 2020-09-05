@@ -18,7 +18,7 @@
         <v-text-field v-model="link" :rules="[rules.isURL]" label="link"></v-text-field>
         <v-text-field v-model="notes" :rules="[rules.isDescription]" label="notes"></v-text-field>
 
-        <v-btn class="yellow" @click="update()">
+        <v-btn class="yellow" @click="update()" title="save updates">
           <v-icon>save</v-icon>
         </v-btn>
         <div v-if="this.message" class="ml-2 msg">
