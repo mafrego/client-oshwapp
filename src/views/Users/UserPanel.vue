@@ -20,9 +20,10 @@
       <v-flex xs6>
         <panel title="Profile">
           <v-toolbar-items slot="action">
-            <v-btn @click="toggleUpdate" class="yellow ml-2" title="update profile" light>
+            <div>
+            <v-btn @click="toggleUpdate" class="yellow ml-2 mt-1" title="update profile" light>
               <v-icon>update</v-icon>
-            </v-btn>
+            </v-btn></div>
           </v-toolbar-items>
 
           <user-panel-update v-if="showUpdate" />
