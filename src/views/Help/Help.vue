@@ -44,11 +44,11 @@
         </v-btn>
       </div>
 
-      <!-- <div>
-        <v-btn class="grey mt-1 ml-2" title="about" @click="toggleComponent">
-          <v-icon>settings</v-icon>
+      <div>
+        <v-btn class="grey mt-1 ml-2" title="contact-about" @click="toggleContactComponent">
+          <v-icon>contact_page</v-icon>
         </v-btn>
-      </div> -->
+      </div>
 
       <div>
         <v-btn class="grey mt-1 ml-2" title="FAQs" @click="toggleFAQComponent">
@@ -64,6 +64,7 @@
       <help-how-to v-if="showHowToComponent" />
       <!-- <help-images v-if="showImagesComponent" />
       <help-assemble v-if="showAssembleComponent" /> -->
+      <help-contact v-if="showContactComponent" />
       <help-video v-if="showVideoComponent" />
       <help-faq v-if="showFAQComponent" />
 
@@ -88,7 +89,7 @@ import HelpGlossary from './HelpGlossary'
 import HelpBomProtocol from './HelpBomProtocol'
 import HelpHowTo from './HelpHowTo'
 // import HelpImages from './HelpImages'
-// import HelpAssemble from './HelpAssemble'
+import HelpContact from './HelpContact'
 import HelpVideo from './HelpVideo'
 import HelpFaq from './HelpFAQ'
 
@@ -100,7 +101,7 @@ export default {
     HelpBomProtocol,
     HelpHowTo,
     // HelpImages,
-    // HelpAssemble,
+    HelpContact,
     HelpVideo,
     HelpFaq,
   },
@@ -113,7 +114,7 @@ export default {
       showBOMComponent: false,
       showHowToComponent: false,
       // showImagesComponent: false,
-      // showAssembleComponent: false,
+      showContactComponent: false,
       showVideoComponent: false,
       showFAQComponent: false,
     };
@@ -134,9 +135,9 @@ export default {
     // toggleImagesComponent() {
     //   this.showImagesComponent = !this.showImagesComponent;
     // },
-    // toggleAssembleComponent() {
-    //   this.showAssembleComponent = !this.showAssembleComponent;
-    // },
+    toggleContactComponent() {
+      this.showContactComponent = !this.showContactComponent;
+    },
     toggleVideoComponent() {
       this.showVideoComponent = !this.showVideoComponent;
     },
