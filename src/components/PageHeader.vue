@@ -29,6 +29,10 @@
       <v-icon>admin_panel_settings</v-icon>
     </v-btn>
 
+    <v-btn v-if="isUserLoggedIn" :to="{name: 'userPanel'}" title="profile" class="grey ml-2">
+      <v-icon>person</v-icon>
+    </v-btn>
+
     <v-spacer></v-spacer>
 
     <v-toolbar-items v-if="isUserLoggedIn" class="mt-10 mr-4">
