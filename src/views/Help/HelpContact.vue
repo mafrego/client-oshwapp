@@ -27,14 +27,14 @@
               class="font-weight-bold"
               href="https://github.com/mafrego/client-oshwapp"
               target="_blank"
-            >client</a>
+            >client</a>: Vue.js 
           </li>
           <li>
             <a
               class="font-weight-bold"
               href="https://github.com/mafrego/server-oshwapp"
               target="_blank"
-            >server</a>
+            >server</a>: Node.js Express.js
           </li>
         </ul>
       </li>

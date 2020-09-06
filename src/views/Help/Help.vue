@@ -26,18 +26,6 @@
         </v-btn>
       </div>
 
-      <!-- <div>
-        <v-btn class="grey mt-1 ml-2" title="images" @click="toggleImagesComponent">
-          <v-icon>photo_camera</v-icon>
-        </v-btn>
-      </div>
-
-      <div>
-        <v-btn class="grey mt-1 ml-2" title="assemble" @click="toggleAssembleComponent">
-          <v-icon>construction</v-icon>
-        </v-btn>
-      </div> -->
-
       <div>
         <v-btn class="grey mt-1 ml-2" title="video tutorial" @click="toggleVideoComponent">
           <v-icon>video_settings</v-icon>
@@ -62,25 +50,11 @@
       <help-glossary v-if="showGlossaryComponent" />
       <help-bom-protocol v-if="showBOMComponent" />
       <help-how-to v-if="showHowToComponent" />
-      <!-- <help-images v-if="showImagesComponent" />
-      <help-assemble v-if="showAssembleComponent" /> -->
-      <help-contact v-if="showContactComponent" />
       <help-video v-if="showVideoComponent" />
+      <help-contact v-if="showContactComponent" />
       <help-faq v-if="showFAQComponent" />
 
   </panel>
-  <!-- <div>
-          for improvement and suggestion: link to contact 
-      </li>
-      <li>take and upload images</li>
-      <li>standard images: size, format and background</li>
-      <li>take pictures with freecad: manual option and using macros</li>
-      <li>start assembling</li>
-      <li>video tutorial: myHouse showing all steps from bom to released project</li>
-      <li>links to git repos</li>
-      <li>contact</li>
-    </ul>
-  </div>-->
 </template>
 
 <script>
