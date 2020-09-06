@@ -1,5 +1,6 @@
 <template>
 <div class="font">
+    <br>
     <h1>FAQs</h1>
     No FAQs yet!
 </div>
