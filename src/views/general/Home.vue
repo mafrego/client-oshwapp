@@ -4,16 +4,16 @@
       <img src="../../assets/kaki.png" class="logo" />
       KAKI
     </h1> -->
-    <h1>
+    <h1 class="text-center">
       OSHW APP
     </h1>
-    <h2>open source hardware application</h2>
+    <h2 class="text-center">open source hardware application</h2>
     <br />
-    <ul>
+    <ul class="text-center">
       What can you do?
       <br />
       <br />
-      <li>
+      <li >
         Search
         <v-btn :to="{name: 'products'}" class="grey" title="search">
           <v-icon>search</v-icon>
@@ -45,14 +45,14 @@ export default {
 /* h1 {
   text-align: center;
 } */
-h2 {
-  text-align: center;
-}
 .logo {
   width: 5%;
 }
 .home {
   font-family: monospace;
-  text-align: center;
+}
+/* for dots in chrome/chromium */
+li {
+  list-style-position: inside;
 }
 </style>
