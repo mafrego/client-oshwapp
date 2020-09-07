@@ -9,7 +9,7 @@
           <v-text-field
             username="username"
             v-model="username"
-            :rules="[rules.required]"
+            :rules="[rules.required, rules.isAlphanumeric]"
             label="username"
             prepend-icon="mdi-account-circle"
             id="username"
@@ -26,7 +26,7 @@
             :type="showPassword ? 'text' : 'password'"
             name="password"
             v-model="password"
-            :rules="[rules.required, rules.counter]"
+            :rules="[rules.required, rules.isAlphanumeric8_32]"
             label="password"
             prepend-icon="mdi-lock"
             :append-icon="showPassword ? 'mdi-eye' : 'mdi-eye-off'"
@@ -62,7 +62,7 @@ export default {
       email: "",
       password: "",
       username: "",
-      error: null,
+      error: "",
       showPassword: false,
       isUserLoading: false,
       rules: {
@@ -71,7 +71,17 @@ export default {
         email: value => {
           const pattern = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
           return pattern.test(value) || "Invalid e-mail.";
-        }
+        },
+        isAlphanumeric8_32: (value) => {
+          const pattern = /^[a-zA-Z0-9_]{8,32}/;
+          if(value) return pattern.test(value) || "Alphanumeric string between 8 and 32 chars";
+          else return true
+        },
+        isAlphanumeric: (value) => {
+          const pattern = /^[a-zA-Z0-9_]{0,20}$/;
+          if(value) return pattern.test(value) || "Max 20 alphanumeric chars";
+          else return true
+        },
       }
     };
   },
@@ -83,6 +93,20 @@ export default {
     // ]),
     async register() {
       try {
+        this.error = ""
+        if(!this.username){
+          this.error = "You must provide a username"
+          return
+        }
+        if(!this.email){
+          this.error = "You must provide an email"
+          return
+        }
+        if(!this.password){
+          this.error = "You must provide a password"
+          return
+        }
+
         this.isUserLoading = true
         const response = await AuthenticationService.register({
           email: this.email,
