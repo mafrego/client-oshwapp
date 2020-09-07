@@ -1,26 +1,27 @@
 <template>
   <div>
+    <br>
     <v-layout column>
       <v-flex xs1>
         <v-text-field
           v-model="questionnaire.answer0"
           :rules="[rules.isAlphanumeric]"
-          label="What would you 0...?"
+          label="What do you like about this app?"
         ></v-text-field>
         <v-text-field
           v-model="questionnaire.answer1"
           :rules="[rules.isAlphanumeric]"
-          label="What would you 1...?"
+          label="What don't you like?"
         ></v-text-field>
         <v-text-field
           v-model="questionnaire.answer2"
           :rules="[rules.isAlphanumeric]"
-          label="What would you 2...?"
+          label="What would you improve?"
         ></v-text-field>
         <v-text-field
           v-model="questionnaire.answer3"
           :rules="[rules.isAlphanumeric]"
-          label="What would you 3...?"
+          label="Any other comment, suggestion, criticism, etc.?"
         ></v-text-field>
 
         <v-btn class="yellow" @click="update()" title="update questionnaire">
@@ -54,11 +55,11 @@ export default {
         //   else return true
         // },
         isAlphanumeric: (value) => {
-          const pattern = /^[-a-zA-Z0-9 _.]*$/;
+          const pattern = /^[^©]{0,200}$/;
           if (value)
             return (
               pattern.test(value) ||
-              "Only alphanumeric, dots, hyphens, underscore chars and blank spaces"
+              "Max 200 alphanumeric chars, © not allowed!"
             );
           else return true;
         },
@@ -103,6 +104,7 @@ export default {
         this.message = "";
         this.error = "";
         this.questionnaire.dateTime = new Date();
+        // console.log(this.questionnaire)
         const response = await UserService.updateQuestionnaire(
           this.questionnaire
         );
