@@ -1,6 +1,6 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
-// import createPersistedState from 'vuex-persistedstate'
+import createPersistedState from 'vuex-persistedstate'
 import projects from './modules/projects'
 import UserService from '@/services/UserService'
 
@@ -19,17 +19,17 @@ export default new Vuex.Store({
   },
 
   // used for dev purpose: do not keep jsw token in local storage in production!
-  // plugins: [
-  //   createPersistedState({
-  //     paths: [
-  //       'token', 
-  //       'user', 
-  //       'isUserLoggedIn', 
-  //       'projects.projects', 
-  //       'projects.project'
-  //     ]
-  //   })
-  // ],
+  plugins: [
+    createPersistedState({
+      paths: [
+        'token', 
+        'user', 
+        'isUserLoggedIn', 
+        'projects.projects', 
+        'projects.project'
+      ]
+    })
+  ],
 
   state: {
     token: null,
@@ -57,6 +57,9 @@ export default new Vuex.Store({
         } finally {
             commit('setUserLoading', false)
         }
+    },
+    setQuestionnaire({commit}, questionnaire){
+      commit('setQuestionnaire', questionnaire)
     }
   },
 
@@ -85,6 +88,9 @@ export default new Vuex.Store({
     setUserError(state, userError){
       state.userError = userError
     },
+    setQuestionnaire(state, questionnaire){
+      state.user.fills_in.node = questionnaire
+    }
   }
 
 })

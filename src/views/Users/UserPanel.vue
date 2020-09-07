@@ -23,7 +23,13 @@
             <div>
             <v-btn @click="toggleUpdate" class="yellow ml-2 mt-1" title="update profile" light>
               <v-icon>update</v-icon>
-            </v-btn></div>
+            </v-btn>
+            </div>
+            <div>
+            <v-btn @click="toggleQuestionnaire" class="yellow ml-2 mt-1" title="questionnaire" light>
+              <v-icon>feedback</v-icon>
+            </v-btn>
+            </div>
           </v-toolbar-items>
 
           <user-panel-update v-if="showUpdate" />
@@ -39,6 +45,9 @@
               </ul>
             </ul>
           </div>
+
+          <user-panel-questionnaire v-if="showQuestionnaire" />
+
         </panel>
       </v-flex>
     </v-layout>
@@ -48,15 +57,18 @@
 <script>
 import { mapState } from "vuex";
 import UserPanelUpdate from "./UserPanelUpdate.vue";
+import UserPanelQuestionnaire from "./UserPanelQuestionnaire.vue";
 
 export default {
   name: "UserPanel",
   components: {
     UserPanelUpdate,
+    UserPanelQuestionnaire,
   },
   data() {
     return {
       showUpdate: false,
+      showQuestionnaire: false,
     };
   },
   computed: {
@@ -65,6 +77,9 @@ export default {
   methods: {
     toggleUpdate() {
       this.showUpdate = !this.showUpdate;
+    },
+    toggleQuestionnaire() {
+      this.showQuestionnaire = !this.showQuestionnaire;
     },
   },
   mounted() {
