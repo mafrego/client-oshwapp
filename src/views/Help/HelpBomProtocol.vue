@@ -1,5 +1,5 @@
 <template>
-  <div class="font">
+  <div class="font text-justify">
     <br />
     <h1>BOM protocol</h1>
     <br />

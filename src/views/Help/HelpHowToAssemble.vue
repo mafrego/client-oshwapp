@@ -1,5 +1,5 @@
 <template>
-<div class="font">
+<div class="font text-justify">
     <br>
     <h1>Start assembling</h1>
     <ol>

@@ -1,5 +1,5 @@
 <template>
-<div class="font">
+<div class="font text-justify">
     <br>
     <h1>Write a bom.csv file</h1>
     <br>

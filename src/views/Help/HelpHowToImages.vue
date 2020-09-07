@@ -1,5 +1,5 @@
 <template>
-<div class="font">
+<div class="font text-justify">
     <h1>Prepare atom and assembly images</h1>
     <br>
     <ol>

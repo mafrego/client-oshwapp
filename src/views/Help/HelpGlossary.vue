@@ -2,7 +2,8 @@
 <div class="font">
     <br>
     <h1>Glossary</h1>
-<p>
+    <br>
+<p class="text-justify">
     <ul>
         <li><span class="bold">BOM</span>:= bill of <span class="bold">material</span>s</li>
         <li><span class="bold">material</span>:=  <span class="bold">atom</span></li>
