@@ -8,7 +8,12 @@
       <v-icon>search</v-icon>
     </v-btn>
 
-    <v-btn v-if="!$store.state.isUserLoggedIn" title="validate bom.csv" :to="{name: 'validate'}" class="grey ml-2">
+    <v-btn
+      v-if="!$store.state.isUserLoggedIn"
+      title="validate bom.csv"
+      :to="{name: 'validate'}"
+      class="grey ml-2"
+    >
       <v-icon>done</v-icon>
     </v-btn>
 
@@ -42,17 +47,17 @@
       </router-link>
     </v-toolbar-items>
 
-    <v-toolbar-items>
-      <v-btn v-if="!isUserLoggedIn" text dark :to="{name: 'login'}">Login</v-btn>
-    </v-toolbar-items>
+      <div>
+        <v-btn v-if="!isUserLoggedIn" class="grey" text :to="{name: 'login'}">Login</v-btn>
+      </div>
 
-    <v-toolbar-items>
-      <v-btn v-if="!isUserLoggedIn" text dark :to="{name:'register'}">Register</v-btn>
-    </v-toolbar-items>
+      <div>
+        <v-btn v-if="!isUserLoggedIn" class="grey ml-2" text :to="{name:'register'}">Register</v-btn>
+      </div>
 
-    <v-toolbar-items>
-      <v-btn v-if="isUserLoggedIn" text dark @click="logout">Log Out</v-btn>
-    </v-toolbar-items>
+      <div>
+        <v-btn v-if="isUserLoggedIn" class="grey ml-2" text @click="logout">Log Out</v-btn>
+      </div>
   </v-toolbar>
 </template>
 
