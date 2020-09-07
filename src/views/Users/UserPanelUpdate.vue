@@ -4,7 +4,7 @@
       <v-flex xs1>
         <v-text-field v-model="description" :rules="[rules.isDescription]" label="description"></v-text-field>
 
-        <v-btn class="yellow" @click="update()">
+        <v-btn class="yellow" @click="update()" title="update profile">
           <v-icon>save</v-icon>
         </v-btn>
         <div v-if="this.message" class="ml-2 msg">
