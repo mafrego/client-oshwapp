@@ -80,9 +80,7 @@ export default {
         isAlphanumeric: (value) => {
           const pattern = /^[-0-9a-zA-Z_]+$/;
           if (value)
-            return (
-              pattern.test(value) || "only alphanumeric hyphens underscores"
-            );
+            return pattern.test(value) || "only alphanumeric hyphens underscores";
           else return true;
         },
         string: (value) => {
@@ -105,7 +103,11 @@ export default {
         isHTTP: (value) => {
           const pattern = /https?:\/\/(www\.)?[-a-zA-Z0-9@:%._+~#=]{1,256}\.[a-zA-Z0-9()]{1,6}\b([-a-zA-Z0-9()@:%_+.~#?&//=]*)/;
           if (value) return pattern.test(value) || "Invalid http link";
-          else return true;
+          else {
+            // set to null otherwise neo4j error
+            this.project.link = null
+            return true;
+            }
         },
         isISO31661: (value) => {
           let ret = false;
@@ -131,7 +133,11 @@ export default {
               ret ||
               "ISO 3166-2 e.g. for county Wicklow in Ireland IE-WW or Wicklow"
             );
-          else return true;
+          else {
+            // set to null otherwise neo4j error
+            this.project.region = null
+            return true;
+            }            
         },
       },
     };
