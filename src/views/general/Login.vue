@@ -32,6 +32,14 @@
         <!-- <v-btn color="success" @click="register">Register</v-btn>
         <v-spacer></v-spacer>-->
         <v-btn color="primary" @click="login">Login</v-btn>
+
+          <v-progress-circular
+            class="ml-10"
+            v-if="isUserLoading"
+            :indeterminate="isUserLoading"
+            color="light-blue"
+          ></v-progress-circular>
+
       </v-card-actions>
       <p class="red--text ml-10" v-if="error">{{error}}</p>
     </v-card>
@@ -49,6 +57,7 @@ export default {
       password: "",
       error: null,
       showPassword: false,
+      isUserLoading: false,
       rules: {
         required: (value) => !!value || "Required.",
         counter: (value) => value.length >= 8 || "Min 8 characters",
@@ -68,6 +77,7 @@ export default {
 
     async login() {
       try {
+        this.isUserLoading = true
         const response = await AuthenticationService.login({
           email: this.email,
           password: this.password,
@@ -75,6 +85,7 @@ export default {
         if (response) {
           this.setToken(response.data.token);
           this.setUser(response.data.user);
+          this.isUserLoading =false
           // this.$store.dispatch("setToken", response.data.token);
           // this.$store.dispatch("setUser", response.data.user);
           this.$router.push({
@@ -82,6 +93,7 @@ export default {
           });
         }
       } catch (error) {
+        this.isUserLoading = false
         this.error = error.response.data.error;
       }
     },
