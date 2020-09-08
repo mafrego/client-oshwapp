@@ -15,7 +15,7 @@
         <li>IMPORTANT: image file names have to be <span class="bold">exactly the same</span> as the names of the respective
              atoms/assemblies (e. g. atom name: "aB-c_D_1x2x3", respective image file name: 
              "aB-c_D_1x2x3.png").</li>
-        <li>Allowed formats: .svg .png .jeg .jpg.</li>
+        <li>Allowed formats: .svg .png .jpeg .jpg.</li>
         <li>Maximum file size is 70kB (enough for a 256x256 image).</li>
         <li>For better visualization transparent background is recommended
             (e.g. <a href="https://github.com/mafrego/docs-oshwapp/tree/master/template/images" target="_blank">pictures</a> of Jubilee atoms and assemblies).</li>
