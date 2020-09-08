@@ -95,7 +95,7 @@
           <li>[A-Z]{3}</li>
           <li>required</li>
           <li>
-            required, currency relative to
+            currency relative to
             <span class="bold">unitCost</span> and
             <span class="bold">totalCost</span>
           </li>
