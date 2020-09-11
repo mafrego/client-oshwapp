@@ -47,15 +47,17 @@ const actions = {
             commit('setLoading', false)
         }
     },
+    // TODO do something similar to login/register to pass errrors to component
+    // see Actions on Vuex docs
     async createProject({ commit }, project) {
         try {
             commit('setLoading', true)
             const response = await ProjectService.post(project)
-            // console.log(response)
+            console.log("response from projects.js", response)
             if (response.status == 201) {
                 const ret = await ProjectService.index(project.userID)
                 commit('setProjects', ret.data)
-                return response.status
+                return response
             }
         } catch (error) {
             commit('setError', error)
@@ -296,6 +298,9 @@ const mutations = {
     },
     updateProjectVersion: (state, version) => {
         state.project.version = version
+    },
+    updateProjectLicense: (state, license) => {
+        state.project.license = license
     },
     updateProjectCountry: (state, country) => {
         state.project.country = country
