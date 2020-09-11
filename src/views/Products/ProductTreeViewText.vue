@@ -1,7 +1,9 @@
 <template>
   <div class="font">
     <div @click="nodeClicked" :style="{'margin-left': `${depth * 20}px`}" class="node">
-      <span class="product-name">{{node.name}}</span>
+      <span class="product-name">{{node.name}} </span>
+        <a v-if="node.vendorUrl" :href="node.vendorUrl" target="_blank">vendor </a>
+        <a v-if="node.link" :href="node.vendorUrl" target="_blank">link</a>
       <img
         class="product-image ml-5"
         :src="node.imageUrl"
@@ -18,7 +20,7 @@
               <span class="product-details">{{node.unitCost}} {{node.currency}}</span>
             </li>
             <li>
-              <!-- ATTENTIO!!!! accessing value of key with dot "assembled_from.quantity"
+              <!-- ATTENTION!!!! access value of key with dot i.e. "assembled_from.quantity"
               using square brackets like so:  node['assembled_from.quantity']-->
               <span class="product-details">{{node['assembled_from.quantity']}} items</span>
             </li>
@@ -94,5 +96,8 @@ export default {
   right: 5%;
   top: 15%;
   font-size: 84%;
+}
+:any-link {
+  text-decoration: none;
 }
 </style>
