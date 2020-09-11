@@ -20,21 +20,20 @@
           v-model="project.version"
           id="id"
         ></v-text-field>
-        <!-- does it make sense? -->
-        <!-- <v-text-field
+        <v-text-field
           label="license"
-          :rules="[rules.required, rules.isAlphanumeric]"
+          :rules="[rules.isAlphanumeric]"
           v-model="project.license"
           id="id"
-        ></v-text-field> -->
-        <v-text-field label="country" :rules="[rules.required, rules.isISO31661]" v-model="project.country" id="id"></v-text-field>
-        <v-text-field label="region" :rules="[rules.isISO31662]" v-model="project.region" id="id"></v-text-field>
+        ></v-text-field>
         <v-text-field
-          label="project link"
-          :rules="[rules.isHTTP]"
-          v-model="project.link"
+          label="country"
+          :rules="[rules.required, rules.isISO31661]"
+          v-model="project.country"
           id="id"
         ></v-text-field>
+        <v-text-field label="region" :rules="[rules.isISO31662]" v-model="project.region" id="id"></v-text-field>
+        <v-text-field label="project link" :rules="[rules.isHTTP]" v-model="project.link" id="id"></v-text-field>
       </v-form>
     </panel>
     <div class="danger-alert" v-if="error">{{error}}</div>
@@ -65,7 +64,7 @@ export default {
         name: null,
         description: null,
         version: null,
-        // license: null,
+        license: null,
         country: null,
         region: null,
         link: null,
@@ -80,7 +79,9 @@ export default {
         isAlphanumeric: (value) => {
           const pattern = /^[-0-9a-zA-Z_]+$/;
           if (value)
-            return pattern.test(value) || "only alphanumeric hyphens underscores";
+            return (
+              pattern.test(value) || "only alphanumeric hyphens underscores"
+            );
           else return true;
         },
         string: (value) => {
@@ -105,9 +106,9 @@ export default {
           if (value) return pattern.test(value) || "Invalid http link";
           else {
             // set to null otherwise neo4j error
-            this.project.link = null
+            this.project.link = null;
             return true;
-            }
+          }
         },
         isISO31661: (value) => {
           let ret = false;
@@ -135,18 +136,15 @@ export default {
             );
           else {
             // set to null otherwise neo4j error
-            this.project.region = null
+            this.project.region = null;
             return true;
-            }            
+          }
         },
       },
     };
   },
   computed: {
-    ...mapGetters([
-      "getProjectNames",
-      "getLoading",
-    ]),
+    ...mapGetters(["getProjectNames", "getLoading"]),
   },
   methods: {
     ...mapActions(["createProject"]),
@@ -169,17 +167,21 @@ export default {
         this.project.state = "created";
         this.project.dateTime = new Date();
         const response = await this.createProject(this.project);
-        if (response == 201) {
-          this.message = "project created";
+        if (response.status === 201) {
+          // this.message = "project created";
 
-          this.project.name = null;
-          this.project.description = null;
-          this.project.version = null;
+          // this.project.name = null;
+          // this.project.description = null;
+          // this.project.version = null;
           // this.project.license = null;
-          this.project.country = null;
-          this.project.region = null;
-          this.project.link = null;
-          this.$refs.form.resetValidation();
+          // this.project.country = null;
+          // this.project.region = null;
+          // this.project.link = null;
+          // this.$refs.form.resetValidation();
+          this.$router.push({
+            name: "project",
+            params: { projectId: response.data.uuid },
+          });
         }
       } catch (err) {
         console.log(err);
