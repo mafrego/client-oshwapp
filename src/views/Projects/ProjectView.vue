@@ -89,6 +89,7 @@
         <div class="project-name">name: {{getProject.name}}</div>
         <div class="project-description">description: {{getProject.description}}</div>
         <div class="project-version">version: {{getProject.version}}</div>
+        <div class="">license: {{getProject.license}}</div>
         <div class="project-state">status: {{getProject.state}}</div>
         <div class="project-datetime">created: {{getProject.dateTime}}</div>
       </v-col>

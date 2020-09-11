@@ -5,6 +5,7 @@
         <!-- <v-text-field v-model="name" :rules="[rules.isAlphanumeric, rules.uniqueName]" label="name"></v-text-field> -->
         <v-text-field v-model="description" :rules="[rules.isDescription]" label="description"></v-text-field>
         <v-text-field v-model="version" :rules="[rules.isSemanticVersion]" label="version"></v-text-field>
+        <v-text-field v-model="license" :rules="[rules.isAlphanumeric]" label="license"></v-text-field>
         <v-text-field v-model="country" :rules="[rules.isISO31661]" label="country"></v-text-field>
         <v-text-field v-model="region" :rules="[rules.isISO31662]" label="region"></v-text-field>
         <v-text-field v-model="link" :rules="[rules.isHTTP]" label="projectlink"></v-text-field>
@@ -111,6 +112,14 @@ export default {
           this.$store.commit('updateProjectVersion', value)
         }
       },
+      license: {
+        get() {
+          return this.$store.state.projects.project.license
+        },
+        set (value) {
+          this.$store.commit('updateProjectLicense', value)
+        }
+      },
       country: {
         get() {
           return this.$store.state.projects.project.country
@@ -146,6 +155,7 @@ export default {
         const project = {
           description: this.description,
           version: this.version,
+          license: this.license,
           country: this.country,
           region: this.region,
           link: this.link
