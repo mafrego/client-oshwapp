@@ -23,6 +23,9 @@ const getters = {
     getProjects: state => state.projects,
     getProjectNames: state => state.projects.map(node => node.name),
     getProject: state => state.project,
+    getProjectByID: (state) => (id) => { 
+        return state.projects.find(project => project.uuid === id)
+    },
     getBom: state => state.bom,
     getAtom: state => state.atom,
     getAtomNames: state => state.bom.map(atom => atom.name),
@@ -47,35 +50,43 @@ const actions = {
             commit('setLoading', false)
         }
     },
+
+    createProject({ commit }, project) {
+      commit('addProject', project)
+    },
+    
     // TODO do something similar to login/register to pass errrors to component
     // see Actions on Vuex docs
-    async createProject({ commit }, project) {
-        try {
-            commit('setLoading', true)
-            const response = await ProjectService.post(project)
-            console.log("response from projects.js", response)
-            if (response.status == 201) {
-                const ret = await ProjectService.index(project.userID)
-                commit('setProjects', ret.data)
-                return response
-            }
-        } catch (error) {
-            commit('setError', error)
-        } finally {
-            commit('setLoading', false)
-        }
-    },
-    async fetchProject({ commit }, projectID) {
-        try {
-            commit('setLoading', true)
-            const response = await ProjectService.show(projectID)
-            commit('setProject', response.data)
-        } catch (error) {
-            commit('setError', error)
-        } finally {
-            commit('setLoading', false)
-        }
-    },
+    // async createProject({ commit }, project) {
+    //     try {
+    //         commit('setLoading', true)
+    //         const response = await ProjectService.post(project)
+    //         console.log("response from projects.js", response)
+    //         if (response.status == 201) {
+    //             const ret = await ProjectService.index(project.userID)
+    //             commit('setProjects', ret.data)
+    //             return response
+    //         }
+    //     } catch (error) {
+    //         commit('setError', error)
+    //     } finally {
+    //         commit('setLoading', false)
+    //     }
+    // },
+
+    // apparently this function is not used
+    // async fetchProject({ commit }, projectID) {
+    //     try {
+    //         commit('setLoading', true)
+    //         const response = await ProjectService.show(projectID)
+    //         commit('setProject', response.data)
+    //     } catch (error) {
+    //         commit('setError', error)
+    //     } finally {
+    //         commit('setLoading', false)
+    //     }
+    // },
+
     // projectState is an object
     async updateProjectState({ state, commit }, projectState) {
         try {
@@ -284,11 +295,15 @@ const mutations = {
     setProjects: (state, projects) => {
         state.projects = projects
     },
-    setProject: (state, projectID) => {
-        state.project = state.projects.find(el => el.uuid === projectID)
+    // setProject: (state, projectID) => {
+    //     state.project = state.projects.find(el => el.uuid === projectID)
+    // },
+    setProject: (state, project) => {
+        state.project = project
     },
     addProject: (state, project) => {
-        state.projects.push(project)
+        state.project = project
+        state.projects.unshift(project)
     },
     updateProject: (state, project) => {
         state.project = project
