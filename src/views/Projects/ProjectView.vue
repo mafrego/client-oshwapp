@@ -157,6 +157,7 @@ export default {
       "getBom",
       "getAssemblableProducts",
       "getLoading",
+      "getProjectByID"
     ]),
   },
   methods: {
@@ -202,7 +203,9 @@ export default {
     },
   },
   created() {
-    this.setProject(this.$store.state.route.params.projectId);
+    // this.setProject(this.$store.state.route.params.projectId);
+    const project = this.getProjectByID(this.$store.state.route.params.projectId);
+    this.setProject(project)
     this.fetchBom(this.getProject.uuid);
     this.fetchAssemblableProducts(this.getProject.uuid);
     this.fetchAllProducts(this.getProject.uuid);
