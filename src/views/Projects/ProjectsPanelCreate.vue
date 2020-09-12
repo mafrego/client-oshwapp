@@ -43,8 +43,8 @@
     </v-btn>
     <v-progress-circular
       class="ml-10"
-      v-if="getLoading"
-      :indeterminate="getLoading"
+      v-if="isLoading"
+      :indeterminate="isLoading"
       color="light-blue"
     ></v-progress-circular>
     <br />
@@ -56,6 +56,7 @@ import { mapGetters, mapActions } from "vuex";
 import semverRegex from "semver-regex";
 import iso31661 from "iso-3166";
 import iso31662 from "iso-3166/2";
+import PorjectService from "@/services/ProjectService";
 
 export default {
   data() {
@@ -72,6 +73,7 @@ export default {
       },
       error: "",
       message: "",
+      isLoading: false,
       rules: {
         required: (value) => !!value || "Required.",
         uniqueName: (value) =>
@@ -163,28 +165,37 @@ export default {
         this.error = "Please fill in all the required fields.";
         return;
       }
+      // try {
+      //   this.project.state = "created";
+      //   this.project.dateTime = new Date();
+      //   const response = await this.createProject(this.project);
+      //   if (response.status === 201) {
+      //     this.$router.push({
+      //       name: "project",
+      //       params: { projectId: response.data.uuid },
+      //     });
+      //   }
+      // } catch (err) {
+      //   console.log(err);
+      // }
       try {
+        this.isLoading = true
         this.project.state = "created";
         this.project.dateTime = new Date();
-        const response = await this.createProject(this.project);
+        const response = await PorjectService.post(this.project);
+        console.log(response)
         if (response.status === 201) {
-          // this.message = "project created";
-
-          // this.project.name = null;
-          // this.project.description = null;
-          // this.project.version = null;
-          // this.project.license = null;
-          // this.project.country = null;
-          // this.project.region = null;
-          // this.project.link = null;
-          // this.$refs.form.resetValidation();
+          this.createProject(response.data)
+          this.isLoading =false
           this.$router.push({
             name: "project",
             params: { projectId: response.data.uuid },
           });
         }
-      } catch (err) {
-        console.log(err);
+      } catch (error) {
+        this.isLoading = false
+        this.error = error.response.data.message;
+        console.log("error: ",error.response.data);
       }
     },
   },
