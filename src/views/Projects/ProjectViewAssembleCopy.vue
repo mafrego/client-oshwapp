@@ -22,6 +22,16 @@
             v-model="assembly.description"
           ></v-text-field>
           <v-text-field
+            label="assembly instructions"
+            :rules="[rules.isDescription]"
+            v-model="assembly.instruction"
+          ></v-text-field>
+          <v-text-field
+            label="assembly link"
+            :rules="[rules.isHTTP]"
+            v-model="assembly.link"
+          ></v-text-field>
+          <v-text-field
             label="how many identical assemblies?"
             :rules="[rules.required]"
             type="number"
@@ -96,11 +106,11 @@ export default {
       assembly: {
         name: null,
         description: null,
+        instruction: null,
+        link: null,
         parts: [],
         quantity_to_assemble: 1,
         quantity: 1,
-        // version: "0.0.1",
-        // type: "child",
       },
       quantities: [],
       msg: null,
@@ -120,6 +130,11 @@ export default {
           const pattern = /^[-a-zA-Z0-9_]*$/;
           if(value) return pattern.test(value) || "Only alphanumeric, dots, hyphens, underscore chars";
           else return true
+        },
+        isHTTP: (value) => {
+          const pattern = /https?:\/\/(www\.)?[-a-zA-Z0-9@:%._+~#=]{1,256}\.[a-zA-Z0-9()]{1,6}\b([-a-zA-Z0-9()@:%_+.~#?&//=]*)/;
+          if (value) return pattern.test(value) || "Invalid http link";
+          else return true;
         },
         singleName: (value) =>
           !this.getAllProductNames.includes(value) || "name already taken!",
@@ -185,10 +200,15 @@ export default {
         return el != null;
       });
       this.assembly.quantity = this.assembly.quantity_to_assemble;
-      const areAllFieldsFilledIn = Object.keys(this.assembly).every(
-        (key) => !!this.assembly[key]
-      );
-      if (!areAllFieldsFilledIn) {
+      // delete not required properties whenever corresponding entries are empty 
+      if(!this.assembly.instruction){
+        delete this.assembly.instruction
+      }
+      if(!this.assembly.link){
+        delete this.assembly.link
+      }
+      // check if required properties are filled in
+      if (!this.assembly.name || !this.assembly.description) {
         this.msg = "Please fill in all the required fields";
         return;
       }
@@ -211,6 +231,8 @@ export default {
           // this.addProductName(this.assembly.name);
           this.assembly.name = null;
           this.assembly.description = null;
+          this.assembly.instruction = null;
+          this.assembly.link = null;
           this.assembly.parts = [];
           this.assembly.quantity_to_assemble = 1;
           this.quantities = [];
