@@ -16,7 +16,8 @@
 
       <div>
         <v-btn class="grey mt-1 ml-2" title="BOM protocol" @click="toggleBOMComponent">
-          <v-icon>list</v-icon>
+          <!-- <v-icon>list</v-icon> -->  
+          <span class="font-weight-bold">BOM</span>
         </v-btn>
       </div>
 
