@@ -10,8 +10,8 @@
         <span class="bold">headerName</span>:
         <ul>
           <li>allowed header format</li>
-          <li>regex</li>
-          <li>required/not required</li>
+          <li>corresponding regex</li>
+          <li>required/recommended</li>
           <li>header description</li>
         </ul>
       </li>
@@ -41,8 +41,8 @@
         <span class="bold">description</span>:
         <ul>
           <li>string including any character except for commas and semicolons</li>
-          <li>required</li>
           <li>^[^,;]+$</li>
+          <li>required</li>
           <li>brief atom description of its peculiarities</li>
         </ul>
       </li>
@@ -106,7 +106,7 @@
         <ul>
           <li>8, 12, 13, or 14 digit length number</li>
           <li>^(\d{8}|\d{12}|\d{13}|\d{14})$</li>
-          <li>not required</li>
+          <li>recommended if available</li>
           <li>
             <a
               href="https://en.wikipedia.org/wiki/Global_Trade_Item_Number"
@@ -120,7 +120,7 @@
         <ul>
           <li>no standard defined: alphanumeric string with underscores, hyphens and blank spaces allowed</li>
           <li>^[-0-9a-zA-Z_. /]+$</li>
-          <li>not required</li>
+          <li>recommended</li>
           <li>
             <a
               href="https://en.wikipedia.org/wiki/Stock_keeping_unit"
@@ -154,7 +154,7 @@
             >ISO 8601</a>
           </li>
           <li>^P(?!$)(\d+(?:\.\d+)?Y)?(\d+(?:\.\d+)?M)?(\d+(?:\.\d+)?W)?(\d+(?:\.\d+)?D)?(T(?=\d)(\d+(?:\.\d+)?H)?(\d+(?:\.\d+)?M)?(\d+(?:\.\d+)?S)?)?$</li>
-          <li>not required</li>
+          <li>recommended</li>
           <li>time required from the placement of an order to arrival of product at your doorstep</li>
         </ul>
       </li>
@@ -182,6 +182,15 @@
         </ul>
       </li>
     </ol>
+    <br />
+    <h2>BOM filename</h2>
+    <br />
+    <ul>
+      <li>The file containing the BOM shall begin with the project name followed by "-BOM".</li>
+      <li>The file extension shall be ".csv".</li>
+      <li>Example: "myproject-BOM.csv".</li>
+      <li>Filenames are case sensitive and blank spaces are not allowed.</li>
+    </ul>
     <br />
     <h2>Supported languages</h2>
     <br />
