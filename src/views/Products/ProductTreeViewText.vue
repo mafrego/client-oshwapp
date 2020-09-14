@@ -3,7 +3,7 @@
     <div @click="nodeClicked" :style="{'margin-left': `${depth * 20}px`}" class="node">
       <span class="product-name">{{node.name}} </span>
         <a v-if="node.vendorUrl" :href="node.vendorUrl" target="_blank">vendor </a>
-        <a v-if="node.link" :href="node.vendorUrl" target="_blank">link</a>
+        <a v-if="node.link" :href="node.link" target="_blank">link</a>
       <img
         class="product-image ml-5"
         :src="node.imageUrl"
@@ -24,6 +24,7 @@
               using square brackets like so:  node['assembled_from.quantity']-->
               <span class="product-details">{{node['assembled_from.quantity']}} items</span>
             </li>
+            <li v-if="node.instruction">{{node.instruction}}</li>
           </ul>
       </v-card>
     </div>
