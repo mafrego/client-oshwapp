@@ -91,7 +91,7 @@
         <div class="project-version">version: {{getProject.version}}</div>
         <div class="">license: {{getProject.license}}</div>
         <div class="project-state">status: {{getProject.state}}</div>
-        <div class="project-datetime">created: {{getProject.dateTime}}</div>
+        <div class="project-datetime">date-created: {{getProject.dateTime}}</div>
       </v-col>
       <v-col md6>
         <img class="project-image" :src="getProject.imageUrl" />
