@@ -1,7 +1,40 @@
 <template>
   <div class="font text-justify">
     <br />
-    <h1>BOM protocol</h1>
+    <h1>OSHW BOM protocol</h1>
+    <br />
+    <h2>Preliminary notes</h2>
+    <br>
+    <ul>
+      <li>The
+        <span class="bold">OSHW BOM protocol</span> defines the headers of a 
+        <a href="https://en.wikipedia.org/wiki/Comma-separated_values" target="_blank">comma-separated values</a>  file used as
+        <a href="https://en.wikipedia.org/wiki/Bill_of_materials" target="_blank">bill of materials </a> for any open source hardware product.
+      </li>
+      <li>Header 0. in the "BOM headers" section describes how each succesive header has to be understood.</li>
+      <li>
+        The protocol follows the
+        <a href="https://semver.org/" target="_blank">Semantic Versioning</a> directives.
+      </li>
+      <li>
+        The protocol is still under development: anyone interested in improving it
+        can <a href="https://github.com/mafrego/docs-oshwapp/issues" target="_blank">create an issue</a> 
+        or write an email to <a href="mailto: marcofregonese@gmail.com">this address</a>.
+      </li>
+      <li>
+        A <a href="https://github.com/mafrego/docs-oshwapp/blob/master" target="_blank">working example</a> 
+        of BOM file according to the OSHW BOM protocol 0.0.1.
+      </li>
+    </ul>
+    <br>
+    <h2>BOM filename</h2>
+    <br />
+    <ul>
+      <li>The file containing the BOM shall begin with the camelCase project name followed by "-BOM".</li>
+      <li>The file extension shall be ".csv".</li>
+      <li>Example: "myOpenSourceProject-BOM.csv".</li>
+      <li>Filenames are case sensitive and blank spaces are not allowed.</li>
+    </ul>
     <br />
     <h2>BOM headers</h2>
     <br />
@@ -183,15 +216,6 @@
       </li>
     </ol>
     <br />
-    <h2>BOM filename</h2>
-    <br />
-    <ul>
-      <li>The file containing the BOM shall begin with the project name followed by "-BOM".</li>
-      <li>The file extension shall be ".csv".</li>
-      <li>Example: "myproject-BOM.csv".</li>
-      <li>Filenames are case sensitive and blank spaces are not allowed.</li>
-    </ul>
-    <br />
     <h2>Supported languages</h2>
     <br />
     <p>Any language with Latin-script alphabet, English preferred.</p>
@@ -208,7 +232,7 @@
 
 <script>
 export default {
-  name: "",
+  name: "HelpBomProtocol",
 };
 </script>
 
