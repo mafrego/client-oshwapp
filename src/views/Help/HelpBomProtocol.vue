@@ -22,7 +22,7 @@
         or write an email to <a href="mailto: marcofregonese@gmail.com">this address</a>.
       </li>
       <li>
-        A <a href="https://github.com/mafrego/docs-oshwapp/blob/master" target="_blank">working example</a> 
+        A <a href="https://github.com/mafrego/docs-oshwapp/blob/master/template/bom/miniHouse-bom.csv" target="_blank">working example</a> 
         of BOM file according to the OSHW BOM protocol 0.0.1.
       </li>
     </ul>
@@ -30,9 +30,9 @@
     <h2>BOM filename</h2>
     <br />
     <ul>
-      <li>The file containing the BOM shall begin with the camelCase project name followed by "-BOM".</li>
+      <li>The file containing the BOM shall begin with the camelCase project name followed by "-bom".</li>
       <li>The file extension shall be ".csv".</li>
-      <li>Example: "myOpenSourceProject-BOM.csv".</li>
+      <li>Example: "myOpenSourceProject-bom.csv".</li>
       <li>Filenames are case sensitive and blank spaces are not allowed.</li>
     </ul>
     <br />
