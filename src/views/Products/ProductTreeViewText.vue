@@ -1,9 +1,9 @@
 <template>
   <div class="font">
-    <div @click="nodeClicked" :style="{'margin-left': `${depth * 20}px`}" class="node">
-      <span class="product-name">{{node.name}} </span>
-        <a v-if="node.vendorUrl" :href="node.vendorUrl" target="_blank">vendor </a>
-        <a v-if="node.link" :href="node.link" target="_blank">link</a>
+    <div @click="nodeClicked" :style="{'margin-left': `${depth * indent}px`}" class="node">
+      <span class="product-name">{{node.name}}</span>
+      <a v-if="node.vendorUrl" :href="node.vendorUrl" target="_blank"> vendor</a>
+      <a v-if="node.link" :href="node.link" target="_blank"> link</a>
       <img
         class="product-image ml-5"
         :src="node.imageUrl"
@@ -12,20 +12,22 @@
       />
 
       <v-card v-if="hover" width="40%" dark elevation-24 class="card">
-          <ul>
-            <li>
-              <span class="product-details">{{node.description}}</span>
-            </li>
-            <li v-if="node.unitCost">
-              <span class="product-details">{{node.unitCost}} {{node.currency}}</span>
-            </li>
-            <li>
-              <!-- ATTENTION!!!! access value of key with dot i.e. "assembled_from.quantity"
-              using square brackets like so:  node['assembled_from.quantity']-->
-              <span class="product-details">{{node['assembled_from.quantity']}} items</span>
-            </li>
-            <li v-if="node.instruction">{{node.instruction}}</li>
-          </ul>
+        <ul>
+          <li>
+            <span class="product-details">{{node.description}}</span>
+          </li>
+          <li v-if="node.unitCost">
+            <span class="product-details">{{node.unitCost}} {{node.currency}}</span>
+          </li>
+            <!-- ATTENTION!!!! access value of key with dot i.e. "assembled_from.quantity"
+            using square brackets like so:  node['assembled_from.quantity']-->
+          <li v-if="node['assembled_from.quantity']">
+            <span v-if="node['assembled_from.quantity'] > 1" class="product-details">{{node['assembled_from.quantity']}} items</span>
+            <span v-else class="product-details">{{node['assembled_from.quantity']}} item</span>
+          </li>
+          <li v-if="node.instruction">{{node.instruction}}</li>
+          <li>{{path}}</li>
+        </ul>
       </v-card>
     </div>
     <div v-if="expanded">
@@ -34,6 +36,8 @@
         :key="child.uuid"
         :node="child"
         :depth="depth + 1"
+        :path="path + '/' +child.name"
+        :indent="indent"
         @onClick="(node) => $emit('on-click', node)"
       />
     </div>
@@ -50,6 +54,8 @@ export default {
       default: 0,
     },
     dummy: Boolean,
+    path: String,
+    indent: Number,
   },
   data() {
     return {
@@ -84,7 +90,7 @@ export default {
 }
 .product-image {
   cursor: pointer;
-  width: 5%;
+  width: 8%;
   height: auto;
   /* center img */
   margin-left: auto;
