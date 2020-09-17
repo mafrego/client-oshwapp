@@ -7,11 +7,11 @@
             <v-flex xs6>
               <div class="product-name">{{product.name}} {{product.version}}</div>
               <div class="product-description">{{product.description}}</div>
-              <div class="">{{product.license}}</div>
-              <div class="product-country">{{product.country}}</div>
+              <div class="">license: {{product.license}}</div>
+              <div class="product-country">country: {{product.country}}</div>
               <div v-if="product.link" class="product-link"><a :href="product.link" target="_blank">link</a></div>
               <div class="product-bom"><a :href="product.bopUrl" >BOM</a></div>
-              <div class="product-author">{{product.author}}</div>
+              <div class="product-author">author: {{product.author}}</div>
 
               <v-btn
                 class="ml-2 cyan"
