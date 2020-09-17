@@ -1,20 +1,38 @@
 <template>
-<div>
+  <div>
+      <h2>app presentation</h2>
+    <br />
+    <iframe
+      width="560"
+      height="315"
+      src="https://www.youtube.com/embed/LVNngJrk7Q0"
+      frameborder="0"
+      allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture"
+      allowfullscreen
+    ></iframe>
     <br>
-    <iframe width="560" height="315" src="https://www.youtube.com/embed/qYj6NwROFwg"
-     frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture"
-      allowfullscreen></iframe> 
-</div>
+    <br />
+    <h2>assembling tutorial</h2>
+    <br>
+    <iframe
+      width="560"
+      height="315"
+      src="https://www.youtube.com/embed/qYj6NwROFwg"
+      frameborder="0"
+      allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture"
+      allowfullscreen
+    ></iframe>
+  </div>
 </template>
-
+ 
 <script>
 export default {
-name: ""    
-}
+  name: "",
+};
 </script>
 
 <style scoped>
 div {
-    text-align: center;
+  text-align: center;
 }
 </style>
