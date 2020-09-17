@@ -4,6 +4,7 @@
     <div v-if="isOpen">
       <div v-for="user in users" :key="user.uuid">
         {{user.username}}: {{user.uuid}}
+        <v-btn :to="{name: 'adminuser', params: { userId: user.uuid}}" color="blue">show</v-btn>
         <v-btn @click="delUser(user.uuid)" color="red">delete</v-btn>
       </div>
     </div>

@@ -21,6 +21,7 @@ import CreateAssembly from '@/views/Assemblies/AssemblyCreate.vue'
 import ViewProject from '@/views/Projects/ProjectView'
 import Experiments from '@/views/Experiments/Experiments.vue'
 import AdminBoard from '@/views/Admin/AdminBoard.vue'
+import AdminUser from '@/views/Admin/AdminUser.vue'
 import Todos from '@/views/Todos/Todos.vue'
 import UserPanel from '@/views/Users/UserPanel.vue'
 
@@ -121,6 +122,11 @@ const routes = [
     path: '/adminboard',
     name: 'adminboard',
     component: AdminBoard
+  },
+  {
+    path: '/adminuser/:userId',
+    name: 'adminuser',
+    component: AdminUser
   },
   {
     path: '/todos',

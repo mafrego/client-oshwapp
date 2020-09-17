@@ -7,6 +7,10 @@ export default {
     return Api().get('allusers', { headers: authHeader() }) 
   },
 
+  getUser(userId) {
+    return Api().get(`user/${userId}`, { headers: authHeader() }) 
+  },
+
   getAllProjects () {
     return Api().get('allprojects', { headers: authHeader() }) 
   },
