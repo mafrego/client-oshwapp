@@ -2,46 +2,55 @@
   <v-layout column>
     <v-flex xs6>
       <panel title="Atom">
-        <v-btn
-          v-if="$store.state.isUserLoggedIn"
-          class="cyan ml-2"
-          :to="{name: 'atoms-create'}"
-          slot="action"
-          title="create atom"
-          light
-        >
-          <v-icon>add_circle</v-icon>
-        </v-btn>
-        <v-btn
-          v-if="$store.state.isUserLoggedIn"
-          class="cyan ml-2"
-          :to="{name: 'assemblies-create'}"
-          slot="action"
-          title="create assembly"
-          light
-        >
-          <v-icon>group_work</v-icon>
-        </v-btn>
         <div v-for="atom in atoms" :key="atom.uuid">
           <v-layout>
             <v-flex xs6>
-              <div class="atom-name">{{atom.name}}</div>
-              <div class="atom-description">{{atom.description}}</div>
-              <div class="atom-material">{{atom.material}}</div>
+              <div
+                class="atom-name"
+                @mouseover="hover = atom.uuid"
+                @mouseleave="hover = null"
+                @click="fix(atom.uuid)"
+              >{{atom.name}}</div>
 
-              <v-btn
-                class="cyan"
-                :to="{
-              name: 'product',
-              params: {
-                productId: atom.uuid
-              } 
-              }"
-              >View</v-btn>
+              <v-card
+                v-if="hover === atom.uuid || fixed === atom.uuid"
+                width="40%"
+                outlined
+                raised
+                dark
+                elevation-24
+                class="card"
+              >
+                <v-card-actions>
+                  {{atom.name}}
+                  <v-spacer></v-spacer>
+                  <v-btn icon class="grey" x-small @click="fix(null)" title="close">
+                    <v-icon>close</v-icon>
+                  </v-btn>
+                </v-card-actions>
+                <ul>
+                  <li>{{atom.description}}</li>
+                  <li>{{atom.unitCost}} {{atom.currency}}</li>
+                  <li v-if="atom.GTIN">GTIN: {{atom.GTIN}}</li>
+                  <li v-if="atom.SKU">SKU: {{atom.SKU}}</li>
+                  <li v-if="atom.vendorUrl">
+                    <a :href="atom.vendorUrl" target="_blank">vendor</a>
+                  </li>
+                  <li v-if="atom.link">
+                    <a :href="atom.link" target="_blank">link</a>
+                  </li>
+                </ul>
+              </v-card>
             </v-flex>
 
             <v-flex xs6>
-              <img class="atom-image" :src="atom.imageUrl" />
+              <img
+                class="atom-image"
+                :src="atom.imageUrl"
+                @mouseover="hover = atom.uuid"
+                @mouseleave="hover = null"
+                @click="fix(atom.uuid)"
+              />
             </v-flex>
           </v-layout>
         </div>
@@ -56,31 +65,31 @@ import AtomService from "@/services/AtomService";
 export default {
   data() {
     return {
-      atoms: null
+      atoms: null,
+      hover: null,
+      fixed: null,
     };
   },
   methods: {
-    // navigateTo(route){
-    //     this.$router.push(route)
-    // }
+    fix(uuid) {
+      this.fixed = uuid;
+    },
   },
   watch: {
     "$route.query.search": {
       immediate: true,
       async handler(value) {
         this.atoms = (await AtomService.index(value)).data;
-      }
-    }
-  }
-
-  // we don't need this because of the previous watch
-  // async mounted() {
-  //   this.atoms = (await AtomService.index()).data;
-  // }
+      },
+    },
+  },
 };
 </script>
 
 <style scoped>
+img {
+  cursor: pointer;
+}
 .atom-name {
   font-size: 30px;
 }
@@ -89,5 +98,14 @@ export default {
 }
 .atom-material {
   font-size: 24px;
+}
+.card {
+  position: fixed;
+  right: 5%;
+  top: 15%;
+  font-size: 84%;
+}
+:any-link {
+  text-decoration: none;
 }
 </style>
