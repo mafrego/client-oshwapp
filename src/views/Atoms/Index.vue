@@ -22,13 +22,7 @@ export default {
       atoms: null,
     };
   },
-  methods:{
-      // navigateTo(route){
-      //     this.$router.push(route)
-      // }
-  },
   async mounted() {
-    //do a request to the backend for all atoms
     this.atoms = (await AtomService.index()).data;
   }
 };
