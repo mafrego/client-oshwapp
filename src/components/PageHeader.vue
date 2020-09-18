@@ -4,8 +4,12 @@
       <v-icon>home</v-icon>
     </v-btn>
 
-    <v-btn title="search" :to="{name: 'products'}" class="grey ml-2">
-      <v-icon>search</v-icon>
+    <v-btn title="search fully assembled" :to="{name: 'products'}" class="grey ml-2">
+      <v-icon>zoom_out</v-icon>
+    </v-btn>
+
+    <v-btn title="search atoms" :to="{name: 'atoms'}" class="grey ml-2">
+      <v-icon>zoom_in</v-icon>
     </v-btn>
 
     <v-btn
