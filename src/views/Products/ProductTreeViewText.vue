@@ -2,16 +2,32 @@
   <div class="font">
     <div @click="nodeClicked" :style="{'margin-left': `${depth * indent}px`}" class="node">
       <span class="product-name">{{node.name}}</span>
-      <a v-if="node.vendorUrl" :href="node.vendorUrl" target="_blank"> vendor</a>
-      <a v-if="node.link" :href="node.link" target="_blank"> link</a>
+      <!-- <a v-if="node.vendorUrl" :href="node.vendorUrl" target="_blank">vendor</a>
+      <a v-if="node.link" :href="node.link" target="_blank">link</a>-->
       <img
         class="product-image ml-5"
         :src="node.imageUrl"
         @mouseover="hover = true"
         @mouseleave="hover = false"
+        @click="fix(node.uuid)"
       />
-
-      <v-card v-if="hover" width="40%" dark elevation-24 class="card">
+      <!-- TODO make something similar in AtomsPanel.vue to fix card if cliked -->
+      <v-card
+        v-if="hover || fixed === node.uuid"
+        width="40%"
+        outlined
+        raised
+        dark
+        elevation-24
+        class="card"
+      >
+        <v-card-actions>
+          {{node.name}}
+          <v-spacer></v-spacer>
+          <v-btn icon class="grey" x-small @click="fix(null)" title="close">
+            <v-icon>close</v-icon>
+          </v-btn>
+        </v-card-actions>
         <ul>
           <li>
             <span class="product-details">{{node.description}}</span>
@@ -19,13 +35,22 @@
           <li v-if="node.unitCost">
             <span class="product-details">{{node.unitCost}} {{node.currency}}</span>
           </li>
-            <!-- ATTENTION!!!! access value of key with dot i.e. "assembled_from.quantity"
-            using square brackets like so:  node['assembled_from.quantity']-->
+          <!-- ATTENTION!!!! access value of key with dot i.e. "assembled_from.quantity"
+          using square brackets like so:  node['assembled_from.quantity']-->
           <li v-if="node['assembled_from.quantity']">
-            <span v-if="node['assembled_from.quantity'] > 1" class="product-details">{{node['assembled_from.quantity']}} items</span>
+            <span
+              v-if="node['assembled_from.quantity'] > 1"
+              class="product-details"
+            >{{node['assembled_from.quantity']}} items</span>
             <span v-else class="product-details">{{node['assembled_from.quantity']}} item</span>
           </li>
           <li v-if="node.instruction">{{node.instruction}}</li>
+          <li v-if="node.vendorUrl">
+            <a :href="node.vendorUrl" target="_blank">vendor</a>
+          </li>
+          <li v-if="node.link">
+            <a :href="node.link" target="_blank">link</a>
+          </li>
           <li>{{path}}</li>
         </ul>
       </v-card>
@@ -61,6 +86,7 @@ export default {
     return {
       expanded: false,
       hover: false,
+      fixed: null,
     };
   },
   methods: {
@@ -69,6 +95,9 @@ export default {
       if (!this.hasChildren) {
         this.$emit("on-click", this.node);
       }
+    },
+    fix(uuid) {
+      this.fixed = uuid;
     },
   },
 };
