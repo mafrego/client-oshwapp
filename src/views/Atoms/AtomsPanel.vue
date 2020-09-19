@@ -21,13 +21,13 @@
                 elevation-24
                 class="card"
               >
-                <v-card-actions>
-                  {{atom.name}}
+              <v-card-title>
+                {{atom.name}}               
                   <v-spacer></v-spacer>
                   <v-btn icon class="grey" x-small @click="fix(null)" title="close">
                     <v-icon>close</v-icon>
                   </v-btn>
-                </v-card-actions>
+              </v-card-title>
                 <ul>
                   <li>{{atom.description}}</li>
                   <li>{{atom.unitCost}} {{atom.currency}}</li>

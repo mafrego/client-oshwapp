@@ -21,13 +21,13 @@
         elevation-24
         class="card"
       >
-        <v-card-actions>
+        <v-card-title>
           {{node.name}}
           <v-spacer></v-spacer>
           <v-btn icon class="grey" x-small @click="fix(null)" title="close">
             <v-icon>close</v-icon>
           </v-btn>
-        </v-card-actions>
+        </v-card-title>
         <ul>
           <li>
             <span class="product-details">{{node.description}}</span>
@@ -132,6 +132,9 @@ export default {
   right: 5%;
   top: 15%;
   font-size: 84%;
+}
+.actions {
+  word-break: normal;
 }
 :any-link {
   text-decoration: none;
