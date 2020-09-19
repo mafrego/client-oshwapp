@@ -169,9 +169,12 @@ export default {
       }
     },
     async updateProjectBom(projectId) {
-      const data = { projectId: projectId };
+      const data = {
+        projectName: this.getProject.name, 
+        projectId: projectId 
+        };
       const ret = await ProjectService.updateProjectBom(data);
-      console.log("ret:", ret);
+      // console.log("ret:", ret);
       if (ret.status === 200) {
         this.showDownloadBtn = !this.showDownloadBtn;
       }
