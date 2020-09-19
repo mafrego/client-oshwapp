@@ -26,14 +26,11 @@
             :rules="[rules.isDescription]"
             v-model="assembly.instruction"
           ></v-text-field>
+          <v-text-field label="assembly link" :rules="[rules.isHTTP]" v-model="assembly.link"></v-text-field>
           <v-text-field
-            label="assembly link"
-            :rules="[rules.isHTTP]"
-            v-model="assembly.link"
-          ></v-text-field>
-          <v-text-field
+            @keydown="preventNonNumericalInput($event)"
             label="how many identical assemblies?"
-            :rules="[rules.required]"
+            :rules="[rules.required, rules.isPositiveInt]"
             type="number"
             min="1"
             v-model="assembly.quantity_to_assemble"
@@ -56,16 +53,19 @@
           <span>quantities: {{ quantities }}</span>
           <br />
           <span>overlimits: {{ this.overlimits }}</span>
-          <br /> -->
+          <br />-->
         </div>
 
         <div v-for="(item, index) in getAssemblableProducts" :key="index">
           <v-layout>
             <v-flex xs3 v-if="getProject.state != 'rooted'">
-              <div
-                class="atom-name"
-              >{{item.name}} <br> items left to assemble: {{item.quantity_to_assemble}}</div>
+              <div class="atom-name">
+                {{item.name}}
+                <br />
+                items left to assemble: {{item.quantity_to_assemble}}
+              </div>
               <v-text-field
+                @keydown="preventNonNumericalInput($event)"
                 :rules="[maxQuantity(item.quantity_to_assemble)]"
                 type="number"
                 label="how many items per assembly?"
@@ -121,15 +121,28 @@ export default {
           const pattern = /^([1-9]\d*)$/;
           return pattern.test(value) || "entry must be a positive integer";
         },
+        isPositiveInt: (value) => {
+          const pattern = /^[1-9]+[0-9]*$/;
+          if (value) return pattern.test(value) || "only positive integers > 0";
+          else return true;
+        },
         isDescription: (value) => {
           const pattern = /^[^,;]*$/;
-          if(value) return pattern.test(value) || "Only alphanumeric, dots, hyphens, underscore chars";
-          else return true
+          if (value)
+            return (
+              pattern.test(value) ||
+              "Only alphanumeric, dots, hyphens, underscore chars"
+            );
+          else return true;
         },
         isAlphanumeric: (value) => {
           const pattern = /^[-a-zA-Z0-9_]*$/;
-          if(value) return pattern.test(value) || "Only alphanumeric, dots, hyphens, underscore chars";
-          else return true
+          if (value)
+            return (
+              pattern.test(value) ||
+              "Only alphanumeric, dots, hyphens, underscore chars"
+            );
+          else return true;
         },
         isHTTP: (value) => {
           const pattern = /https?:\/\/(www\.)?[-a-zA-Z0-9@:%._+~#=]{1,256}\.[a-zA-Z0-9()]{1,6}\b([-a-zA-Z0-9()@:%_+.~#?&//=]*)/;
@@ -173,6 +186,13 @@ export default {
       "disassemble",
       "updateProjectState",
     ]),
+    // this function prevents Firefox from allowing chars other than digits
+    preventNonNumericalInput(event) {
+      const char = String.fromCharCode(event.keyCode);
+      if (!/[0-9\b]/.test(char)) {
+        event.preventDefault();
+      }
+    },
     async release() {
       const args = {
         state: "released",
@@ -200,12 +220,12 @@ export default {
         return el != null;
       });
       this.assembly.quantity = this.assembly.quantity_to_assemble;
-      // delete not required properties whenever corresponding entries are empty 
-      if(!this.assembly.instruction){
-        delete this.assembly.instruction
+      // delete not required properties whenever corresponding entries are empty
+      if (!this.assembly.instruction) {
+        delete this.assembly.instruction;
       }
-      if(!this.assembly.link){
-        delete this.assembly.link
+      if (!this.assembly.link) {
+        delete this.assembly.link;
       }
       // check if required properties are filled in
       if (!this.assembly.name || !this.assembly.description) {
