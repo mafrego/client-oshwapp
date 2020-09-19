@@ -183,7 +183,7 @@ export default {
         this.project.state = "created";
         this.project.dateTime = new Date();
         const response = await PorjectService.post(this.project);
-        console.log(response)
+        // console.log(response)
         if (response.status === 201) {
           this.createProject(response.data)
           this.isLoading =false
