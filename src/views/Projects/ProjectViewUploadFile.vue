@@ -45,7 +45,7 @@ export default {
   name: "ProjectViewUploadFile",
   data() {
     return {
-      // substitutte "" with [] to eliminate Vue warn
+      // file: [] to eliminate Vue warn, no file: {} or file: null
       file: [],
       message: "",
       error: "",
@@ -85,6 +85,13 @@ export default {
       }
     },
     submitFile() {
+      // console.log('file:', this.file)
+      // console.log(this.getProject.name)
+      const projectName = this.getProject.name
+      if(this.file.name != projectName+"-bom.csv"){
+        this.message = "file name has to be "+ projectName +"-bom.csv"
+        return 
+      }
       this.message = "";
       if (this.file.length == 0) {
         this.message = "you need to select a .csv file!";
