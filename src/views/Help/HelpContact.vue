@@ -4,7 +4,7 @@
     <h1>OSHW APP</h1>
     <ul>
       <li>
-        <span class="bold">Version</span>: 0.0.1
+        <span class="bold">Version</span>: 1.0.3
       </li>
       <li>
         <span class="bold">License</span>:

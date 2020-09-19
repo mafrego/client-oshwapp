@@ -10,8 +10,8 @@
             <li>fill up the cells according to the <router-link :to="{ name: 'bomprotocol'}" target="_blank">BOM protocol</router-link></li>
             <li>Attention: commas and semicolons are forbidden!</li>
             <li>save the BOM both as spreadsheet and .csv file</li>
-            <li>use the <v-btn color="grey" :to="{ name: 'validate'}" target="_blank" title="validate bom.csv"><v-icon>done</v-icon></v-btn> feature to check yourProject-bom.csv file</li>
-            <li>login, create a project, upload  yourProject-bom.csv and start assembling</li>
+            <li>use the <v-btn color="grey" :to="{ name: 'validate'}" target="_blank" title="validate bom.csv"><v-icon>done</v-icon></v-btn> feature to check yourproject-bom.csv file</li>
+            <li>login, create a project, upload  yourproject-bom.csv and start assembling</li>
     </ol>
     <br>
 </div>

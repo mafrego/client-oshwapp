@@ -30,10 +30,11 @@
     <h2>BOM filename</h2>
     <br />
     <ul>
-      <li>The file containing the BOM shall begin with the camelCase project name followed by "-bom".</li>
+      <li>The file containing the BOM shall begin with the project name followed by "-bom".</li>
       <li>The file extension shall be ".csv".</li>
-      <li>Example: "myOpenSourceProject-bom.csv".</li>
+      <li>Example: "myopensourceproject-bom.csv".</li>
       <li>Filenames are case sensitive and blank spaces are not allowed.</li>
+      <li>Filenames are recommended to be lower case.</li>
     </ul>
     <br />
     <h2>BOM headers</h2>
