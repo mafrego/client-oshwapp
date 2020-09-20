@@ -10,7 +10,7 @@
         <v-text-field v-model="region" :rules="[rules.isISO31662]" label="region"></v-text-field>
         <v-text-field v-model="link" :rules="[rules.isHTTP]" label="projectlink"></v-text-field>
 
-        <v-btn class="yellow" @click="update()">
+        <v-btn class="yellow" @click="update()" title="save">
           <v-icon>save</v-icon>
         </v-btn>
         <div v-if="this.message" class="ml-2 msg">
