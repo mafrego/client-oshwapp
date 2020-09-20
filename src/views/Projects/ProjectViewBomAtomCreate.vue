@@ -2,48 +2,48 @@
   <div>
     <panel title="Create atom">
       <v-form ref="form">
-      <v-text-field
-        label="name"
-        :rules="[rules.required, rules.isAlphanumeric, rules.uniqueName]"
-        v-model="atom.name"
-      ></v-text-field>
-      <v-text-field
-        label="description"
-        :rules="[rules.required, rules.isDescription]"
-        v-model="atom.description"
-      ></v-text-field>
-      <v-text-field
+        <v-text-field
+          label="name"
+          :rules="[rules.required, rules.isAlphanumeric, rules.uniqueName]"
+          v-model="atom.name"
+        ></v-text-field>
+        <v-text-field
+          label="description"
+          :rules="[rules.required, rules.isDescription]"
+          v-model="atom.description"
+        ></v-text-field>
+        <v-text-field
           @keydown="preventNonNumericalInput($event)"
           type="number"
           min="1"
-        label="minimum order quantity"
-        :rules="[rules.required, rules.isPositiveInt]"
-        v-model="atom.moq"
-      ></v-text-field>
-      <v-text-field
+          label="minimum order quantity"
+          :rules="[rules.required, rules.isPositiveInt]"
+          v-model="atom.moq"
+        ></v-text-field>
+        <v-text-field
           @keydown="preventNonNumericalInput($event)"
           type="number"
           min="1"
-        label="quantity"
-        :rules="[rules.required, rules.isPositiveInt]"
-        v-model="atom.quantity"
-      ></v-text-field>
-      <v-text-field
-        label="unit cost"
-        :rules="[rules.required, rules.isPositiveFloat]"
-        v-model="atom.unitCost"
-      ></v-text-field>
-      <v-text-field
-        label="currency"
-        :rules="[rules.required, rules.isCurrency]"
-        v-model="atom.currency"
-      ></v-text-field>
-      <v-text-field label="GTIN" :rules="[rules.isAlphanumeric]" v-model="atom.GTIN"></v-text-field>
-      <v-text-field label="SKU" :rules="[rules.isAlphanumeric]" v-model="atom.SKU"></v-text-field>
-      <v-text-field label="vendor URL" :rules="[rules.isHTTP]" v-model="atom.vendorUrl"></v-text-field>
-      <v-text-field label="lead time" :rules="[rules.isDuration]" v-model="atom.leadTime"></v-text-field>
-      <v-text-field label="link" :rules="[rules.isHTTP]" v-model="atom.link"></v-text-field>
-      <v-text-field label="notes" :rules="[rules.isDescription]" v-model="atom.notes"></v-text-field>
+          label="quantity"
+          :rules="[rules.required, rules.isPositiveInt]"
+          v-model="atom.quantity"
+        ></v-text-field>
+        <v-text-field
+          label="unit cost"
+          :rules="[rules.required, rules.isPositiveFloat]"
+          v-model="atom.unitCost"
+        ></v-text-field>
+        <v-text-field
+          label="currency"
+          :rules="[rules.required, rules.isCurrency]"
+          v-model="atom.currency"
+        ></v-text-field>
+        <v-text-field label="GTIN" :rules="[rules.isAlphanumeric]" v-model="atom.GTIN"></v-text-field>
+        <v-text-field label="SKU" :rules="[rules.isAlphanumeric]" v-model="atom.SKU"></v-text-field>
+        <v-text-field label="vendor URL" :rules="[rules.isHTTP]" v-model="atom.vendorUrl"></v-text-field>
+        <v-text-field label="lead time" :rules="[rules.isDuration]" v-model="atom.leadTime"></v-text-field>
+        <v-text-field label="link" :rules="[rules.isHTTP]" v-model="atom.link"></v-text-field>
+        <v-text-field label="notes" :rules="[rules.isDescription]" v-model="atom.notes"></v-text-field>
       </v-form>
     </panel>
     <div class="green--text" v-if="message">{{message}}</div>
@@ -61,7 +61,10 @@ export default {
   name: "ProjectViewBomAtomCreate",
   data() {
     return {
-      atom: {},
+      atom: {
+        itemNumber: null,
+        quantity_to_assemble: null,
+      },
       message: "",
       error: "",
       rules: {
@@ -119,16 +122,14 @@ export default {
     };
   },
   computed: {
-    ...mapGetters([
-      "getAtomNames",
-    ]),
+    ...mapGetters(["getAtomNames", "getBom"]),
   },
   methods: {
     ...mapActions(["createAtom"]),
     preventNonNumericalInput(event) {
-      const char = String.fromCharCode(event.keyCode)
+      const char = String.fromCharCode(event.keyCode);
       if (!/[0-9\b\t]/.test(char)) {
-        event.preventDefault()
+        event.preventDefault();
       }
     },
     async create() {
@@ -147,20 +148,25 @@ export default {
         this.error = "Please fill in all the required fields.";
         return;
       }
-      // TODO add itemNumber and quantity_to_assemble
+      this.atom.quantity_to_assemble = this.atom.quantity;
+      
+      if (this.getBom.length === 0) {
+        this.atom.itemNumber = 100000;
+      } else {
+        this.atom.itemNumber = this.getBom[this.getBom.length - 1].itemNumber + 1;
+      }
+
       const response = await this.createAtom(this.atom);
-      // console.log(response)
       if (response.status === 201) {
         this.message = "added new atom to BOM";
 
-          this.atom.name = null
-          this.atom.description = null
-          this.atom.moq = null
-          this.atom.quantity = null
-          this.atom.unitCost = null
-          this.atom.currency = null
-          this.$refs.form.resetValidation();
-
+        this.atom.name = null;
+        this.atom.description = null;
+        this.atom.moq = null;
+        this.atom.quantity = null;
+        this.atom.unitCost = null;
+        this.atom.currency = null;
+        this.$refs.form.resetValidation();
       } else {
         this.error = "problems in creating new atom";
       }
