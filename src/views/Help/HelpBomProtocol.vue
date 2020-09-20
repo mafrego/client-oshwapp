@@ -45,7 +45,7 @@
         <ul>
           <li>allowed header format</li>
           <li>corresponding regex</li>
-          <li>required/recommended</li>
+          <li>deonticity: required, recommended or optional</li>
           <li>header description</li>
         </ul>
       </li>
