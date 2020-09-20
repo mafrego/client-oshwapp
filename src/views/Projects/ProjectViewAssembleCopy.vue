@@ -189,7 +189,7 @@ export default {
     // this function prevents Firefox from allowing chars other than digits
     preventNonNumericalInput(event) {
       const char = String.fromCharCode(event.keyCode);
-      if (!/[0-9\b]/.test(char)) {
+      if (!/[0-9\b\t]/.test(char)) {
         event.preventDefault();
       }
     },
