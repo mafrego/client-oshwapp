@@ -1,7 +1,7 @@
 <template>
   <v-layout column>
     <v-flex xs6>
-      <panel title="BOM" v-if="getBom.length > 0">
+      <panel title="BOM" >
         <v-toolbar-items slot="action">
           <div>
             <v-btn
@@ -14,7 +14,7 @@
               <v-icon>delete</v-icon>
             </v-btn>
           </div>
-          <div>
+          <div v-if="getBom.length > 0">
             <v-btn
               @click="updateProjectBom(getProject.uuid)"
               class="green ml-2 mt-1"
@@ -36,9 +36,11 @@
               <v-icon>cloud_download</v-icon>
             </v-btn>
           </div>
-          <!-- <v-btn @click="toggleCreateAtom" class="green ml-2" title="add atom" light>
-            <v-icon>add</v-icon>
-          </v-btn>-->
+          <div>
+            <v-btn @click="toggleCreateAtom" class="green ml-2 mt-1" title="add atom" light>
+              <v-icon>add</v-icon>
+            </v-btn>
+          </div>
         </v-toolbar-items>
 
         <project-view-bom-atom-create v-if="showCreateAtom" />
@@ -170,18 +172,18 @@ export default {
     },
     async updateProjectBom(projectId) {
       const data = {
-        projectName: this.getProject.name, 
-        projectId: projectId 
-        };
+        projectName: this.getProject.name,
+        projectId: projectId,
+      };
       const ret = await ProjectService.updateProjectBom(data);
       // console.log("ret:", ret);
       if (ret.status === 200) {
         this.showDownloadBtn = !this.showDownloadBtn;
       }
     },
-    changeShowDownloadBtn(){
-      this.showDownloadBtn = !this.showDownloadBtn
-    }
+    changeShowDownloadBtn() {
+      this.showDownloadBtn = !this.showDownloadBtn;
+    },
   },
   created() {
     this.fetchBom(this.getProject.uuid);
