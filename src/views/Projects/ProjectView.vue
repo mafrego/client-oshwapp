@@ -7,6 +7,17 @@
       </v-btn>
       </div>
       <div>
+      <v-btn 
+        v-if="getProject.state != 'released'"
+        @click="toggleComponentBOM" 
+        class="blue ml-2 mt-1" 
+        title="BOM" 
+        light
+      >
+        <v-icon>list</v-icon>
+      </v-btn>
+      </div>
+      <div>
       <v-btn
         v-if="getProject.state != 'released'"
         @click="toggleComponentUpload"
@@ -17,17 +28,17 @@
         <v-icon>attach_file</v-icon>
       </v-btn>
       </div>
-      <div>
+      <!-- <div>
       <v-btn 
         v-if="getProject.state === 'assembling' || getProject.state === 'rooted' || getProject.state === 'released'"
         @click="toggleComponentBOM" 
         class="blue ml-2 mt-1" 
-        title="list BOM" 
+        title="BOM" 
         light
       >
         <v-icon>list</v-icon>
       </v-btn>
-      </div>
+      </div> -->
       <div>
       <v-btn
         v-if="getProject.state === 'assembling' || getProject.state === 'rooted' || getProject.state === 'released'"
