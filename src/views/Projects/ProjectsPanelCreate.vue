@@ -165,19 +165,6 @@ export default {
         this.error = "Please fill in all the required fields.";
         return;
       }
-      // try {
-      //   this.project.state = "created";
-      //   this.project.dateTime = new Date();
-      //   const response = await this.createProject(this.project);
-      //   if (response.status === 201) {
-      //     this.$router.push({
-      //       name: "project",
-      //       params: { projectId: response.data.uuid },
-      //     });
-      //   }
-      // } catch (err) {
-      //   console.log(err);
-      // }
       try {
         this.isLoading = true
         this.project.state = "created";
@@ -186,16 +173,16 @@ export default {
         // console.log(response)
         if (response.status === 201) {
           this.createProject(response.data)
-          this.isLoading =false
           this.$router.push({
             name: "project",
             params: { projectId: response.data.uuid },
           });
         }
       } catch (error) {
-        this.isLoading = false
         this.error = error.response.data.message;
         console.log("error: ",error.response.data);
+      } finally {
+          this.isLoading =false
       }
     },
   },
