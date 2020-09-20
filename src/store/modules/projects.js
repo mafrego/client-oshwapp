@@ -4,7 +4,7 @@ import AtomService from '@/services/AtomService'
 import FileService from '@/services/FileService'
 
 const state = () => ({
-    projects: null,
+    projects: [],
     project: null,
     bom: [],
     atom: null,
@@ -23,7 +23,7 @@ const getters = {
     getProjects: state => state.projects,
     getProjectNames: state => state.projects.map(node => node.name),
     getProject: state => state.project,
-    getProjectByID: (state) => (id) => { 
+    getProjectByID: (state) => (id) => {
         return state.projects.find(project => project.uuid === id)
     },
     getBom: state => state.bom,
@@ -52,47 +52,15 @@ const actions = {
     },
 
     createProject({ commit }, project) {
-      commit('addProject', project)
+        commit('addProject', project)
     },
-    
-    // TODO do something similar to login/register to pass errrors to component
-    // see Actions on Vuex docs
-    // async createProject({ commit }, project) {
-    //     try {
-    //         commit('setLoading', true)
-    //         const response = await ProjectService.post(project)
-    //         console.log("response from projects.js", response)
-    //         if (response.status == 201) {
-    //             const ret = await ProjectService.index(project.userID)
-    //             commit('setProjects', ret.data)
-    //             return response
-    //         }
-    //     } catch (error) {
-    //         commit('setError', error)
-    //     } finally {
-    //         commit('setLoading', false)
-    //     }
-    // },
-
-    // apparently this function is not used
-    // async fetchProject({ commit }, projectID) {
-    //     try {
-    //         commit('setLoading', true)
-    //         const response = await ProjectService.show(projectID)
-    //         commit('setProject', response.data)
-    //     } catch (error) {
-    //         commit('setError', error)
-    //     } finally {
-    //         commit('setLoading', false)
-    //     }
-    // },
 
     // projectState is an object
     async updateProjectState({ state, commit }, projectState) {
         try {
             commit('setLoading', true)
             const response = await ProjectService.updateProjectState(projectState, state.project.uuid)
-            commit('updateState', response.data.state)
+            commit('updateState', response.data.project.state)
             return response.status
         } catch (error) {
             commit('setError', error)
@@ -162,12 +130,19 @@ const actions = {
             commit('setLoading', false)
         }
     },
+    // TODO try to refactor the function and to something similar to create a project
+    // but mind! You have to update project state in case you pass from 0 to 1 atom:
+    // so call updateProjectState from the component as well
     async createAtom({ commit, state }, atom) {
         try {
             commit('setLoading', true)
             const response = await AtomService.addAtomToBom(atom, state.project.uuid)
-            // console.log(response.data)
             commit('updateBom', response.data)
+            commit('addProduct', response.data)
+            if (response && state.project.state != 'assembling') {
+                const ret = await ProjectService.updateProjectState({ state: 'assembling'}, state.project.uuid)
+                commit('updateState', ret.data.project.state)
+            }
             return response
         } catch (error) {
             commit('setError', error)
@@ -187,11 +162,15 @@ const actions = {
             commit('setLoading', false)
         }
     },
-    async deleteAtom({ commit }, atomID) {
+    async deleteAtom({ commit, state }, atomID) {
         try {
             commit('setLoading', true)
             const response = await AtomService.delete(atomID)
             commit('deleteAtom', response.data)
+            if(response && state.bom.length < 1){
+                const ret = await ProjectService.updateProjectState({ state: 'created'}, state.project.uuid)
+                commit('updateState', ret.data.project.state)
+            }
         } catch (error) {
             commit('setError', error)
         } finally {
@@ -295,9 +274,6 @@ const mutations = {
     setProjects: (state, projects) => {
         state.projects = projects
     },
-    // setProject: (state, projectID) => {
-    //     state.project = state.projects.find(el => el.uuid === projectID)
-    // },
     setProject: (state, project) => {
         state.project = project
     },
@@ -338,8 +314,8 @@ const mutations = {
         state.products = state.products.filter(product => product.uuid != assemblyID)
     },
     updateBom: (state, atom) => {
-        state.bom.unshift(atom)     // add at the beginning of array
-        // state.bom.push(atom)     // add at the end of array
+        // state.bom.unshift(atom)     // add at the beginning of array
+        state.bom.push(atom)     // add at the end of array
     },
     updateState: (state, projectState) => {
         state.project.state = projectState
@@ -357,6 +333,9 @@ const mutations = {
     },
     setProducts: (state, products) => {
         state.products = products
+    },
+    addProduct: (state, product) => {
+        state.products.push(product)
     },
     setAtom: (state, atom) => {
         state.atom = atom
