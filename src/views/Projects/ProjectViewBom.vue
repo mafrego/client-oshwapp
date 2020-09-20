@@ -27,7 +27,7 @@
           </div>
           <div>
             <v-btn
-              :href="getProject.bopUrl"
+              :href="bomUrl"
               v-if="showDownloadBtn"
               @click="changeShowDownloadBtn"
               class="grey ml-2 mt-1"
@@ -122,6 +122,7 @@ export default {
       atomToUpdate: null,
       atomDetails: null,
       showDownloadBtn: false,
+      bomUrl: null
     };
   },
   computed: {
@@ -176,8 +177,9 @@ export default {
         projectId: projectId,
       };
       const ret = await ProjectService.updateProjectBom(data);
-      // console.log("ret:", ret);
       if (ret.status === 200) {
+        // console.log(ret.data.Location)
+        this.bomUrl = ret.data.Location
         this.showDownloadBtn = !this.showDownloadBtn;
       }
     },
