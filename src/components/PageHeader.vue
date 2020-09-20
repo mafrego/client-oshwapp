@@ -1,6 +1,6 @@
 <template>
   <v-toolbar class="cyan" rounded color="primary">
-    <v-btn title="home" class="grey" :to="{name: 'home'}">
+    <v-btn v-if="!$store.state.isUserLoggedIn" title="home" class="grey" :to="{name: 'home'}">
       <v-icon>home</v-icon>
     </v-btn>
 
@@ -21,10 +21,6 @@
       <v-icon>done</v-icon>
     </v-btn>
 
-    <v-btn class="grey ml-2" :to="{name: 'help'}" title="help">
-      <v-icon>help</v-icon>
-    </v-btn>
-
     <v-btn v-if="isUserLoggedIn" :to="{name: 'projects'}" title="projects" class="grey ml-2">
       <v-icon>settings</v-icon>
     </v-btn>
@@ -42,6 +38,10 @@
       <v-icon>person</v-icon>
     </v-btn>
 
+    <v-btn class="grey ml-2" :to="{name: 'help'}" title="help">
+      <v-icon>help</v-icon>
+    </v-btn>
+
     <v-spacer></v-spacer>
 
     <v-toolbar-items v-if="isUserLoggedIn" class="mt-10 mr-4">
@@ -51,17 +51,17 @@
       </router-link>
     </v-toolbar-items>
 
-      <div>
-        <v-btn v-if="!isUserLoggedIn" class="grey" text :to="{name: 'login'}">Login</v-btn>
-      </div>
+    <div>
+      <v-btn v-if="!isUserLoggedIn" class="grey" text :to="{name: 'login'}">Login</v-btn>
+    </div>
 
-      <div>
-        <v-btn v-if="!isUserLoggedIn" class="grey ml-2" text :to="{name:'register'}">Register</v-btn>
-      </div>
+    <div>
+      <v-btn v-if="!isUserLoggedIn" class="grey ml-2" text :to="{name:'register'}">Register</v-btn>
+    </div>
 
-      <div>
-        <v-btn v-if="isUserLoggedIn" class="grey ml-2" text @click="logout">Log Out</v-btn>
-      </div>
+    <div>
+      <v-btn v-if="isUserLoggedIn" class="grey ml-2" text @click="logout">Log Out</v-btn>
+    </div>
   </v-toolbar>
 </template>
 
