@@ -13,11 +13,17 @@
         v-model="atom.description"
       ></v-text-field>
       <v-text-field
+          @keydown="preventNonNumericalInput($event)"
+          type="number"
+          min="1"
         label="minimum order quantity"
         :rules="[rules.required, rules.isPositiveInt]"
         v-model="atom.moq"
       ></v-text-field>
       <v-text-field
+          @keydown="preventNonNumericalInput($event)"
+          type="number"
+          min="1"
         label="quantity"
         :rules="[rules.required, rules.isPositiveInt]"
         v-model="atom.quantity"
@@ -37,7 +43,7 @@
       <v-text-field label="vendor URL" :rules="[rules.isHTTP]" v-model="atom.vendorUrl"></v-text-field>
       <v-text-field label="lead time" :rules="[rules.isDuration]" v-model="atom.leadTime"></v-text-field>
       <v-text-field label="link" :rules="[rules.isHTTP]" v-model="atom.link"></v-text-field>
-      <v-text-field label="notes" :rules="[rules.isDescription]" v-model="atom.notes" id="id"></v-text-field>
+      <v-text-field label="notes" :rules="[rules.isDescription]" v-model="atom.notes"></v-text-field>
       </v-form>
     </panel>
     <div class="green--text" v-if="message">{{message}}</div>
@@ -60,11 +66,11 @@ export default {
       error: "",
       rules: {
         required: (value) => !!value || "Required.",
-        counter: (value) => value.length >= 8 || "Min 8 characters",
-        email: (value) => {
-          const pattern = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
-          return pattern.test(value) || "Invalid e-mail.";
-        },
+        // counter: (value) => value.length >= 8 || "Min 8 characters",
+        // email: (value) => {
+        //   const pattern = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+        //   return pattern.test(value) || "Invalid e-mail.";
+        // },
         uniqueName: (value) =>
           !this.getAtomNames.includes(value) || "name already taken!",
         isDescription: (value) => {
@@ -119,6 +125,12 @@ export default {
   },
   methods: {
     ...mapActions(["createAtom"]),
+    preventNonNumericalInput(event) {
+      const char = String.fromCharCode(event.keyCode)
+      if (!/[0-9\b\t]/.test(char)) {
+        event.preventDefault()
+      }
+    },
     async create() {
       this.message = "";
       this.error = "";
@@ -135,6 +147,7 @@ export default {
         this.error = "Please fill in all the required fields.";
         return;
       }
+      // TODO add itemNumber and quantity_to_assemble
       const response = await this.createAtom(this.atom);
       // console.log(response)
       if (response.status === 201) {
