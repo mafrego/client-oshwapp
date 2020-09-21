@@ -90,6 +90,7 @@ const actions = {
             commit('setLoading', false)
         }
     },
+    // example of how to manage errors in actions
     async sendBom({ state, commit }, formData) {
         try {
             commit('setErrorBom', null)
@@ -131,8 +132,9 @@ const actions = {
         }
     },
     createAtom({ commit }, atom) {
-        commit('updateBom', atom)
-        commit('addProduct', atom)
+            commit('updateBom', atom)
+            // this addProduct add atom to BOM but only after uploading bom.csv somehow I donno why
+            // commit('addProduct', atom)
     },
     async reviseAtom({ commit, state }) {
         try {
@@ -298,8 +300,8 @@ const mutations = {
         state.products = state.products.filter(product => product.uuid != assemblyID)
     },
     updateBom: (state, atom) => {
-        // state.bom.unshift(atom)     // add at the beginning of array
-        state.bom.push(atom)     // add at the end of array
+        state.bom.unshift(atom)     // add at the beginning of array
+        // state.bom.push(atom)     // add at the end of array
     },
     updateState: (state, projectState) => {
         state.project.state = projectState
@@ -319,7 +321,8 @@ const mutations = {
         state.products = products
     },
     addProduct: (state, product) => {
-        state.products.push(product)
+        // state.products.push(product)
+        state.products.unshift(product)
     },
     setAtom: (state, atom) => {
         state.atom = atom
