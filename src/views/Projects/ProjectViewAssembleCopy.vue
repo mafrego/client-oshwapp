@@ -33,7 +33,7 @@
             :rules="[rules.required, rules.isPositiveInt]"
             type="number"
             min="1"
-            v-model="assembly.quantity_to_assemble"
+            v-model.number="assembly.quantity_to_assemble"
             @input="recomputeQuantities"
           />
           <div class="danger-alert" v-if="msg">{{msg}}</div>

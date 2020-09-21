@@ -11,7 +11,7 @@
           @keydown="preventNonNumericalInput($event)"
           type="number"
           min="1"
-          v-model="moq"
+          v-model.number="moq"
           :rules="[rules.isPositiveInt]"
           label="mimimum quantity order"
         ></v-text-field>
