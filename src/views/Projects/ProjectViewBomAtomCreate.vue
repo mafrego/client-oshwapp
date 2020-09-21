@@ -18,7 +18,7 @@
           min="1"
           label="minimum order quantity"
           :rules="[rules.required, rules.isPositiveInt]"
-          v-model="atom.moq"
+          v-model.number="atom.moq"
         ></v-text-field>
         <v-text-field
           @keydown="preventNonNumericalInput($event)"
@@ -26,7 +26,7 @@
           min="1"
           label="quantity"
           :rules="[rules.required, rules.isPositiveInt]"
-          v-model="atom.quantity"
+          v-model.number="atom.quantity"
         ></v-text-field>
         <v-text-field
           label="unit cost"
@@ -64,6 +64,10 @@ export default {
       atom: {
         itemNumber: null,
         quantity_to_assemble: null,
+        totalCost: null,
+        moq: null,
+        unitCost: null,
+        quantity: null
       },
       message: "",
       error: "",
@@ -149,13 +153,22 @@ export default {
         return;
       }
       this.atom.quantity_to_assemble = this.atom.quantity;
-      
+      // add itemNumber
       if (this.getBom.length === 0) {
         this.atom.itemNumber = 100000;
       } else {
         this.atom.itemNumber = this.getBom[this.getBom.length - 1].itemNumber + 1;
       }
-
+      // add totalCost
+      if(this.atom.moq == 1){
+        this.atom.totalCost = this.atom.unitCost * this.atom.quantity
+      } else {
+        if(this.atom.moq >= this.atom.quantity){
+          this.atom.totalCost = this.atom.unitCost
+        } else {
+          this.atom.totalCost = Math.ceil(this.atom.quantity / this.atom.moq) * this.atom.unitCost
+        }
+      }
       const response = await this.createAtom(this.atom);
       if (response.status === 201) {
         this.message = "added new atom to BOM";
