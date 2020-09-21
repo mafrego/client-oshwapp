@@ -104,7 +104,7 @@
           <li>floating point number</li>
           <li>^(?:[1-9]\d*|0)?(?:\.\d+)?$</li>
           <li>required</li>
-          <li>cost of single atom</li>
+          <li>cost of a single atom if moq equals 1 otherwise cost of a moq</li>
         </ul>
       </li>
       <li>
