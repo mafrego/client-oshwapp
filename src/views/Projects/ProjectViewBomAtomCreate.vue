@@ -51,11 +51,18 @@
     <v-btn class="green" @click="create" title="save atom">
       <v-icon>save</v-icon>
     </v-btn>
+    <v-progress-circular
+      class="ml-10"
+      v-if="isLoading"
+      :indeterminate="isLoading"
+      color="light-blue"
+    ></v-progress-circular>
   </div>
 </template>
 
 <script>
 import { mapActions, mapGetters } from "vuex";
+import AtomService from "@/services/AtomService";
 
 export default {
   name: "ProjectViewBomAtomCreate",
@@ -67,10 +74,11 @@ export default {
         totalCost: null,
         moq: null,
         unitCost: null,
-        quantity: null
+        quantity: null,
       },
       message: "",
       error: "",
+      isLoading: false,
       rules: {
         required: (value) => !!value || "Required.",
         // counter: (value) => value.length >= 8 || "Min 8 characters",
@@ -126,10 +134,10 @@ export default {
     };
   },
   computed: {
-    ...mapGetters(["getAtomNames", "getBom"]),
+    ...mapGetters(["getAtomNames", "getBom", "getProject"]),
   },
   methods: {
-    ...mapActions(["createAtom"]),
+    ...mapActions(["createAtom", "updateProjectState"]),
     preventNonNumericalInput(event) {
       const char = String.fromCharCode(event.keyCode);
       if (!/[0-9\b\t]/.test(char)) {
@@ -157,31 +165,45 @@ export default {
       if (this.getBom.length === 0) {
         this.atom.itemNumber = 100000;
       } else {
-        this.atom.itemNumber = this.getBom[this.getBom.length - 1].itemNumber + 1;
+        this.atom.itemNumber =
+          this.getBom[this.getBom.length - 1].itemNumber + 1;
       }
       // add totalCost
-      if(this.atom.moq == 1){
-        this.atom.totalCost = this.atom.unitCost * this.atom.quantity
+      if (this.atom.moq == 1) {
+        this.atom.totalCost = this.atom.unitCost * this.atom.quantity;
       } else {
-        if(this.atom.moq >= this.atom.quantity){
-          this.atom.totalCost = this.atom.unitCost
+        if (this.atom.moq >= this.atom.quantity) {
+          this.atom.totalCost = this.atom.unitCost;
         } else {
-          this.atom.totalCost = Math.ceil(this.atom.quantity / this.atom.moq) * this.atom.unitCost
+          this.atom.totalCost =
+            Math.ceil(this.atom.quantity / this.atom.moq) * this.atom.unitCost;
         }
       }
-      const response = await this.createAtom(this.atom);
-      if (response.status === 201) {
-        this.message = "added new atom to BOM";
-
-        this.atom.name = null;
-        this.atom.description = null;
-        this.atom.moq = null;
-        this.atom.quantity = null;
-        this.atom.unitCost = null;
-        this.atom.currency = null;
-        this.$refs.form.resetValidation();
-      } else {
-        this.error = "problems in creating new atom";
+      try {
+        this.isLoading = true;
+        const response = await AtomService.addAtomToBom(
+          this.atom,
+          this.getProject.uuid
+        );
+        // console.log(response);
+        if (response.status === 201) {
+          this.createAtom(response.data);
+          if (this.getProject.state === "created") {
+            this.updateProjectState({ state: "assembling" });
+          }
+          this.message = "added new atom to BOM";
+          this.atom.name = null;
+          this.atom.description = null;
+          this.atom.moq = null;
+          this.atom.quantity = null;
+          this.atom.unitCost = null;
+          this.atom.currency = null;
+          this.$refs.form.resetValidation();
+        }
+      } catch (error) {
+        this.error = error.response.data.message;
+      } finally {
+        this.isLoading = false;
       }
     },
   },

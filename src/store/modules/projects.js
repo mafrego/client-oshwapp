@@ -55,7 +55,7 @@ const actions = {
         commit('addProject', project)
     },
 
-    // projectState is an object
+    // projectState is an object like this { state: 'newstate'}
     async updateProjectState({ state, commit }, projectState) {
         try {
             commit('setLoading', true)
@@ -130,25 +130,9 @@ const actions = {
             commit('setLoading', false)
         }
     },
-    // TODO try to refactor the function and to something similar to create a project
-    // but mind! You have to update project state in case you pass from 0 to 1 atom:
-    // so call updateProjectState from the component as well
-    async createAtom({ commit, state }, atom) {
-        try {
-            commit('setLoading', true)
-            const response = await AtomService.addAtomToBom(atom, state.project.uuid)
-            commit('updateBom', response.data)
-            commit('addProduct', response.data)
-            if (response && state.project.state != 'assembling') {
-                const ret = await ProjectService.updateProjectState({ state: 'assembling'}, state.project.uuid)
-                commit('updateState', ret.data.project.state)
-            }
-            return response
-        } catch (error) {
-            commit('setError', error)
-        } finally {
-            commit('setLoading', false)
-        }
+    createAtom({ commit }, atom) {
+        commit('updateBom', atom)
+        commit('addProduct', atom)
     },
     async reviseAtom({ commit, state }) {
         try {
@@ -167,8 +151,8 @@ const actions = {
             commit('setLoading', true)
             const response = await AtomService.delete(atomID)
             commit('deleteAtom', response.data)
-            if(response && state.bom.length < 1){
-                const ret = await ProjectService.updateProjectState({ state: 'created'}, state.project.uuid)
+            if (response && state.bom.length < 1) {
+                const ret = await ProjectService.updateProjectState({ state: 'created' }, state.project.uuid)
                 commit('updateState', ret.data.project.state)
             }
         } catch (error) {
