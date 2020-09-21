@@ -5,7 +5,8 @@
           <li v-if="atom.description" >description: {{atom.description}}</li>
           <li>minimum order quantity: {{atom.moq}}</li>
           <li>quantity: {{atom.quantity}}</li>
-          <li>cost per unit: {{atom.cost}} {{atom.currency}}</li>
+          <li>cost per unit: {{atom.unitCost}} {{atom.currency}}</li>
+          <li>total cost: {{atom.totalCost}} {{atom.currency}}</li>
           <li v-if="atom.GTIN">GTIN: {{atom.GTIN}}</li>
           <li v-if="atom.SKU" >SKU: {{atom.SKU}}</li>
           <li v-if="atom.vendorUrl"><a :href="atom.vendorUrl" target="_blank" >vendor</a></li>
