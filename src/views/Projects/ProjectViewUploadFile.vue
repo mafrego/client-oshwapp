@@ -32,20 +32,19 @@
       :indeterminate="getLoading"
       color="light-blue"
     ></v-progress-circular>
-      <!-- <v-progress-circular class="ml-10" v-if="loading" :indeterminate="loading" color="light-blue"></v-progress-circular> -->
     </div>
   </form>
 </template>
 
 <script>
 // import FileService from "@/services/FileService";
-import { mapGetters, mapActions, mapState, mapMutations } from "vuex";
+import { mapGetters, mapActions, mapMutations } from "vuex";
 
 export default {
   name: "ProjectViewUploadFile",
   data() {
     return {
-      // file: [] to eliminate Vue warn, no file: {} or file: null
+      // file: [] to eliminate Vue warn, neither file: {} nor file: null
       file: [],
       message: "",
       error: "",
@@ -53,9 +52,6 @@ export default {
   },
   computed: {
     ...mapGetters(["getProject", "getBom", "getErrorBom", "getLoading"]),
-    ...mapState({
-      loading: (state) => state.projects.loading,
-    }),
   },
   mounted() {
     this.setErrorBom(null);
@@ -85,17 +81,15 @@ export default {
       }
     },
     submitFile() {
-      // console.log('file:', this.file)
-      // console.log(this.getProject.name)
-      const projectName = this.getProject.name
-      if(this.file.name != projectName+"-bom.csv"){
-        this.message = "file name has to be "+ projectName +"-bom.csv"
-        return 
-      }
       this.message = "";
       if (this.file.length == 0) {
         this.message = "you need to select a .csv file!";
         return;
+      }
+      const projectName = this.getProject.name
+      if(this.file.name != projectName+"-bom.csv"){
+        this.message = "file name has to be "+ projectName +"-bom.csv"
+        return 
       }
       let formData = new FormData();
       // the name "file" is the same used in server with middleware multer
