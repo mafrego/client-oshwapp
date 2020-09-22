@@ -1,44 +1,79 @@
 <template>
   <div>
     <panel title="Project Metadata">
-      <v-form ref="form">
-        <v-text-field
-          label="project name"
-          :rules="[rules.required, rules.uniqueName, rules.isAlphanumeric]"
-          v-model="project.name"
-          id="id"
-        ></v-text-field>
-        <v-text-field
-          label="description"
-          :rules="[rules.required, rules.isDescription]"
-          v-model="project.description"
-          id="id"
-        ></v-text-field>
-        <v-text-field
-          label="version"
-          :rules="[rules.required, rules.isSemanticVersion]"
-          v-model="project.version"
-          id="id"
-        ></v-text-field>
-        <v-text-field
-          label="license"
-          :rules="[rules.isAlphanumeric]"
-          v-model="project.license"
-          id="id"
-        ></v-text-field>
-        <v-text-field
-          label="country"
-          :rules="[rules.required, rules.isISO31661]"
-          v-model="project.country"
-          id="id"
-        ></v-text-field>
-        <v-text-field label="region" :rules="[rules.isISO31662]" v-model="project.region" id="id"></v-text-field>
-        <v-text-field label="project link" :rules="[rules.isHTTP]" v-model="project.link" id="id"></v-text-field>
-      </v-form>
-    </panel>
+      <v-container>
+        <v-layout row wrap justify-space-between>
+          <v-flex sm3>
+            <v-text-field
+              label="name"
+              :rules="[rules.required, rules.uniqueName, rules.isAlphanumeric]"
+              v-model="project.name"
+              solo-inverted
+              dense
+              persistent-hint
+            ></v-text-field>
+          </v-flex>
+          <v-flex sm5>
+            <v-text-field
+              label="description"
+              :rules="[rules.required, rules.isDescription]"
+              v-model="project.description"
+              solo-inverted
+              dense
+            ></v-text-field>
+          </v-flex>
+          <v-flex sm2>
+            <v-text-field
+              label="version"
+              :rules="[rules.required, rules.isSemanticVersion]"
+              v-model="project.version"
+              solo-inverted
+              dense
+            ></v-text-field>
+          </v-flex>
+        </v-layout>
+        <v-layout row wrap justify-space-between>
+          <v-flex sm2>
+            <v-text-field
+              label="license"
+              :rules="[rules.required, rules.isAlphanumeric]"
+              v-model="project.license"
+              solo-inverted
+              dense
+            ></v-text-field>
+          </v-flex>
+          <v-flex sm2>
+            <v-text-field
+              label="country"
+              :rules="[rules.required, rules.isISO31661]"
+              v-model="project.country"
+              solo-inverted
+              dense
+            ></v-text-field>
+          </v-flex>
+          <v-flex sm2>
+            <v-text-field
+              label="region"
+              :rules="[rules.isISO31662]"
+              v-model="project.region"
+              solo-inverted
+              dense
+            ></v-text-field>
+          </v-flex>
+          <v-flex sm4>
+            <v-text-field
+              label="link"
+              :rules="[rules.isHTTP]"
+              v-model="project.link"
+              solo-inverted
+              dense
+            ></v-text-field>
+          </v-flex>
+        </v-layout>
+
     <div class="danger-alert" v-if="error">{{error}}</div>
     <div class="green--text" v-if="message">{{message}}</div>
-    <v-btn class="green mt-2" @click="create" title="save">
+    <v-btn class="green mt-2" @click="create" title="create project">
       <v-icon>save</v-icon>
     </v-btn>
     <v-progress-circular
@@ -47,7 +82,8 @@
       :indeterminate="isLoading"
       color="light-blue"
     ></v-progress-circular>
-    <br />
+      </v-container>
+    </panel>
   </div>
 </template>
 
@@ -82,7 +118,7 @@ export default {
           const pattern = /^[-0-9a-zA-Z_]+$/;
           if (value)
             return (
-              pattern.test(value) || "only alphanumeric hyphens underscores"
+              pattern.test(value) || "only alphanumeric!"
             );
           else return true;
         },
@@ -100,12 +136,12 @@ export default {
           else return true;
         },
         isSemanticVersion: (value) => {
-          if (value) return semverRegex().test(value) || "e.g. 0.0.1";
+          if (value) return semverRegex().test(value) || "x.y.z";
           else return true;
         },
         isHTTP: (value) => {
           const pattern = /https?:\/\/(www\.)?[-a-zA-Z0-9@:%._+~#=]{1,256}\.[a-zA-Z0-9()]{1,6}\b([-a-zA-Z0-9()@:%_+.~#?&//=]*)/;
-          if (value) return pattern.test(value) || "Invalid http link";
+          if (value) return pattern.test(value) || "invalid http link";
           else {
             // set to null otherwise neo4j error
             this.project.link = null;
@@ -123,7 +159,7 @@ export default {
             )
               ret = true;
           });
-          if (value) return ret || "ISO 3166-1 e.g. IT, ITA, 380 or Italy";
+          if (value) return ret || "ISO 3166-1";
           else return true;
         },
         isISO31662: (value) => {
@@ -134,7 +170,7 @@ export default {
           if (value)
             return (
               ret ||
-              "ISO 3166-2 e.g. for county Wicklow in Ireland IE-WW or Wicklow"
+              "ISO 3166-2"
             );
           else {
             // set to null otherwise neo4j error
@@ -166,13 +202,13 @@ export default {
         return;
       }
       try {
-        this.isLoading = true
+        this.isLoading = true;
         this.project.state = "created";
         this.project.dateTime = new Date();
         const response = await PorjectService.post(this.project);
         // console.log(response)
         if (response.status === 201) {
-          this.createProject(response.data)
+          this.createProject(response.data);
           this.$router.push({
             name: "project",
             params: { projectId: response.data.uuid },
@@ -180,9 +216,9 @@ export default {
         }
       } catch (error) {
         this.error = error.response.data.message;
-        console.log("error: ",error.response.data);
+        console.log("error: ", error.response.data);
       } finally {
-          this.isLoading =false
+        this.isLoading = false;
       }
     },
   },
