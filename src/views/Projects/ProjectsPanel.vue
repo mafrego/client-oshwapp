@@ -32,7 +32,7 @@
           <br />
           <div v-for="project in getProjects" :key="project.uuid">
             <v-layout>
-              <v-flex xs6>
+              <v-flex sm8>
                 <div class="project-name">project name: {{project.name}}</div>
                 <!-- <div class="project-description">{{project.description}}</div> -->
                 <div class="project-state">status: {{project.state}}</div>
@@ -51,7 +51,7 @@
                 </v-btn>
               </v-flex>
 
-              <v-flex xs6>
+              <v-flex sm4>
                 <img class="project-image" :src="project.imageUrl" />
               </v-flex>
             </v-layout>
