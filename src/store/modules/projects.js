@@ -101,8 +101,9 @@ const actions = {
                 commit('updateProject', ret0.data.project)
                 const ret3 = await ProjectService.getBom(state.project.uuid)
                 commit('setBom', ret3.data)
-                // I keep the following line just to remind you that if you make two commits using the same
-                // data (ret3.data) the array is the same so that if modify bom you modify products simultaneously 
+                // I keep the following line just to remind you that if you make multiple commits with the same
+                // data (ret3.data) the assignments will refer to the same data, that is if modify bom you'll modify 
+                // products simultaneously!
                 // commit('setProducts', ret3.data)
             }
         } catch (error) {
