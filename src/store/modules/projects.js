@@ -136,6 +136,8 @@ const actions = {
     },
     async createAtom({ commit }, atom) {
             commit('addAtomToBom', atom)
+            commit('addProduct', atom)
+            commit('addAssemblableProduct', atom)
     },
     async reviseAtom({ commit, state }) {
         try {
@@ -301,7 +303,6 @@ const mutations = {
     },
     addAtomToBom: (state, atom) => {
         state.bom.push(atom)     // add at the end of array
-        state.products.push(atom)     // add at the end of array
     },
     updateState: (state, projectState) => {
         state.project.state = projectState
@@ -321,8 +322,7 @@ const mutations = {
         state.products = products
     },
     addProduct: (state, product) => {
-        // state.products.push(product)
-        state.products.unshift(product)
+        state.products.push(product)
     },
     setAtom: (state, atom) => {
         state.atom = atom
@@ -379,6 +379,9 @@ const mutations = {
     },
     setAssemblableProducts: (state, products) => {
         state.assemblableProducts = products
+    },
+    addAssemblableProduct: (state, product) => {
+        state.assemblableProducts.push(product)
     },
     setError: (state, error) => {
         state.error = error
