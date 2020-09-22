@@ -76,7 +76,7 @@ export default {
     }),
   },
   methods: {
-    ...mapActions(['fetchAssemblableProducts', 'uploadImages']),
+    ...mapActions(['uploadImages']),
     selectFile() {
       this.message = "";
       this.uploadedFiles = []
@@ -122,7 +122,6 @@ export default {
         this.files = [];
         this.uploadFiles = [];
         this.error = false;
-        // this.fetchAssemblableProducts(this.getProject.uuid)
       } catch (error) {
         this.message = error.response.data.error;
         this.error = true;

@@ -175,8 +175,8 @@ export default {
     }),
   },
   created() {
-    this.fetchAssemblableProducts(this.getProject.uuid);
-    this.fetchAllProducts(this.getProject.uuid);
+    this.fetchAssemblableProducts();
+    this.fetchAllProducts();
   },
   methods: {
     ...mapActions([

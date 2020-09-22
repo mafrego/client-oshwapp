@@ -131,7 +131,6 @@ export default {
   methods: {
     ...mapActions([
       "fetchBom",
-      "fetchAssemblableProducts",
       "deleteBom",
       "deleteAtom",
       "fetchAllProducts",
@@ -188,8 +187,9 @@ export default {
     },
   },
   created() {
-    this.fetchBom(this.getProject.uuid);
-    this.fetchAllProducts(this.getProject.uuid); //to make sure that size of product array is updated
+    // this.fetchBom(this.getProject.uuid);
+    this.fetchBom();
+    this.fetchAllProducts(); //to make sure that size of product array is updated
   },
 };
 </script>

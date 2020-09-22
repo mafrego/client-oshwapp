@@ -203,12 +203,12 @@ export default {
     },
   },
   created() {
-    // this.setProject(this.$store.state.route.params.projectId);
+    // order matters: first the project needs to be set
     const project = this.getProjectByID(this.$store.state.route.params.projectId);
     this.setProject(project)
-    this.fetchBom(this.getProject.uuid);
-    this.fetchAssemblableProducts(this.getProject.uuid);
-    this.fetchAllProducts(this.getProject.uuid);
+    this.fetchBom();
+    this.fetchAssemblableProducts();
+    this.fetchAllProducts();
   },
 };
 </script>

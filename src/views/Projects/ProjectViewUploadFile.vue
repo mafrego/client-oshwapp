@@ -59,7 +59,6 @@ export default {
   methods: {
     ...mapActions([
       "sendBom",
-      "fetchAssemblableProducts",
     ]),
     ...mapMutations(["setErrorBom"]),
     // no need of following method with v-file-input

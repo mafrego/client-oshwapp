@@ -38,11 +38,10 @@ export default {
     ...mapGetters(['getBom', 'getProject', 'getAllProducts'])
   },
   methods: {
-    ...mapActions(['fetchBom', 'fetchAssemblableProducts', 'fetchAllProducts'])
+    ...mapActions(['fetchAllProducts'])
   },
   created(){
-    // this.fetchBom(this.getProject.uuid),
-    this.fetchAllProducts(this.getProject.uuid)
+    this.fetchAllProducts()
   },
 }
 </script>
