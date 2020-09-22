@@ -101,7 +101,9 @@ const actions = {
                 commit('updateProject', ret0.data.project)
                 const ret3 = await ProjectService.getBom(state.project.uuid)
                 commit('setBom', ret3.data)
-                commit('setProducts', ret3.data)
+                // I keep the following line just to remind you that if you make two commits using the same
+                // data (ret3.data) the array is the same so that if modify bom you modify products simultaneously 
+                // commit('setProducts', ret3.data)
             }
         } catch (error) {
             commit('setErrorBom', error.response.data)
@@ -109,10 +111,10 @@ const actions = {
             commit('setLoading', false)
         }
     },
-    async fetchBom({ commit }, projectId) {
+    async fetchBom({ commit, state }) {
         try {
             commit('setLoading', true)
-            const response = await ProjectService.getBom(projectId)
+            const response = await ProjectService.getBom(state.project.uuid)
             commit('setBom', response.data)
         } catch (error) {
             commit('setError', error)
@@ -131,10 +133,8 @@ const actions = {
             commit('setLoading', false)
         }
     },
-    createAtom({ commit }, atom) {
-            commit('updateBom', atom)
-            // this addProduct add atom to BOM but only after uploading bom.csv somehow I donno why
-            // commit('addProduct', atom)
+    async createAtom({ commit }, atom) {
+            commit('addAtomToBom', atom)
     },
     async reviseAtom({ commit, state }) {
         try {
@@ -163,12 +163,11 @@ const actions = {
             commit('setLoading', false)
         }
     },
-    async fetchAllProducts({ commit }, projectId) {
+    async fetchAllProducts({ commit, state }) {
         try {
             commit('setLoading', true)
-            const response = await ProjectService.getAllProducts(projectId)
+            const response = await ProjectService.getAllProducts(state.project.uuid)
             commit('setProducts', response.data)
-            // commit('setProductNames', response.data)
         } catch (error) {
             commit('setError', error)
         } finally {
@@ -195,10 +194,10 @@ const actions = {
             commit('setLoading', false)
         }
     },
-    async fetchAssemblableProducts({ commit }, projectId) {
+    async fetchAssemblableProducts({ commit, state }) {
         try {
             commit('setLoading', true)
-            const response = await ProjectService.getAssemblableProducts(projectId)
+            const response = await ProjectService.getAssemblableProducts(state.project.uuid)
             commit('setAssemblableProducts', response.data)
         } catch (error) {
             commit('setError', error)
@@ -299,9 +298,9 @@ const mutations = {
     deleteAssembly: (state, assemblyID) => {
         state.products = state.products.filter(product => product.uuid != assemblyID)
     },
-    updateBom: (state, atom) => {
-        state.bom.unshift(atom)     // add at the beginning of array
-        // state.bom.push(atom)     // add at the end of array
+    addAtomToBom: (state, atom) => {
+        state.bom.push(atom)     // add at the end of array
+        state.products.push(atom)     // add at the end of array
     },
     updateState: (state, projectState) => {
         state.project.state = projectState
