@@ -193,7 +193,7 @@ export default {
         this.project.name &&
         this.project.description &&
         this.project.version &&
-        // this.project.license &&
+        this.project.license &&
         this.project.country
       ) {
         this.error = null;
