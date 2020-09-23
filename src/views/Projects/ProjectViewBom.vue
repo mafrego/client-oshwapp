@@ -1,6 +1,4 @@
 <template>
-  <v-layout column>
-    <v-flex xs6>
       <panel title="BOM" >
         <v-toolbar-items slot="action">
           <div>
@@ -47,7 +45,7 @@
 
         <div v-for="atom in getBom" :key="atom.itemNumber">
           <v-layout>
-            <v-flex xs6>
+            <v-flex xs8>
               <div class="atom-name">{{atom.name}}</div>
 
               <v-btn color="blue" @click="selectAtomDetails(atom.uuid)" title="atom details">
@@ -92,14 +90,12 @@
               </v-btn>
             </v-flex>
 
-            <v-flex xs6>
+            <v-flex xs4>
               <img class="atom-image" :src="atom.imageUrl" :alt="atom.name" />
             </v-flex>
           </v-layout>
         </div>
       </panel>
-    </v-flex>
-  </v-layout>
 </template>
 
 <script>
