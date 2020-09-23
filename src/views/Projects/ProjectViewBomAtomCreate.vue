@@ -1,62 +1,152 @@
 <template>
   <div>
-    <panel title="Create atom">
-      <v-form ref="form">
-        <v-text-field
-          label="name"
-          :rules="[rules.required, rules.isAlphanumeric, rules.uniqueName]"
-          v-model="atom.name"
-        ></v-text-field>
-        <v-text-field
-          label="description"
-          :rules="[rules.required, rules.isDescription]"
-          v-model="atom.description"
-        ></v-text-field>
-        <v-text-field
-          @keydown="preventNonNumericalInput($event)"
-          type="number"
-          min="1"
-          label="minimum order quantity"
-          :rules="[rules.required, rules.isPositiveInt]"
-          v-model.number="atom.moq"
-        ></v-text-field>
-        <v-text-field
-          @keydown="preventNonNumericalInput($event)"
-          type="number"
-          min="1"
-          label="quantity"
-          :rules="[rules.required, rules.isPositiveInt]"
-          v-model.number="atom.quantity"
-        ></v-text-field>
-        <v-text-field
-          label="unit cost"
-          :rules="[rules.required, rules.isPositiveFloat]"
-          v-model="atom.unitCost"
-        ></v-text-field>
-        <v-text-field
-          label="currency"
-          :rules="[rules.required, rules.isCurrency]"
-          v-model="atom.currency"
-        ></v-text-field>
-        <v-text-field label="GTIN" :rules="[rules.isAlphanumeric]" v-model="atom.GTIN"></v-text-field>
-        <v-text-field label="SKU" :rules="[rules.isAlphanumeric]" v-model="atom.SKU"></v-text-field>
-        <v-text-field label="vendor URL" :rules="[rules.isHTTP]" v-model="atom.vendorUrl"></v-text-field>
-        <v-text-field label="lead time" :rules="[rules.isDuration]" v-model="atom.leadTime"></v-text-field>
-        <v-text-field label="link" :rules="[rules.isHTTP]" v-model="atom.link"></v-text-field>
-        <v-text-field label="notes" :rules="[rules.isDescription]" v-model="atom.notes"></v-text-field>
-      </v-form>
+    <panel title="atom data">
+      <v-container>
+        <v-form ref="form">
+          <v-layout row justify-space-between>
+            <v-flex sm3>
+              <v-text-field
+                label="name"
+                :rules="[rules.required, rules.isAlphanumeric, rules.uniqueName]"
+                v-model="atom.name"
+                solo-inverted
+                dense
+              ></v-text-field>
+            </v-flex>
+            <v-flex sm8>
+              <v-text-field
+                label="description"
+                :rules="[rules.required, rules.isDescription]"
+                v-model="atom.description"
+                solo-inverted
+                dense
+              ></v-text-field>
+            </v-flex>
+          </v-layout>
+          <v-layout row justify-space-between>
+            <v-flex sm2>
+              <v-text-field
+                @keydown="preventNonNumericalInput($event)"
+                type="number"
+                min="1"
+                label="m.o.q."
+                :rules="[rules.required, rules.isPositiveInt]"
+                v-model.number="atom.moq"
+                solo-inverted
+                dense
+              ></v-text-field>
+            </v-flex>
+            <v-flex sm2>
+              <v-text-field
+                @keydown="preventNonNumericalInput($event)"
+                type="number"
+                min="1"
+                label="quantity"
+                :rules="[rules.required, rules.isPositiveInt]"
+                v-model.number="atom.quantity"
+                solo-inverted
+                dense
+              ></v-text-field>
+            </v-flex>
+            <v-flex sm3>
+              <v-text-field
+                label="unit cost"
+                :rules="[rules.required, rules.isPositiveFloat]"
+                v-model="atom.unitCost"
+                solo-inverted
+                dense
+              ></v-text-field>
+            </v-flex>
+            <v-flex sm3>
+              <v-text-field
+                label="currency"
+                :rules="[rules.required, rules.isCurrency]"
+                v-model="atom.currency"
+                solo-inverted
+                dense
+              ></v-text-field>
+            </v-flex>
+          </v-layout>
+          <v-layout row justify-space-between>
+            <v-flex sm2>
+              <v-text-field
+                label="GTIN"
+                :rules="[rules.isGTIN]"
+                v-model="atom.GTIN"
+                solo-inverted
+                dense
+              ></v-text-field>
+            </v-flex>
+            <v-flex sm2>
+              <v-text-field
+                label="SKU"
+                :rules="[rules.isAlphanumeric]"
+                v-model="atom.SKU"
+                solo-inverted
+                dense
+              ></v-text-field>
+            </v-flex>
+            <v-flex sm5>
+              <v-text-field
+                label="vendor URL"
+                :rules="[rules.isHTTP]"
+                v-model="atom.vendorUrl"
+                solo-inverted
+                dense
+              ></v-text-field>
+            </v-flex>
+            <v-flex sm2>
+              <v-text-field
+                label="lead time"
+                :rules="[rules.isDuration]"
+                v-model="atom.leadTime"
+                solo-inverted
+                dense
+              ></v-text-field>
+            </v-flex>
+          </v-layout>
+          <v-layout row justify-space-between>
+            <v-flex sm4>
+              <v-text-field
+                label="link"
+                :rules="[rules.isHTTP]"
+                v-model="atom.link"
+                solo-inverted
+                dense
+              ></v-text-field>
+            </v-flex>
+            <v-flex sm7>
+              <v-text-field
+                label="notes"
+                :rules="[rules.isDescription]"
+                v-model="atom.notes"
+                solo-inverted
+                dense
+              ></v-text-field>
+            </v-flex>
+          </v-layout>
+          <v-layout row justify-space-between>
+            <v-flex sm1>
+              <v-btn class="green" @click="create" title="save atom">
+                <v-icon>save</v-icon>
+              </v-btn>
+            </v-flex>
+            <v-flex sm1>
+              <v-progress-circular
+                class="ml-10"
+                v-if="isLoading"
+                :indeterminate="isLoading"
+                color="light-blue"
+              ></v-progress-circular>
+            </v-flex>
+            <v-flex sm9>
+              <div class="green--text" v-if="message">{{message}}</div>
+              <div class="red--text" v-if="error">{{error}}</div>
+            </v-flex>
+          </v-layout>
+        </v-form>
+      </v-container>
     </panel>
-    <div class="green--text" v-if="message">{{message}}</div>
-    <div class="red--text" v-if="error">{{error}}</div>
-    <v-btn class="green" @click="create" title="save atom">
-      <v-icon>save</v-icon>
-    </v-btn>
-    <v-progress-circular
-      class="ml-10"
-      v-if="isLoading"
-      :indeterminate="isLoading"
-      color="light-blue"
-    ></v-progress-circular>
   </div>
 </template>
 
@@ -96,39 +186,44 @@ export default {
         },
         isCurrency: (value) => {
           const pattern = /[A-Z]{3}/;
-          if (value)
-            return (
-              pattern.test(value) || "only currency ISO 4217 e.g. EUR, USD"
-            );
+          if (value) return pattern.test(value) || "ISO 4217 e.g. EUR, USD";
           else return true;
         },
         isAlphanumeric: (value) => {
           const pattern = /^[-0-9a-zA-Z_]+$/;
-          if (value)
-            return (
-              pattern.test(value) || "only alphanumeric hyphens underscores"
-            );
+          if (value) return pattern.test(value) || "only alphanumeric";
           else return true;
         },
         isHTTP: (value) => {
           const pattern = /https?:\/\/(www\.)?[-a-zA-Z0-9@:%._+~#=]{1,256}\.[a-zA-Z0-9()]{1,6}\b([-a-zA-Z0-9()@:%_+.~#?&//=]*)/;
-          if (value) return pattern.test(value) || "Invalid HTTP link";
+          if (value) return pattern.test(value) || "invalid HTTP link";
           else return true;
+        },
+        isGTIN: (value) => {
+          const pattern = /^(\d{8}|\d{12}|\d{13}|\d{14})$/;
+          if (value) return pattern.test(value) || "invalid GTIN";
+          else {
+            this.atom.GTIN = null
+            return true;
+          }
         },
         isPositiveFloat: (value) => {
           const pattern = /^[+-]?\d+(\.\d+)?$/;
-          if (value) return pattern.test(value) || "Invalid float";
+          if (value) return pattern.test(value) || "invalid float";
           else return true;
         },
         isPositiveInt: (value) => {
           const pattern = /^[1-9]+[0-9]*$/;
-          if (value) return pattern.test(value) || "only positive integer > 0";
+          if (value) return pattern.test(value) || "positive integer";
           else return true;
         },
         isDuration: (value) => {
           const pattern = /^P(?!$)(\d+(?:\.\d+)?Y)?(\d+(?:\.\d+)?M)?(\d+(?:\.\d+)?W)?(\d+(?:\.\d+)?D)?(T(?=\d)(\d+(?:\.\d+)?H)?(\d+(?:\.\d+)?M)?(\d+(?:\.\d+)?S)?)?$/;
-          if (value) return pattern.test(value) || "only duration ISO 8601";
-          else return true;
+          if (value) return pattern.test(value) || "duration ISO 8601";
+          else{ 
+            this.atom.leadTime = null 
+            return true;
+          }
         },
       },
     };
@@ -159,6 +254,19 @@ export default {
       } else {
         this.error = "Please fill in all the required fields.";
         return;
+      }
+      // set to null not required properties if empty otherwise error in Neo4j
+      if(this.atom.SKU === ""){
+        this.atom.SKU = null
+      }
+      if(this.atom.vendorUrl === ""){
+        this.atom.vendorUrl = null
+      }
+      if(this.atom.link === ""){
+        this.atom.link = null
+      }
+      if(this.atom.notes === ""){
+        this.atom.notes = null
       }
       this.atom.quantity_to_assemble = this.atom.quantity;
       // add itemNumber
