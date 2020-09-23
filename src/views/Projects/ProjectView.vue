@@ -91,17 +91,14 @@
 
     <v-layout>
       <v-flex sm7>
-        <div class="project-name">project {{getProject.name}}</div>
-        <div class="project-description">description: {{getProject.description}}</div>
-        <div class="project-version">version: {{getProject.version}}</div>
-        <div class>license: {{getProject.license}}</div>
-        <div class="project-country">country: {{getProject.country}}</div>
-        <div v-if="getProject.region" class="project-region">region: {{getProject.region}}</div>
+        <div class="project-state">{{getProject.state}}:</div>
+        <div class="project-name">{{getProject.name}} {{getProject.version}}</div>
+        <div class="project-description">{{getProject.description}}</div>
+        <div class>{{getProject.license}} {{getProject.country}} {{getProject.region}}</div>
         <div v-if="getProject.link" class="project-link">
-          <a :href="getProject.link">link</a>
+          <a :href="getProject.link" target="_blank">link</a>
         </div>
-        <div class="project-state">status: {{getProject.state}}</div>
-        <div class="project-datetime">date-created: {{getProject.dateTime}}</div>
+        <!-- <div class="project-datetime">date-created: {{getProject.dateTime}}</div> -->
       </v-flex>
       <v-flex class="image" sm4>
         <img class="project-image" :src="getProject.imageUrl" />
