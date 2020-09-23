@@ -35,7 +35,7 @@ const getters = {
     getAssembly: state => state.assembly,
     getLoading: state => state.loading,
     getError: state => state.error,
-    getErrorBom: state => { return state.errorBom }
+    getErrorBom: state => { return state.errorBom },
 }
 
 const actions = {
@@ -68,16 +68,8 @@ const actions = {
             commit('setLoading', false)
         }
     },
-    async updateProject({ state, commit }, project) {
-        try {
-            commit('setLoading', true)
-            const response = await ProjectService.updateProject(project, state.project.uuid)
-            return response
-        } catch (error) {
-            commit('setError', error)
-        } finally {
-            commit('setLoading', false)
-        }
+    updateProject({ commit }, project) {
+        commit('setProject', project)
     },
     async deleteProject({ commit }, projectId) {
         try {
