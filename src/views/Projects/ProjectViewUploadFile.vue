@@ -1,43 +1,50 @@
 <template>
-  <form @submit.prevent="submitFile" enctype="multipart/form-data">
-    <div v-if="getErrorBom" class="message-error">
-      <ul>
-        <li v-for="error in getErrorBom" :key="error">{{error}}</li>
-      </ul>
-      </div>
-    <div v-if="message" class="message-error">{{message}}</div>
-    <div v-if="getProject.state === 'assembling'" class="message-success">BOM uploaded!</div>
-    <div v-if="getProject.state != 'assembling'" class="field">
-      <label for="file" class="label">
-        <!-- the v-file-input works with v-model -->
-        <v-file-input
-          v-model="file"
-          value
-          accept=".csv"
-          label="select BOM.csv"
-          ref="file"
-          chips
-          show-size
-          truncate-length="100"
-        />
-        <!-- normal input works with extra function selectFile -->
-        <!-- <input type="file" ref="file" @change="selectFile" /> -->
-      </label>
-      <v-btn class="green" @click="submitFile" title="upload BOM">
-        <v-icon>cloud_upload</v-icon>
-      </v-btn>
-    <v-progress-circular
-      class="ml-10"
-      v-if="getLoading"
-      :indeterminate="getLoading"
-      color="light-blue"
-    ></v-progress-circular>
-    </div>
-  </form>
+  <v-container>
+    <form @submit.prevent="submitFile" enctype="multipart/form-data">
+      <v-layout justify-space-between>
+        <v-flex sm4 v-if="getBom.length === 0">
+          <label for="file" class="label">
+            <v-file-input
+              v-model="file"
+              value
+              accept=".csv"
+              label="select BOM.csv"
+              ref="file"
+              chips
+              solo
+              dense
+              show-size
+              truncate-length="100"
+            />
+          </label>
+        </v-flex>
+        <v-flex sm2 v-if="getBom.length === 0">
+          <v-btn class="green" @click="submitFile" title="upload BOM">
+            <v-icon>cloud_upload</v-icon>
+          </v-btn>
+          <v-progress-circular
+            class="ml-10"
+            v-if="getLoading"
+            :indeterminate="getLoading"
+            color="light-blue"
+          ></v-progress-circular>
+        </v-flex>
+        <v-flex sm5>
+          <div v-if="getErrorBom" class="message-error">
+            <ul>
+              <li v-for="error in getErrorBom" :key="error">{{error}}</li>
+            </ul>
+          </div>
+          <div v-if="message" class="message-error">{{message}}</div>
+          <div v-if="getProject.state === 'assembling'" class="message-success">BOM uploaded!</div>
+          <div v-if="getProject.state != 'assembling'" class="field"></div>
+        </v-flex>
+      </v-layout>
+    </form>
+  </v-container>
 </template>
 
 <script>
-// import FileService from "@/services/FileService";
 import { mapGetters, mapActions, mapMutations } from "vuex";
 
 export default {
@@ -57,9 +64,7 @@ export default {
     this.setErrorBom(null);
   },
   methods: {
-    ...mapActions([
-      "sendBom",
-    ]),
+    ...mapActions(["sendBom"]),
     ...mapMutations(["setErrorBom"]),
     // no need of following method with v-file-input
     selectFile() {
@@ -85,10 +90,10 @@ export default {
         this.message = "you need to select a .csv file!";
         return;
       }
-      const projectName = this.getProject.name
-      if(this.file.name != projectName+"-bom.csv"){
-        this.message = "file name has to be "+ projectName +"-bom.csv"
-        return 
+      const projectName = this.getProject.name;
+      if (this.file.name != projectName + "-bom.csv") {
+        this.message = "file name has to be " + projectName + "-bom.csv";
+        return;
       }
       let formData = new FormData();
       // the name "file" is the same used in server with middleware multer

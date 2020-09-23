@@ -2,120 +2,126 @@
   <panel title="Project" class="font">
     <v-toolbar-items slot="action">
       <div>
-      <v-btn @click="toggleComponentValidateBOM" class="grey ml-2 mt-1" title="validate BOM" light>
-        <v-icon>done</v-icon>
-      </v-btn>
+        <v-btn
+          @click="toggleComponentValidateBOM"
+          class="grey ml-2 mt-1"
+          title="validate BOM"
+          light
+        >
+          <v-icon>done</v-icon>
+        </v-btn>
       </div>
       <div>
-      <v-btn 
-        v-if="getProject.state != 'released'"
-        @click="toggleComponentBOM" 
-        class="blue ml-2 mt-1" 
-        title="BOM" 
-        light
-      >
-        <v-icon>list</v-icon>
-      </v-btn>
+        <v-btn
+          v-if="getProject.state != 'released'"
+          @click="toggleComponentBOM"
+          class="blue ml-2 mt-1"
+          title="BOM"
+          light
+        >
+          <v-icon>list</v-icon>
+        </v-btn>
       </div>
       <div>
-      <v-btn
-        v-if="getProject.state != 'released'"
-        @click="toggleComponentUpload"
-        class="green ml-2 mt-1"
-        title="select bom.csv to upload"
-        light
-      >
-        <v-icon>attach_file</v-icon>
-      </v-btn>
+        <v-btn
+          v-if="getProject.state != 'released'"
+          @click="toggleComponentUpload"
+          class="green ml-2 mt-1"
+          title="select bom.csv to upload"
+          light
+        >
+          <v-icon>attach_file</v-icon>
+        </v-btn>
       </div>
       <div>
-      <v-btn
-        v-if="getProject.state === 'assembling' || getProject.state === 'rooted' || getProject.state === 'released'"
-        @click="toggleComponentUploadImages"
-        class="green ml-2 mt-1"
-        title="select images to upload"
-        light
-      >
-        <v-icon>add_a_photo</v-icon>
-      </v-btn>
+        <v-btn
+          v-if="getProject.state === 'assembling' || getProject.state === 'rooted' || getProject.state === 'released'"
+          @click="toggleComponentUploadImages"
+          class="green ml-2 mt-1"
+          title="select images to upload"
+          light
+        >
+          <v-icon>add_a_photo</v-icon>
+        </v-btn>
       </div>
       <div>
-      <v-btn
-        v-if="getProject.state === 'assembling' || getProject.state === 'rooted' || getProject.state === 'released'"
-        @click="toggleComponentAllProducts"
-        class="blue ml-2 mt-1"
-        title="all products"
-        light
-      >
-        <v-icon>account_tree</v-icon>
-      </v-btn>
+        <v-btn
+          v-if="getProject.state === 'assembling' || getProject.state === 'rooted' || getProject.state === 'released'"
+          @click="toggleComponentAllProducts"
+          class="blue ml-2 mt-1"
+          title="all products"
+          light
+        >
+          <v-icon>account_tree</v-icon>
+        </v-btn>
       </div>
       <div>
-      <v-btn
-        v-if="getProject.state === 'assembling' || getProject.state === 'rooted'"
-        @click="toggleComponentAssembleCopy"
-        class="green ml-2 mt-1"
-        title="assemble"
-        light
-      >
-        <v-icon>handyman</v-icon>
-      </v-btn>
+        <v-btn
+          v-if="getProject.state === 'assembling' || getProject.state === 'rooted'"
+          @click="toggleComponentAssembleCopy"
+          class="green ml-2 mt-1"
+          title="assemble"
+          light
+        >
+          <v-icon>handyman</v-icon>
+        </v-btn>
       </div>
       <div>
-      <v-btn
-        @click="toggleComponentProjectUpdate"
-        class="yellow ml-2 mt-1"
-        title="update project metadata"
-        light
-      >
-        <v-icon>update</v-icon>
-      </v-btn>
+        <v-btn
+          @click="toggleComponentProjectUpdate"
+          class="yellow ml-2 mt-1"
+          title="update project metadata"
+          light
+        >
+          <v-icon>update</v-icon>
+        </v-btn>
       </div>
       <div>
-      <v-btn
-        v-if="getProject.state != 'released'"
-        class="red ml-2 mt-1"
-        @click="del" 
-        title="delete project"
-        light
-      >
-        <v-icon>delete</v-icon>
-      </v-btn>
+        <v-btn
+          v-if="getProject.state != 'released'"
+          class="red ml-2 mt-1"
+          @click="del"
+          title="delete project"
+          light
+        >
+          <v-icon>delete</v-icon>
+        </v-btn>
       </div>
     </v-toolbar-items>
 
-    <v-row>
-      <v-col md6>
-        <div class="project-name">name: {{getProject.name}}</div>
+    <v-layout>
+      <v-flex sm7>
+        <div class="project-name">project {{getProject.name}}</div>
         <div class="project-description">description: {{getProject.description}}</div>
         <div class="project-version">version: {{getProject.version}}</div>
-        <div class="">license: {{getProject.license}}</div>
+        <div class>license: {{getProject.license}}</div>
+        <div class="project-country">country: {{getProject.country}}</div>
+        <div v-if="getProject.region" class="project-region">region: {{getProject.region}}</div>
+        <div v-if="getProject.link" class="project-link">
+          <a :href="getProject.link">link</a>
+        </div>
         <div class="project-state">status: {{getProject.state}}</div>
         <div class="project-datetime">date-created: {{getProject.dateTime}}</div>
-      </v-col>
-      <v-col md6>
+      </v-flex>
+      <v-flex class="image" sm4>
         <img class="project-image" :src="getProject.imageUrl" />
-      </v-col>
-      <v-progress-circular
-        class="ml-10"
-        v-if="getLoading"
-        :indeterminate="getLoading"
-        color="light-blue"
-      ></v-progress-circular>
-    </v-row>
-
-    <project-view-validate-bom v-if="showComponentValidateBOM" />
+      </v-flex>
+      <v-flex sm1>
+        <v-progress-circular
+          class="ml-10"
+          v-if="getLoading"
+          :indeterminate="getLoading"
+          color="light-blue"
+        ></v-progress-circular>
+      </v-flex>
+    </v-layout>
     <br />
     <project-view-update v-if="showComponentUpdate" />
-    <br />
+    <project-view-validate-bom v-if="showComponentValidateBOM" />
     <project-view-upload-file v-if="showComponentUpload" />
-    <br />
     <project-view-upload-images v-if="showComponentUploadImages" />
-    <br />
     <project-view-bom v-if="showComponentBOM" />
-    <br />
     <project-view-all-products v-if="showComponentAllProducts" />
-    <br />
     <project-view-assemble-copy v-if="showComponentAssembleCopy" />
   </panel>
 </template>
@@ -157,7 +163,7 @@ export default {
       "getBom",
       "getAssemblableProducts",
       "getLoading",
-      "getProjectByID"
+      "getProjectByID",
     ]),
   },
   methods: {
@@ -204,8 +210,10 @@ export default {
   },
   created() {
     // order matters: first the project needs to be set
-    const project = this.getProjectByID(this.$store.state.route.params.projectId);
-    this.setProject(project)
+    const project = this.getProjectByID(
+      this.$store.state.route.params.projectId
+    );
+    this.setProject(project);
     this.fetchBom();
     this.fetchAssemblableProducts();
     this.fetchAllProducts();
@@ -216,6 +224,9 @@ export default {
 <style scoped>
 .font {
   font-family: monospace;
+}
+:any-link {
+  text-decoration: none;
 }
 .project-name {
   font-size: 170%;
@@ -228,6 +239,11 @@ export default {
 }
 .project-state {
   font-size: 100%;
+}
+.image {
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 .project-image {
   max-width: 200px;

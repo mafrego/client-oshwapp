@@ -1,33 +1,51 @@
 <template>
-  <form @submit.prevent="submitFile" enctype="multipart/form-data">
-    <div v-if="errors" class="message-error">
-      <ul>
-        <li v-for="error in errors" :key="error">{{error}}</li>
-      </ul>
-    </div>
-    <div v-if="message" class="message-error">{{message}}</div>
-    <div v-if="success" class="message-success">{{success}}</div>
-
-    <label for="file" class="label">
-      <v-file-input
-        v-model="file"
-        value
-        accept=".csv"
-        label="select BOM.csv"
-        ref="file"
-        chips
-        show-size
-        truncate-length="100"
-      />
-    </label>
-    <v-btn class="grey" @click="submitFile" title="check BOM">
-      <v-icon>check_circle</v-icon>
-    </v-btn>
-  </form>
+  <v-container>
+    <form @submit.prevent="submitFile" enctype="multipart/form-data">
+      <v-layout justify-space-between>
+        <v-flex sm4>
+          <label for="file" class="label">
+            <v-file-input
+              v-model="file"
+              value
+              accept=".csv"
+              label="select yourproject-bom.csv"
+              ref="file"
+              chips
+              solo
+              dense
+              show-size
+              truncate-length="100"
+            />
+          </label>
+        </v-flex>
+        <v-flex sm2>
+          <v-btn class="grey" @click="submitFile" title="check BOM">
+            <v-icon>check_circle</v-icon>
+          </v-btn>
+          <v-progress-circular
+            class="ml-10"
+            v-if="getLoading"
+            :indeterminate="getLoading"
+            color="light-blue"
+          ></v-progress-circular>
+        </v-flex>
+        <v-flex sm5>
+          <div v-if="message" class="message-error">{{message}}</div>
+          <div v-if="success" class="message-success">{{success}}</div>
+        </v-flex>
+      </v-layout>
+      <div v-if="errors" class="message-error">
+        <ul>
+          <li v-for="error in errors" :key="error">{{error}}</li>
+        </ul>
+      </div>
+    </form>
+  </v-container>
 </template>
 
 <script>
 import FileService from "@/services/FileService";
+import { mapGetters } from "vuex";
 
 export default {
   name: "ProjectViewValidateBom",
@@ -37,8 +55,11 @@ export default {
       message: "",
       error: "",
       errors: [],
-      success: ""
+      success: "",
     };
+  },
+  computed: {
+    ...mapGetters(["getLoading"]),
   },
   methods: {
     // no need of following method with v-file-input
@@ -59,9 +80,9 @@ export default {
       }
     },
     async submitFile() {
-      this.errors = []
-      this.message = ""
-      this.success = ""
+      this.errors = [];
+      this.message = "";
+      this.success = "";
       if (this.file.length == 0) {
         this.message = "you need to select a .csv file!";
         return;
@@ -71,7 +92,7 @@ export default {
       formData.append("file", this.file);
       try {
         await FileService.checkBom(formData);
-        this.success = "file "+ this.file.name + " is valid!"
+        this.success = "file " + this.file.name + " is valid!";
       } catch (error) {
         this.errors = error.response.data;
       }
