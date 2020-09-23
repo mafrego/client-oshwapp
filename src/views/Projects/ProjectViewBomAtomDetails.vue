@@ -31,4 +31,7 @@ export default {
 </script>
 
 <style scoped>
+:any-link {
+  text-decoration: none;
+}
 </style>
