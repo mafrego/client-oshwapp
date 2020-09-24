@@ -1,49 +1,148 @@
 <template>
-  <div>
-    <!-- <v-btn color="blue" @click="loadData(atom)" title="actual values">
-      <v-icon>refresh</v-icon>
-    </v-btn>-->
-    <v-layout column>
-      <v-flex xs1>
+  <v-container grid-list-xs>
+    <div>
+      <v-layout>
         <!-- name, code, quantity, imageUrl cannot be updated -->
-        <v-text-field v-model="description" :rules="[rules.isDescription]" label="description"></v-text-field>
         <v-text-field
-          @keydown="preventNonNumericalInput($event)"
-          type="number"
-          min="1"
-          v-model.number="moq"
-          :rules="[rules.isPositiveInt]"
-          label="mimimum quantity order"
+          v-model="description"
+          :rules="[rules.required, rules.isDescription]"
+          label="description"
+          solo-inverted
+          dense
         ></v-text-field>
-        <v-text-field
-          v-if="quantity === quantity_to_assemble"
-          v-model="quantity"
-          :rules="[rules.isPositiveInt]"
-          label="quantity"
-        ></v-text-field>
-        <v-text-field v-model="unitCost" :rules="[rules.isPositiveFloat]" label="unit cost"></v-text-field>
-        <v-text-field v-model="currency" :rules="[rules.isCurrency]" label="currency"></v-text-field>
-        <v-text-field v-model="GTIN" :rules="[rules.isGTIN]" label="GTIN"></v-text-field>
-        <v-text-field v-model="SKU" :rules="[rules.isSKU]" label="SKU"></v-text-field>
-        <v-text-field v-model="vendorUrl" :rules="[rules.isURL]" label="vendor URL"></v-text-field>
-        <v-text-field v-model="leadTime" :rules="[rules.isDuration]" label="lead time"></v-text-field>
-        <v-text-field v-model="link" :rules="[rules.isURL]" label="link"></v-text-field>
-        <v-text-field v-model="notes" :rules="[rules.isDescription]" label="notes"></v-text-field>
-
-        <v-btn class="yellow" @click="update()" title="save updates">
-          <v-icon>save</v-icon>
-        </v-btn>
-        <div v-if="this.message" class="ml-2 msg">
-          <span class="green--text">{{message}}</span>
-        </div>
-        <div v-if="error" class="red--text msg ml-2">{{error}}</div>
-      </v-flex>
-    </v-layout>
-  </div>
+      </v-layout>
+      <v-layout justify-space-between>
+        <v-flex sm2>
+          <v-text-field
+            @keydown="preventNonNumericalInput($event)"
+            type="number"
+            min="1"
+            v-model.number="moq"
+            :rules="[rules.required, rules.isPositiveInt]"
+            label="m.o.q."
+            solo-inverted
+            dense
+          ></v-text-field>
+        </v-flex>
+        <!-- update atom quantity_to_assemble that is quantity left  -->
+        <!-- ATTENTION test this carefully!!! -->
+        <v-flex sm2>
+          <v-text-field
+            @keydown="preventNonNumericalInput($event)"
+            type="number"
+            min="0"
+            v-model.number="quantity_to_assemble"
+            :rules="[rules.required, rules.isPositiveInt]"
+            label="qty left"
+            solo-inverted
+            dense
+          ></v-text-field>
+        </v-flex>
+        <v-flex sm3>
+          <v-text-field
+            v-model="unitCost"
+            :rules="[rules.isPositiveFloat]"
+            label="unit cost"
+            solo-inverted
+            dense
+          ></v-text-field>
+        </v-flex>
+        <v-flex sm3>
+          <v-text-field
+            v-model="currency"
+            :rules="[rules.isCurrency]"
+            label="currency"
+            solo-inverted
+            dense
+          ></v-text-field>
+        </v-flex>
+      </v-layout>
+      <v-layout justify-space-between>
+        <v-flex sm2>
+          <v-text-field
+            v-model="GTIN"
+            :rules="[rules.isGTIN]"
+            label="GTIN"
+            solo-inverted
+            dense
+          ></v-text-field>
+        </v-flex>
+        <v-flex sm2>
+          <v-text-field
+            v-model="SKU"
+            :rules="[rules.isSKU]"
+            label="SKU"
+            solo-inverted
+            dense
+          ></v-text-field>
+        </v-flex>
+        <v-flex sm5>
+          <v-text-field
+            v-model="vendorUrl"
+            :rules="[rules.isURL]"
+            label="vendor URL"
+            solo-inverted
+            dense
+          ></v-text-field>
+        </v-flex>
+        <v-flex sm2>
+          <v-text-field
+            v-model="leadTime"
+            :rules="[rules.isDuration]"
+            label="lead time"
+            solo-inverted
+            dense
+          ></v-text-field>
+        </v-flex>
+      </v-layout>
+      <v-layout justify-space-between>
+        <v-flex sm4>
+          <v-text-field
+            v-model="link"
+            :rules="[rules.isURL]"
+            label="link"
+            solo-inverted
+            dense
+          ></v-text-field>
+        </v-flex>
+        <v-flex sm7>
+          <v-text-field
+            v-model="notes"
+            :rules="[rules.isDescription]"
+            label="notes"
+            solo-inverted
+            dense
+          ></v-text-field>
+        </v-flex>
+      </v-layout>
+      <v-layout justify-space-between>
+        <v-flex sm2>
+          <v-btn class="yellow" @click="update()" title="save updates">
+            <v-icon>save</v-icon>
+          </v-btn>
+        </v-flex>
+        <v-flex sm1>
+          <v-progress-circular
+            class="ml-10"
+            v-if="isLoading"
+            :indeterminate="isLoading"
+            color="light-blue"
+          ></v-progress-circular>
+        </v-flex>
+        <v-flex sm9>
+          <div v-if="this.message" class="ml-2 msg green--text">
+            {{ message }}
+          </div>
+          <div v-if="error" class="red--text msg ml-2">{{ error }}</div>
+        </v-flex>
+      </v-layout>
+    </div>
+  </v-container>
 </template>
 
 <script>
 import { mapGetters, mapActions } from "vuex";
+import AtomService from "@/services/AtomService";
 
 export default {
   name: "ProjectViewBomAtomUpdate",
@@ -51,14 +150,14 @@ export default {
     return {
       message: "",
       error: "",
+      isLoading: false,
       rules: {
         required: (value) => !!value || "Required.",
         isDescription: (value) => {
-          const pattern = /[^,;]*$/;
+          const pattern = /^[^,;]+$/;
           if (value)
             return (
-              pattern.test(value) ||
-              "Only alphanumeric, dots, hyphens, underscore chars"
+              pattern.test(value) || "any char except for commas and semicolons"
             );
           else return true;
         },
@@ -78,19 +177,12 @@ export default {
         },
         isGTIN: (value) => {
           const pattern = /^(\d{8}|\d{12}|\d{13}|\d{14})$/;
-          if (value)
-            return (
-              pattern.test(value) || "only GTIN codes 8,12,13 or 14 digits"
-            );
+          if (value) return pattern.test(value) || "GTIN codes";
           else return true;
         },
         isSKU: (value) => {
           const pattern = /^[-a-zA-Z0-9_ ./]*$/;
-          if (value)
-            return (
-              pattern.test(value) ||
-              "Only alphanumeric, dots, hyphens, underscore chars"
-            );
+          if (value) return pattern.test(value) || "alphanumeric";
           else return true;
         },
         isURL: (value) => {
@@ -105,18 +197,19 @@ export default {
         },
         isPositiveInt: (value) => {
           const pattern = /^[1-9]+[0-9]*$/;
-          if (value) return pattern.test(value) || "only positive integers > 0";
+          if (value) return pattern.test(value) || "int > 0";
           else return true;
         },
         isDuration: (value) => {
           const pattern = /^P(?!$)(\d+(?:\.\d+)?Y)?(\d+(?:\.\d+)?M)?(\d+(?:\.\d+)?W)?(\d+(?:\.\d+)?D)?(T(?=\d)(\d+(?:\.\d+)?H)?(\d+(?:\.\d+)?M)?(\d+(?:\.\d+)?S)?)?$/;
-          if (value) return pattern.test(value) || "only duration ISO 8601";
+          if (value) return pattern.test(value) || "duration ISO 8601";
           else return true;
         },
       },
     };
   },
   computed: {
+    ...mapGetters(["getAtom"]),
     description: {
       get() {
         return this.$store.state.projects.atom.description;
@@ -136,6 +229,9 @@ export default {
     quantity_to_assemble: {
       get() {
         return this.$store.state.projects.atom.quantity_to_assemble;
+      },
+      set(value) {
+        this.$store.commit("updateAtomQuantityToAssemble", value);
       },
     },
     unitCost: {
@@ -228,28 +324,41 @@ export default {
     },
   },
   methods: {
-    ...mapGetters(["getAtom"]),
     ...mapActions(["reviseAtom"]),
     // this function prevents Firefox from allowing chars other than digits
     preventNonNumericalInput(event) {
-      const char = String.fromCharCode(event.keyCode)
+      const char = String.fromCharCode(event.keyCode);
       if (!/[0-9\b\t]/.test(char)) {
-        event.preventDefault()
+        event.preventDefault();
       }
     },
     async update() {
       // console.log(this.atomToUpdate.description)
+      this.isLoading = true;
+      this.message = "";
+      this.error = "";
+      // TODO check that required fields are filled in and that not required are set to null if empty
+      // TODO set atom.quantity accordingly
+      const atom = {
+        uuid: this.getAtom.uuid,
+        description: this.description,
+        moq: this.moq,
+        quantity_to_assemble: this.quantity_to_assemble,
+        unitCost: this.unitCost,
+        currency: this.currency,
+      };
       try {
-        this.message = "";
-        this.error = "";
-        const response = await this.reviseAtom();
+        const response = await AtomService.put(atom);
         if (response.status === 200) {
+          console.log(response.data);
+          this.reviseAtom(response.data);
           this.message = "atom updated";
-        } else {
-          this.error = "atom not updated";
         }
       } catch (error) {
+        this.error = error.response.data.message;
         console.log(error);
+      } finally {
+        this.isLoading = false;
       }
     },
   },
