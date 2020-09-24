@@ -78,12 +78,25 @@
           ></v-text-field>
         </v-flex>
       </v-layout>
-
-      <div v-if="this.message" class="msg green--text">{{message}}</div>
-      <div v-if="error" class="red--text msg">{{error}}</div>
-      <v-btn class="yellow" @click="update()" title="save">
-        <v-icon>save</v-icon>
-      </v-btn>
+      <v-layout row wrap justify-space-between>
+        <v-flex sm1>
+          <v-btn class="yellow" @click="update()" title="save">
+            <v-icon>save</v-icon>
+          </v-btn>
+        </v-flex>
+        <v-flex sm1>
+          <v-progress-circular
+            class="ml-10"
+            v-if="isLoading"
+            :indeterminate="isLoading"
+            color="light-blue"
+          ></v-progress-circular>
+        </v-flex>
+        <v-flex sm9>
+          <div v-if="this.message" class="msg green--text">{{ message }}</div>
+          <div v-if="error" class="red--text msg">{{ error }}</div>
+        </v-flex>
+      </v-layout>
     </v-container>
   </div>
 </template>
@@ -103,6 +116,7 @@ export default {
       error: "",
       addRegion: null,
       addLink: null,
+      isLoading: false,
       rules: {
         required: (value) => !!value || "required",
         uniqueName: (value) =>
@@ -110,7 +124,9 @@ export default {
         isDescription: (value) => {
           const pattern = /^[^,;]+$/;
           if (value)
-            return pattern.test(value) || "any char but commas and semicolons";
+            return (
+              pattern.test(value) || "any char except for commas and semicolons"
+            );
           else return true;
         },
         isAlphanumeric: (value) => {
@@ -142,19 +158,19 @@ export default {
             if (element.code == value || element.name === value) ret = true;
           });
           if (value) return ret || "ISO 3166-2";
-          else{
-            this.region = null
-              this.addRegion = null
-             return true;
+          else {
+            this.region = null;
+            this.addRegion = null;
+            return true;
           }
         },
         isHTTP: (value) => {
           const pattern = /https?:\/\/(www\.)?[-a-zA-Z0-9@:%._+~#=]{1,256}\.[a-zA-Z0-9()]{1,6}\b([-a-zA-Z0-9()@:%_+.~#?&//=]*)/;
           if (value) return pattern.test(value) || "Invalid http link";
-          else{
-            this.link = null
-            this.addLink = null
-             return true;
+          else {
+            this.link = null;
+            this.addLink = null;
+            return true;
           }
         },
       },
@@ -241,21 +257,21 @@ export default {
         description: this.description,
         version: this.version,
         license: this.license,
-        country: this.country
+        country: this.country,
       };
       if (this.region) {
-        project.region = this.region
-      } else if(this.addRegion){
-        project.region = this.addRegion
+        project.region = this.region;
+      } else if (this.addRegion) {
+        project.region = this.addRegion;
       } else {
-        project.region = null
+        project.region = null;
       }
       if (this.link) {
-        project.link = this.link
-      } else if(this.addLink){
-        project.link = this.addLink
+        project.link = this.link;
+      } else if (this.addLink) {
+        project.link = this.addLink;
       } else {
-        project.link = null
+        project.link = null;
       }
       // console.log('this.region:', this.region)
       // console.log('this.addRegion:', this.addRegion)
@@ -264,7 +280,7 @@ export default {
       // console.log('this.addLink:', this.addLink)
       // console.log(project.link)
       try {
-        this.setLoading(true)
+        this.isLoading = true;
         const response = await ProjectService.updateProject(
           project,
           this.getProject.uuid
@@ -273,13 +289,13 @@ export default {
         if (response.status === 200) {
           this.message = "project metadata updated";
           this.updateProject(response.data);
-          this.addRegion = null
-          this.addLink = null
+          this.addRegion = null;
+          this.addLink = null;
         }
       } catch (error) {
         this.error = error.response.data.message;
-      } finally{
-        this.setLoading(false)
+      } finally {
+        this.isLoading = false;
       }
     },
   },

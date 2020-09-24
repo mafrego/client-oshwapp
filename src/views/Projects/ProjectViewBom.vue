@@ -44,22 +44,28 @@
         <project-view-bom-atom-create v-if="showCreateAtom" />
 
         <div v-for="atom in getBom" :key="atom.itemNumber">
-          <v-layout>
-            <v-flex xs8>
-              <div class="atom-name">{{atom.name}}</div>
-
+          <v-layout >
+            <v-flex sm6 class="atom">
+              <div class="font-family: monospace font-weight-black">{{atom.name}}</div>
+            </v-flex>
+            <v-flex class="image" sm6>
+              <img class="atom-image" :src="atom.imageUrl" :alt="atom.name" />
+            </v-flex>
+          </v-layout>
+          <v-layout wrap >
+            
               <v-btn color="blue" @click="selectAtomDetails(atom.uuid)" title="atom details">
                 <v-icon>article</v-icon>
               </v-btn>
-              <project-view-bom-atom-details v-if="atomDetails === atom.uuid" v-bind:atom="atom" />
               <v-btn
                 v-if="atomDetails === atom.uuid"
                 @click="hideDetails"
-                color="grey"
+                class="grey ml-1"
                 title="hide details"
               >
                 <v-icon>close</v-icon>
               </v-btn>
+              <!-- <project-view-bom-atom-details v-if="atomDetails === atom.uuid" v-bind:atom="atom" /> -->
 
               <v-btn
                 color="yellow"
@@ -69,16 +75,14 @@
               >
                 <v-icon>update</v-icon>
               </v-btn>
-              <project-view-bom-atom-update v-if="atomToUpdate === atom.uuid" v-bind:atom="atom" />
               <v-btn
                 v-if="atomToUpdate === atom.uuid"
                 @click="hideUpdate"
-                color="grey"
+                class="grey ml-1"
                 title="hide update"
               >
                 <v-icon>close</v-icon>
               </v-btn>
-
               <v-btn
                 v-if="atom.quantity === atom.quantity_to_assemble"
                 class="ml-2"
@@ -88,11 +92,9 @@
               >
                 <v-icon>delete</v-icon>
               </v-btn>
-            </v-flex>
+              <project-view-bom-atom-details v-if="atomDetails === atom.uuid" v-bind:atom="atom" />
+              <project-view-bom-atom-update v-if="atomToUpdate === atom.uuid" v-bind:atom="atom" />
 
-            <v-flex xs4>
-              <img class="atom-image" :src="atom.imageUrl" :alt="atom.name" />
-            </v-flex>
           </v-layout>
         </div>
       </panel>
@@ -191,14 +193,23 @@ export default {
 </script>
 
 <style scoped>
-.atom-name {
-  font-size: 14px;
+.atom {
+  font-size: 150%;
+  /* text-align: center; */
+  align-self: flex-end;
+  overflow-wrap: break-word;
 }
 .atom-description {
   font-size: 14px;
 }
 .atom-material {
   font-size: 24px;
+}
+.image {
+  display: flex;
+  justify-content: center;
+  align-items: flex-end;
+  overflow-wrap: break-word;
 }
 .atom-image {
   width: 100px;
