@@ -11,11 +11,11 @@
               multiple
               value
               @change="selectFile"
-              label="images"
+              label="select atom images"
               small-chips
               solo
               show-size
-              truncate-length="10"
+              truncate-length="8"
               prepend-icon="mdi-camera"
             />
             <!-- TODO simplify all this using :rules in v-file-input -->

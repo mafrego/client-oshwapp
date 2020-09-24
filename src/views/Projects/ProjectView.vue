@@ -103,14 +103,14 @@
       <v-flex class="image" sm4>
         <img class="project-image" :src="getProject.imageUrl" />
       </v-flex>
-      <v-flex sm1>
+      <!-- <v-flex sm1>
         <v-progress-circular
           class="ml-10"
           v-if="getLoading"
           :indeterminate="getLoading"
           color="light-blue"
         ></v-progress-circular>
-      </v-flex>
+      </v-flex> -->
     </v-layout>
     <br />
     <project-view-update v-if="showComponentUpdate" />

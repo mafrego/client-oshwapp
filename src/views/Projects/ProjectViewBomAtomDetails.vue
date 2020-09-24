@@ -1,10 +1,12 @@
 <template>
+<v-container>
   <div>
         <ul>
           <li >item #{{atom.itemNumber}}</li>
-          <li v-if="atom.description" >description: {{atom.description}}</li>
-          <li>minimum order quantity: {{atom.moq}}</li>
+          <li v-if="atom.description" >{{atom.description}}</li>
+          <li>m.o.q.: {{atom.moq}}</li>
           <li>quantity: {{atom.quantity}}</li>
+          <li>quantity left to assemble: {{atom.quantity_to_assemble}}</li>
           <li>cost per unit: {{atom.unitCost}} {{atom.currency}}</li>
           <li>total cost: {{atom.totalCost}} {{atom.currency}}</li>
           <li v-if="atom.GTIN">GTIN: {{atom.GTIN}}</li>
@@ -16,6 +18,7 @@
           <!-- <li><a :href="atom.imageUrl" download target="_blank">download image</a></li> -->
         </ul>
   </div>
+</v-container>
 </template>
 
 <script>

@@ -132,7 +132,7 @@ export default {
         isDescription: (value) => {
           const pattern = /^[^,;]+$/;
           if (value)
-            return pattern.test(value) || "any char but commas and semicolons";
+            return pattern.test(value) || "any char except for commas and semicolons";
           else return true;
         },
         isSemanticVersion: (value) => {
