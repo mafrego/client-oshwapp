@@ -126,23 +126,28 @@ const actions = {
             commit('setLoading', false)
         }
     },
-    async createAtom({ commit }, atom) {
-            commit('addAtomToBom', atom)
-            commit('addProduct', atom)
-            commit('addAssemblableProduct', atom)
+    createAtom({ commit }, atom) {
+        commit('addAtomToBom', atom)
+        commit('addProduct', atom)
+        commit('addAssemblableProduct', atom)
     },
-    async reviseAtom({ commit, state }) {
-        try {
-            commit('setLoading', true)
-            const response = await AtomService.put(state.atom)
-            commit('updateAtom', response.data)
-            return response
-        } catch (error) {
-            commit('setError', error)
-        } finally {
-            commit('setLoading', false)
-        }
+    // TODO commit the result of function called in component the same as above
+    // remeber to update products and assemblableProducts with actions as well
+    reviseAtom({ commit }, atom) {
+        commit('updateAtom', atom)
     },
+    // async reviseAtom({ commit, state }) {
+    //     try {
+    //         commit('setLoading', true)
+    //         const response = await AtomService.put(state.atom)
+    //         commit('updateAtom', response.data)
+    //         return response
+    //     } catch (error) {
+    //         commit('setError', error)
+    //     } finally {
+    //         commit('setLoading', false)
+    //     }
+    // },
     async deleteAtom({ commit, state }, atomID) {
         try {
             commit('setLoading', true)
@@ -334,7 +339,9 @@ const mutations = {
     },
     updateAtomQuantity: (state, quantity) => {
         state.atom.quantity = quantity
-        state.atom.quantity_to_assemle = quantity
+    },
+    updateAtomQuantityToAssemble: (state, quantity) => {
+        state.atom.quantity_to_assemble = quantity
     },
     updateAtomUnitCost: (state, cost) => {
         state.atom.cost = cost
