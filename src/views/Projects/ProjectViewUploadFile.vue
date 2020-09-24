@@ -8,7 +8,7 @@
               v-model="file"
               value
               accept=".csv"
-              label="select BOM.csv"
+              label="yourproject-bom.csv"
               ref="file"
               chips
               solo
