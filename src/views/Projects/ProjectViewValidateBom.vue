@@ -8,7 +8,7 @@
               v-model="file"
               value
               accept=".csv"
-              label="select yourproject-bom.csv"
+              label="yourproject-bom.csv"
               ref="file"
               chips
               solo
@@ -22,10 +22,16 @@
           <v-btn class="grey" @click="submitFile" title="check BOM">
             <v-icon>check_circle</v-icon>
           </v-btn>
-          <v-progress-circular
+          <!-- <v-progress-circular
             class="ml-10"
             v-if="getLoading"
             :indeterminate="getLoading"
+            color="light-blue"
+          ></v-progress-circular> -->
+          <v-progress-circular
+            class="ml-10"
+            v-if="isLoading"
+            :indeterminate="isLoading"
             color="light-blue"
           ></v-progress-circular>
         </v-flex>
@@ -56,6 +62,7 @@ export default {
       error: "",
       errors: [],
       success: "",
+      isLoading: false
     };
   },
   computed: {
@@ -91,10 +98,13 @@ export default {
       // the name "file" is the same used in server with middleware multer
       formData.append("file", this.file);
       try {
+        this.isLoading = true
         await FileService.checkBom(formData);
         this.success = "file " + this.file.name + " is valid!";
       } catch (error) {
         this.errors = error.response.data;
+      } finally {
+        this.isLoading = false
       }
       this.file = [];
     },
