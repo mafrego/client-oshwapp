@@ -1,60 +1,95 @@
 <template>
-      <panel title="BOM" >
-        <v-toolbar-items slot="action">
-          <div>
+  <panel title="BOM">
+    <v-toolbar-items slot="action">
+      <div>
+        <v-btn
+          v-if="getBom.length > 0 && getBom.length == getAllProducts.length"
+          @click="deleteBOM"
+          class="red ml-2 mt-1"
+          title="delete all atoms"
+          light
+        >
+          <v-icon>delete</v-icon>
+        </v-btn>
+      </div>
+      <div v-if="getBom.length > 0">
+        <v-btn
+          @click="updateProjectBom(getProject.uuid)"
+          class="green ml-2 mt-1"
+          title="generate bom.csv"
+          light
+          v-if="!showDownloadBtn"
+        >
+          <v-icon>article</v-icon>
+        </v-btn>
+      </div>
+      <div>
+        <v-btn
+          :href="bomUrl"
+          v-if="showDownloadBtn"
+          @click="changeShowDownloadBtn"
+          class="grey ml-2 mt-1"
+          title="download BOM"
+        >
+          <v-icon>cloud_download</v-icon>
+        </v-btn>
+      </div>
+      <div>
+        <v-btn
+          @click="toggleCreateAtom"
+          class="green ml-2 mt-1"
+          title="add atom"
+          light
+        >
+          <v-icon>add</v-icon>
+        </v-btn>
+      </div>
+    </v-toolbar-items>
+
+    <project-view-bom-atom-create v-if="showCreateAtom" />
+
+    <div v-for="atom in getBom" :key="atom.itemNumber">
+      <v-layout>
+        <v-flex sm6 class="atom">
+          <v-layout>
+            <div class="font-family: monospace font-weight-black">
+              {{ atom.name }} #{{atom.itemNumber}}
+            </div>
+          </v-layout>
+          <v-layout v-if="getProject.state == 'created' || getProject.state == 'assembling'">
             <v-btn
-              v-if="getBom.length > 0 && getBom.length == getAllProducts.length"
-              @click="deleteBOM"
-              class="red ml-2 mt-1"
-              title="delete all atoms"
-              light
+              color="yellow"
+              class="ml-2"
+              @click="selectAtomToUpdate(atom)"
+              title="update atom"
+            >
+              <v-icon>update</v-icon>
+            </v-btn>
+            <v-btn
+              v-if="atomToUpdate === atom.uuid"
+              @click="hideUpdate"
+              class="grey ml-2"
+              title="hide update"
+            >
+              <v-icon>close</v-icon>
+            </v-btn>
+            <v-btn
+              v-if="atom.quantity === atom.quantity_to_assemble"
+              class="ml-2"
+              color="red"
+              @click="deleteATOM(atom.uuid)"
+              title="delete atom"
             >
               <v-icon>delete</v-icon>
             </v-btn>
-          </div>
-          <div v-if="getBom.length > 0">
-            <v-btn
-              @click="updateProjectBom(getProject.uuid)"
-              class="green ml-2 mt-1"
-              title="generate bom.csv"
-              light
-              v-if="!showDownloadBtn"
-            >
-              <v-icon>article</v-icon>
-            </v-btn>
-          </div>
-          <div>
-            <v-btn
-              :href="bomUrl"
-              v-if="showDownloadBtn"
-              @click="changeShowDownloadBtn"
-              class="grey ml-2 mt-1"
-              title="download BOM"
-            >
-              <v-icon>cloud_download</v-icon>
-            </v-btn>
-          </div>
-          <div>
-            <v-btn @click="toggleCreateAtom" class="green ml-2 mt-1" title="add atom" light>
-              <v-icon>add</v-icon>
-            </v-btn>
-          </div>
-        </v-toolbar-items>
-
-        <project-view-bom-atom-create v-if="showCreateAtom" />
-
-        <div v-for="atom in getBom" :key="atom.itemNumber">
-          <v-layout >
-            <v-flex sm6 class="atom">
-              <div class="font-family: monospace font-weight-black">{{atom.name}}</div>
-            </v-flex>
-            <v-flex class="image" sm6>
-              <img class="atom-image" :src="atom.imageUrl" :alt="atom.name" />
-            </v-flex>
           </v-layout>
-          <v-layout wrap >
-            
-              <v-btn color="blue" @click="selectAtomDetails(atom.uuid)" title="atom details">
+        </v-flex>
+        <v-flex class="image" sm6>
+          <img class="atom-image" :src="atom.imageUrl" :alt="atom.name" />
+        </v-flex>
+      </v-layout>
+      <v-layout wrap>
+        <!-- <v-btn color="blue" @click="selectAtomDetails(atom.uuid)" title="atom details">
                 <v-icon>article</v-icon>
               </v-btn>
               <v-btn
@@ -64,10 +99,10 @@
                 title="hide details"
               >
                 <v-icon>close</v-icon>
-              </v-btn>
-              <!-- <project-view-bom-atom-details v-if="atomDetails === atom.uuid" v-bind:atom="atom" /> -->
+              </v-btn> -->
+        <!-- <project-view-bom-atom-details v-if="atomDetails === atom.uuid" v-bind:atom="atom" /> -->
 
-              <v-btn
+        <!-- <v-btn
                 color="yellow"
                 class="ml-2"
                 @click="selectAtomToUpdate(atom)"
@@ -91,19 +126,21 @@
                 title="delete atom"
               >
                 <v-icon>delete</v-icon>
-              </v-btn>
-              <project-view-bom-atom-details v-if="atomDetails === atom.uuid" v-bind:atom="atom" />
-              <project-view-bom-atom-update v-if="atomToUpdate === atom.uuid" v-bind:atom="atom" />
-
-          </v-layout>
-        </div>
-      </panel>
+              </v-btn> -->
+        <!-- <project-view-bom-atom-details v-if="atomDetails === atom.uuid" v-bind:atom="atom" /> -->
+        <project-view-bom-atom-update
+          v-if="atomToUpdate === atom.uuid"
+          v-bind:atom="atom"
+        />
+      </v-layout>
+    </div>
+  </panel>
 </template>
 
 <script>
 import { mapGetters, mapActions, mapMutations } from "vuex";
 import ProjectViewBomAtomCreate from "./ProjectViewBomAtomCreate";
-import ProjectViewBomAtomDetails from "./ProjectViewBomAtomDetails";
+// import ProjectViewBomAtomDetails from "./ProjectViewBomAtomDetails";
 import ProjectViewBomAtomUpdate from "./ProjectViewBomAtomUpdate";
 import ProjectService from "@/services/ProjectService";
 
@@ -111,7 +148,7 @@ export default {
   name: "ProjectViewBom",
   components: {
     ProjectViewBomAtomCreate,
-    ProjectViewBomAtomDetails,
+    // ProjectViewBomAtomDetails,
     ProjectViewBomAtomUpdate,
   },
   data() {
@@ -120,19 +157,14 @@ export default {
       atomToUpdate: null,
       atomDetails: null,
       showDownloadBtn: false,
-      bomUrl: null
+      bomUrl: null,
     };
   },
   computed: {
     ...mapGetters(["getBom", "getProject", "getAllProducts"]),
   },
   methods: {
-    ...mapActions([
-      "fetchBom",
-      "deleteBom",
-      "deleteAtom",
-      "fetchAllProducts",
-    ]),
+    ...mapActions(["fetchBom", "deleteBom", "deleteAtom", "fetchAllProducts"]),
     ...mapMutations(["setAtom"]),
     toggleCreateAtom() {
       this.showCreateAtom = !this.showCreateAtom;
@@ -176,7 +208,7 @@ export default {
       const ret = await ProjectService.updateProjectBom(data);
       if (ret.status === 200) {
         // console.log(ret.data.Location)
-        this.bomUrl = ret.data.Location
+        this.bomUrl = ret.data.Location;
         this.showDownloadBtn = !this.showDownloadBtn;
       }
     },
@@ -196,7 +228,7 @@ export default {
 .atom {
   font-size: 150%;
   /* text-align: center; */
-  align-self: flex-end;
+  /* align-self: flex-end; */
   overflow-wrap: break-word;
 }
 .atom-description {
