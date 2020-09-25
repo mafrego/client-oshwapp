@@ -39,6 +39,7 @@ const getters = {
 }
 
 const actions = {
+
     async fetchProjects({ commit }, userID) {
         try {
             commit('setLoading', true)
@@ -83,6 +84,7 @@ const actions = {
         }
     },
     // example of how to manage errors in actions
+    // TODO refactor using dispatch
     async sendBom({ state, commit }, formData) {
         try {
             commit('setErrorBom', null)
@@ -131,29 +133,20 @@ const actions = {
         commit('addProduct', atom)
         commit('addAssemblableProduct', atom)
     },
-    // TODO commit the result of function called in component the same as above
     // remeber to update products and assemblableProducts with actions as well
-    reviseAtom({ commit }, atom) {
-        commit('updateAtom', atom)
+    reviseAtom({ dispatch }) {
+        // commit('updateAtom', atom)
+        dispatch('fetchAssemblableProducts')
+        dispatch('fetchBom')
+        dispatch('fetchAllProducts')
     },
-    // async reviseAtom({ commit, state }) {
-    //     try {
-    //         commit('setLoading', true)
-    //         const response = await AtomService.put(state.atom)
-    //         commit('updateAtom', response.data)
-    //         return response
-    //     } catch (error) {
-    //         commit('setError', error)
-    //     } finally {
-    //         commit('setLoading', false)
-    //     }
-    // },
     async deleteAtom({ commit, state }, atomID) {
         try {
             commit('setLoading', true)
             const response = await AtomService.delete(atomID)
             commit('deleteAtom', response.data)
             if (response && state.bom.length < 1) {
+    // TODO try to use: dispatch('updateProjectState', { state: 'created'})
                 const ret = await ProjectService.updateProjectState({ state: 'created' }, state.project.uuid)
                 commit('updateState', ret.data.project.state)
             }
@@ -174,6 +167,7 @@ const actions = {
             commit('setLoading', false)
         }
     },
+    // TODO refactor: I think that there's no point in re-fetching data from db, not sure
     async uploadImages({ state, commit }, formData) {
         try {
             commit('setLoading', true)
@@ -205,6 +199,7 @@ const actions = {
             commit('setLoading', false)
         }
     },
+    // TODO refactor using dispatch
     async assembleCopy({ state, commit }, assembly) {
         try {
             commit('setLoading', true)
@@ -221,7 +216,7 @@ const actions = {
             if (response.status === 201) {
                 const ret = await ProjectService.getAllProducts(state.project.uuid)
                 commit('setProducts', ret.data)
-                // update BOM as well
+                // update BOM as well because of quantity_to_assemble
                 const ret0 = await ProjectService.getBom(state.project.uuid)
                 commit('setBom', ret0.data)
                 return response.status
@@ -232,6 +227,7 @@ const actions = {
             commit('setLoading', false)
         }
     },
+    // TODO refactor using dispatch
     async disassemble({ state, commit }, assemblyID) {
         try {
             commit('setLoading', true)
@@ -325,8 +321,9 @@ const mutations = {
         state.atom = atom
     },
     updateAtom: (state, atom) => {
-        state.atom = atom
+        // state.atom = atom
         state.bom.forEach((item, i) => { if (item.uuid == atom.uuid) state.bom[i] = atom })
+        state.products.forEach((item, i) => { if (item.uuid == atom.uuid) state.bom[i] = atom })
     },
     deleteAtom: (state, atom) => {
         state.bom = state.bom.filter(item => { return item.uuid != atom.uuid })
@@ -340,11 +337,12 @@ const mutations = {
     updateAtomQuantity: (state, quantity) => {
         state.atom.quantity = quantity
     },
-    updateAtomQuantityToAssemble: (state, quantity) => {
-        state.atom.quantity_to_assemble = quantity
+    updateAtomQuantityToAssemble: (state, new_qty_to_assemble) => {
+        state.atom.quantity = state.atom.quantity + (new_qty_to_assemble - state.atom.quantity_to_assemble)
+        state.atom.quantity_to_assemble = new_qty_to_assemble
     },
     updateAtomUnitCost: (state, cost) => {
-        state.atom.cost = cost
+        state.atom.unitCost = cost
     },
     updateAtomCurrency: (state, currency) => {
         state.atom.currency = currency
