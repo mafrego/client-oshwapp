@@ -7,7 +7,7 @@
           v-model="description"
           :rules="[rules.required, rules.isDescription]"
           label="description"
-          solo-inverted
+          outlined
           dense
         ></v-text-field>
       </v-layout>
@@ -20,7 +20,16 @@
             v-model.number="moq"
             :rules="[rules.required, rules.isPositiveInt]"
             label="m.o.q."
-            solo-inverted
+            outlined
+            dense
+          ></v-text-field>
+        </v-flex>
+        <v-flex sm2>
+          <v-text-field
+            v-model="quantity"
+            label="quantity"
+            outlined
+            readonly
             dense
           ></v-text-field>
         </v-flex>
@@ -33,84 +42,142 @@
             min="0"
             v-model.number="quantity_to_assemble"
             :rules="[rules.required, rules.isPositiveInt]"
-            label="qty left"
-            solo-inverted
+            label="quantity left"
+            outlined
             dense
           ></v-text-field>
         </v-flex>
         <v-flex sm3>
+            <!-- @keydown="preventNonFloatInput($event)" -->
           <v-text-field
-            v-model="unitCost"
-            :rules="[rules.isPositiveFloat]"
+            type="number"
+            min="0"
+            step="0.01"
+            v-model.number="unitCost"
+            :rules="[rules.required, rules.isPositiveFloat]"
             label="unit cost"
-            solo-inverted
+            outlined
             dense
           ></v-text-field>
         </v-flex>
-        <v-flex sm3>
+        <v-flex sm2>
           <v-text-field
             v-model="currency"
-            :rules="[rules.isCurrency]"
+            :rules="[rules.required, rules.isCurrency]"
             label="currency"
-            solo-inverted
+            outlined
             dense
           ></v-text-field>
         </v-flex>
       </v-layout>
       <v-layout justify-space-between>
-        <v-flex sm2>
+        <v-flex v-if="GTIN" sm2>
           <v-text-field
             v-model="GTIN"
             :rules="[rules.isGTIN]"
             label="GTIN"
-            solo-inverted
+            outlined
             dense
           ></v-text-field>
         </v-flex>
-        <v-flex sm2>
+        <v-flex v-if="!GTIN" sm2>
+          <v-text-field
+            v-model="addGTIN"
+            :rules="[rules.isGTIN]"
+            label="add GTIN"
+            outlined
+            dense
+          ></v-text-field>
+        </v-flex>
+        <v-flex v-if="SKU" sm2>
           <v-text-field
             v-model="SKU"
             :rules="[rules.isSKU]"
             label="SKU"
-            solo-inverted
+            outlined
             dense
           ></v-text-field>
         </v-flex>
-        <v-flex sm5>
+        <v-flex v-if="!SKU" sm2>
+          <v-text-field
+            v-model="addSKU"
+            :rules="[rules.isSKU]"
+            label="add SKU"
+            outlined
+            dense
+          ></v-text-field>
+        </v-flex>
+        <v-flex v-if="vendorUrl" sm5>
           <v-text-field
             v-model="vendorUrl"
             :rules="[rules.isURL]"
             label="vendor URL"
-            solo-inverted
+            outlined
             dense
           ></v-text-field>
         </v-flex>
-        <v-flex sm2>
+        <v-flex v-if="!vendorUrl" sm5>
+          <v-text-field
+            v-model="addVendorUrl"
+            :rules="[rules.isURL]"
+            label="add vendor URL"
+            outlined
+            dense
+          ></v-text-field>
+        </v-flex>
+        <v-flex v-if="leadTime" sm2>
           <v-text-field
             v-model="leadTime"
             :rules="[rules.isDuration]"
             label="lead time"
-            solo-inverted
+            outlined
+            dense
+          ></v-text-field>
+        </v-flex>
+        <v-flex v-if="!leadTime" sm2>
+          <v-text-field
+            v-model="addLeadTime"
+            :rules="[rules.isDuration]"
+            label="add lead time"
+            outlined
             dense
           ></v-text-field>
         </v-flex>
       </v-layout>
       <v-layout justify-space-between>
-        <v-flex sm4>
+        <v-flex v-if="link" sm4>
           <v-text-field
             v-model="link"
             :rules="[rules.isURL]"
             label="link"
-            solo-inverted
+            outlined
             dense
           ></v-text-field>
         </v-flex>
-        <v-flex sm7>
+        <v-flex v-if="!link" sm4>
+          <v-text-field
+            v-model="addLink"
+            :rules="[rules.isURL]"
+            label="add link"
+            outlined
+            dense
+          ></v-text-field>
+        </v-flex>
+        <v-flex v-if="notes" sm7>
           <v-text-field
             v-model="notes"
             :rules="[rules.isDescription]"
             label="notes"
-            solo-inverted
+            outlined
+            dense
+          ></v-text-field>
+        </v-flex>
+        <v-flex v-if="!notes" sm7>
+          <v-text-field
+            v-model="addNotes"
+            :rules="[rules.isDescription]"
+            label="add notes"
+            outlined
             dense
           ></v-text-field>
         </v-flex>
@@ -151,6 +218,12 @@ export default {
       message: "",
       error: "",
       isLoading: false,
+      addGTIN: null,
+      addSKU: null,
+      addVendorUrl: null,
+      addLeadTime: null,
+      addLink: null,
+      addNotes: null,
       rules: {
         required: (value) => !!value || "Required.",
         isDescription: (value) => {
@@ -178,7 +251,11 @@ export default {
         isGTIN: (value) => {
           const pattern = /^(\d{8}|\d{12}|\d{13}|\d{14})$/;
           if (value) return pattern.test(value) || "GTIN codes";
-          else return true;
+          else {
+            this.GTIN = null
+            this.addGTIN = null 
+            return true;
+          }
         },
         isSKU: (value) => {
           const pattern = /^[-a-zA-Z0-9_ ./]*$/;
@@ -332,26 +409,100 @@ export default {
         event.preventDefault();
       }
     },
+    preventNonFloatInput(event) {
+      const char = String.fromCharCode(event.keyCode);
+      if (!/[.0-9\b\t]/.test(char)) {
+        event.preventDefault();
+      }
+    },
     async update() {
       // console.log(this.atomToUpdate.description)
-      this.isLoading = true;
       this.message = "";
       this.error = "";
       // TODO check that required fields are filled in and that not required are set to null if empty
-      // TODO set atom.quantity accordingly
+      if (
+        // this.project.name &&
+        this.description &&
+        this.moq &&
+        // this.quantity_to_assemble &&         //if set to 0 invalid 
+        this.unitCost &&
+        this.currency
+      ) {
+        this.error = null;
+      } else {
+        this.error = "Please fill in all the required fields.";
+        return;
+      }
       const atom = {
         uuid: this.getAtom.uuid,
         description: this.description,
         moq: this.moq,
         quantity_to_assemble: this.quantity_to_assemble,
+        quantity: this.quantity,
         unitCost: this.unitCost,
         currency: this.currency,
-      };
+      }
+      // not required properties: GTIN, SKU, vendorUrl, leadTime, link, notes
+      if (this.GTIN) {
+        atom.GTIN = this.GTIN;
+      } else if (this.addGTIN) {
+        atom.GTIN = this.addGTIN;
+      } else {
+        atom.GTIN = null;
+      }
+      if (this.SKU) {
+        atom.SKU = this.SKU;
+      } else if (this.addSKU) {
+        atom.SKU = this.addSKU;
+      } else {
+        atom.SKU = null;
+      }
+      if (this.vendorUrl) {
+        atom.vendorUrl = this.vendorUrl;
+      } else if (this.addVendorUrl) {
+        atom.vendorUrl = this.addVendorUrl;
+      } else {
+        atom.vendorUrl = null;
+      }
+      if (this.leadTime) {
+        atom.leadTime = this.leadTime;
+      } else if (this.addLeadTime) {
+        atom.leadTime = this.addLeadTime;
+      } else {
+        atom.leadTime = null;
+      }
+      if (this.link) {
+        atom.link = this.link;
+      } else if (this.addLink) {
+        atom.link = this.addLink;
+      } else {
+        atom.link = null;
+      }
+      if (this.notes) {
+        atom.notes = this.notes;
+      } else if (this.addNotes) {
+        atom.notes = this.addNotes;
+      } else {
+        atom.notes = null;
+      }
+      // add totalCost
+      if (this.moq == 1) {
+        atom.totalCost = this.unitCost * atom.quantity;
+      } else {
+        if (this.moq >= atom.quantity) {
+          atom.totalCost = this.unitCost;
+        } else {
+          atom.totalCost =
+            Math.ceil(atom.quantity / this.moq) * this.unitCost;
+        }
+      }
       try {
+        // console.log('atom sent: ',atom)
+      this.isLoading = true;
         const response = await AtomService.put(atom);
         if (response.status === 200) {
-          console.log(response.data);
-          this.reviseAtom(response.data);
+          // console.log('atom received: ',response.data);
+          this.reviseAtom();
           this.message = "atom updated";
         }
       } catch (error) {
