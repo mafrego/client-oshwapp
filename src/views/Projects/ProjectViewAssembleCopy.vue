@@ -9,89 +9,143 @@
     </div>
     <br />
     <panel v-if="getAssemblableProducts.length" title="Assembly panel">
-      <v-form ref="form">
-        <div v-if="getProject.state != 'rooted'">
-          <v-text-field
-            label="assembly name"
-            :rules="[rules.singleName, rules.required, rules.isAlphanumeric]"
-            v-model="assembly.name"
-          ></v-text-field>
-          <v-text-field
-            label="assembly description"
-            :rules="[rules.required, rules.isDescription]"
-            v-model="assembly.description"
-          ></v-text-field>
-          <v-text-field
-            label="assembly instructions"
-            :rules="[rules.isDescription]"
-            v-model="assembly.instruction"
-          ></v-text-field>
-          <v-text-field label="assembly link" :rules="[rules.isHTTP]" v-model="assembly.link"></v-text-field>
-          <v-text-field
-            @keydown="preventNonNumericalInput($event)"
-            label="how many identical assemblies?"
-            :rules="[rules.required, rules.isPositiveInt]"
-            type="number"
-            min="1"
-            v-model.number="assembly.quantity_to_assemble"
-            @input="recomputeQuantities"
-          />
-          <div class="danger-alert" v-if="msg">{{msg}}</div>
-          <div class="danger-alert" v-if="overlimits.length != 0">{{overlimits.join(", ")}}</div>
-          <v-btn class="green" @click="startAssembling" title="assemble">
-            <v-icon>build</v-icon>
-          </v-btn>
-          <v-progress-circular
-            class="ml-10"
-            v-if="getLoading"
-            :indeterminate="getLoading"
-            color="light-blue"
-          ></v-progress-circular>
-          <!-- <br />
+      <v-container fluid>
+        <v-form ref="form">
+          <div v-if="getProject.state != 'rooted'">
+            <v-layout row justify-space-between>
+              <v-flex sm3>
+                <v-text-field
+                  label="assembly name"
+                  :rules="[
+                    rules.singleName,
+                    rules.required,
+                    rules.isAlphanumeric,
+                  ]"
+                  v-model="assembly.name"
+                  solo-inverted
+                  dense
+                  hint="name"
+                ></v-text-field>
+              </v-flex>
+              <v-flex sm1>
+                <v-text-field
+                  @keydown="preventNonNumericalInput($event)"
+                  :rules="[rules.required, rules.isPositiveInt]"
+                  type="number"
+                  min="1"
+                  v-model.number="assembly.quantity_to_assemble"
+                  @input="recomputeQuantities"
+                  solo-inverted
+                  dense
+                  hint="qty"
+                />
+              </v-flex>
+              <v-flex sm7>
+                <v-text-field
+                  label="assembly description"
+                  :rules="[rules.required, rules.isDescription]"
+                  v-model="assembly.description"
+                  solo-inverted
+                  dense
+                  hint="description"
+                ></v-text-field>
+              </v-flex>
+            </v-layout>
+            <v-layout row justify-space-between>
+              <v-flex sm12>
+                <v-textarea
+                  label="assembly instructions"
+                  :rules="[rules.isDescription]"
+                  v-model="assembly.instruction"
+                  solo
+                  dense
+                  rows="1"
+                  hint="assembly instructions"
+                ></v-textarea>
+              </v-flex>
+            </v-layout>
+            <v-layout row justify-space-between>
+              <v-flex sm12>
+                <v-text-field
+                  label="assembly link"
+                  :rules="[rules.isHTTP]"
+                  v-model="assembly.link"
+                  solo-inverted
+                  dense
+                  hint="link"
+                ></v-text-field>
+              </v-flex>
+            </v-layout>
+            <v-layout row justify-start>
+              <v-flex sm1>
+                <v-btn class="green" @click="startAssembling" title="assemble">
+                  <v-icon>build</v-icon>
+                </v-btn>
+              </v-flex>
+              <v-flex sm1>
+                <v-progress-circular
+                  class="ml-10"
+                  v-if="getLoading"
+                  :indeterminate="getLoading"
+                  color="light-blue"
+                ></v-progress-circular>
+              </v-flex>
+              <v-flex sm8>
+                <div class="danger-alert" v-if="msg">{{ msg }}</div>
+                <div class="danger-alert" v-if="overlimits.length != 0">
+                  {{ overlimits.join(", ") }}
+                </div>
+              </v-flex>
+            </v-layout>
+            <!-- <br />
           <span>assembly.parts: {{ assembly.parts }}</span>
           <br />
           <span>quantities: {{ quantities }}</span>
           <br />
           <span>overlimits: {{ this.overlimits }}</span>
           <br />-->
-        </div>
+          </div>
 
-        <div v-for="(item, index) in getAssemblableProducts" :key="index">
-          <v-layout>
-            <v-flex xs3 v-if="getProject.state != 'rooted'">
-              <div class="atom-name">
-                {{item.name}}
-                <br />
-                items left to assemble: {{item.quantity_to_assemble}}
-              </div>
-              <v-text-field
-                @keydown="preventNonNumericalInput($event)"
-                :rules="[maxQuantity(item.quantity_to_assemble)]"
-                type="number"
-                label="how many items per assembly?"
-                min="0"
-                max="100"
-                step="1"
-                v-model="quantities[index]"
-                @input="setValue(item, index); recomputeQuantities();"
-              />
-            </v-flex>
-            <v-flex xs2>
-              <img class="atom-image" :src="item.imageUrl" :alt="item.name" />
-            </v-flex>
-            <v-flex xs1>
-              <v-btn
-                v-if="!item._labels.includes('Atom')"
-                color="red"
-                @click="takeApart(item.uuid)"
-                title="disassemble"
-              >
-                <v-icon>construction</v-icon>
-              </v-btn>
-            </v-flex>
-          </v-layout>
-        </div>
-      </v-form>
+          <div v-for="(item, index) in getAssemblableProducts" :key="index">
+            <v-layout>
+              <v-flex xs3 v-if="getProject.state != 'rooted'">
+                <div class="atom-name">
+                  {{ item.name }}
+                  <br />
+                  items left to assemble: {{ item.quantity_to_assemble }}
+                </div>
+                <v-text-field
+                  @keydown="preventNonNumericalInput($event)"
+                  :rules="[maxQuantity(item.quantity_to_assemble)]"
+                  type="number"
+                  label="how many items per assembly?"
+                  min="0"
+                  max="100"
+                  step="1"
+                  v-model="quantities[index]"
+                  @input="
+                    setValue(item, index);
+                    recomputeQuantities();
+                  "
+                />
+              </v-flex>
+              <v-flex xs2>
+                <img class="atom-image" :src="item.imageUrl" :alt="item.name" />
+              </v-flex>
+              <v-flex xs1>
+                <v-btn
+                  v-if="!item._labels.includes('Atom')"
+                  color="red"
+                  @click="takeApart(item.uuid)"
+                  title="disassemble"
+                >
+                  <v-icon>construction</v-icon>
+                </v-btn>
+              </v-flex>
+            </v-layout>
+          </div>
+        </v-form>
+      </v-container>
     </panel>
   </div>
 </template>

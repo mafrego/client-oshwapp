@@ -1,5 +1,7 @@
 <template>
-  <v-toolbar class="cyan" rounded color="primary">
+  <v-toolbar  dense class="cyan" rounded color="primary">
+    <v-layout row wrap justify-start>
+
     <v-btn v-if="!$store.state.isUserLoggedIn" title="home" class="grey" :to="{name: 'home'}">
       <v-icon>home</v-icon>
     </v-btn>
@@ -44,7 +46,8 @@
 
     <v-spacer></v-spacer>
 
-    <v-toolbar-items v-if="isUserLoggedIn" class="mt-10 mr-4">
+      
+    <v-toolbar-items v-if="isUserLoggedIn" class="mt-2 mr-4">
       <router-link class="home" tag="span" :to="{name: 'userPanel'}">
         <v-icon>sentiment_satisfied</v-icon>
         hi {{user.username}}!
@@ -62,6 +65,7 @@
     <div>
       <v-btn v-if="isUserLoggedIn" class="grey ml-2" text @click="logout">Log Out</v-btn>
     </div>
+    </v-layout>
   </v-toolbar>
 </template>
 
