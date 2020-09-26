@@ -1,14 +1,15 @@
 <template>
   <div>
-    <v-container>
+    <v-container fluid>
       <v-layout row wrap justify-space-between>
-        <v-flex sm7>
+        <v-flex sm5>
           <v-text-field
             v-model="description"
             :rules="[rules.required, rules.isDescription]"
             dense
             solo-inverted
             label="description"
+            hint="description"
           ></v-text-field>
         </v-flex>
         <v-flex sm2>
@@ -18,6 +19,17 @@
             dense
             solo-inverted
             label="version"
+            hint="version"
+          ></v-text-field>
+        </v-flex>
+        <v-flex sm2>
+          <v-text-field
+            v-model="currency"
+            :rules="[rules.required, rules.isCurrency]"
+            dense
+            solo-inverted
+            label="currency"
+            hint="currency"
           ></v-text-field>
         </v-flex>
         <v-flex sm2>
@@ -27,6 +39,7 @@
             dense
             solo-inverted
             label="license"
+            hint="license"
           ></v-text-field>
         </v-flex>
       </v-layout>
@@ -39,6 +52,7 @@
             dense
             solo-inverted
             label="country"
+            hint="country"
           ></v-text-field>
         </v-flex>
         <v-flex v-if="region" sm2>
@@ -48,6 +62,7 @@
             dense
             solo-inverted
             label="region"
+            hint="region"
           ></v-text-field>
         </v-flex>
         <v-flex v-if="link" sm7>
@@ -57,6 +72,7 @@
             dense
             solo-inverted
             label="link"
+            hint="link"
           ></v-text-field>
         </v-flex>
         <v-flex v-if="!region" sm2>
@@ -66,6 +82,7 @@
             dense
             solo-inverted
             label="add region"
+            hint="add region"
           ></v-text-field>
         </v-flex>
         <v-flex v-if="!link" sm7>
@@ -75,6 +92,7 @@
             dense
             solo-inverted
             label="add link"
+            hint="add link"
           ></v-text-field>
         </v-flex>
       </v-layout>
@@ -136,6 +154,11 @@ export default {
         },
         isSemanticVersion: (value) => {
           if (value) return semverRegex().test(value) || "x.y.z";
+          else return true;
+        },
+        isCurrency: (value) => {
+          const pattern = /[A-Z]{3}/;
+          if (value) return pattern.test(value) || "ISO 4217";
           else return true;
         },
         isISO31661: (value) => {
@@ -202,6 +225,14 @@ export default {
         this.$store.commit("updateProjectVersion", value);
       },
     },
+    currency: {
+      get() {
+        return this.$store.state.projects.project.currency;
+      },
+      set(value) {
+        this.$store.commit("updateProjectCurrency", value);
+      },
+    },
     license: {
       get() {
         return this.$store.state.projects.project.license;
@@ -256,6 +287,7 @@ export default {
       const project = {
         description: this.description,
         version: this.version,
+        currency: this.currency,
         license: this.license,
         country: this.country,
       };

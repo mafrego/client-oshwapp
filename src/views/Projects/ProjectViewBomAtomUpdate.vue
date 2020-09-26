@@ -1,5 +1,5 @@
 <template>
-  <v-container grid-list-xs>
+  <v-container fluid>
     <div>
       <v-layout>
         <!-- name, code, quantity, imageUrl cannot be updated -->
@@ -11,7 +11,7 @@
           dense
         ></v-text-field>
       </v-layout>
-      <v-layout justify-space-between>
+      <v-layout wrap justify-space-between>
         <v-flex sm2>
           <v-text-field
             @keydown="preventNonNumericalInput($event)"
@@ -24,10 +24,10 @@
             dense
           ></v-text-field>
         </v-flex>
-        <v-flex sm2>
+        <v-flex sm1>
           <v-text-field
             v-model="quantity"
-            label="quantity"
+            label="qty"
             outlined
             readonly
             dense
@@ -42,13 +42,12 @@
             min="0"
             v-model.number="quantity_to_assemble"
             :rules="[rules.required, rules.isPositiveInt]"
-            label="quantity left"
+            label="qty left"
             outlined
             dense
           ></v-text-field>
         </v-flex>
-        <v-flex sm3>
-            <!-- @keydown="preventNonFloatInput($event)" -->
+        <v-flex sm2>
           <v-text-field
             type="number"
             min="0"
@@ -62,15 +61,24 @@
         </v-flex>
         <v-flex sm2>
           <v-text-field
-            v-model="currency"
-            :rules="[rules.required, rules.isCurrency]"
+            :value="getAtom.totalCost"
+            label="total cost"
+            outlined
+            dense
+            readonly
+          ></v-text-field>
+        </v-flex>
+        <v-flex sm1>
+          <v-text-field
+            :value="getProject.currency"
             label="currency"
             outlined
             dense
+            readonly
           ></v-text-field>
         </v-flex>
       </v-layout>
-      <v-layout justify-space-between>
+      <v-layout wrap justify-space-between>
         <v-flex v-if="GTIN" sm2>
           <v-text-field
             v-model="GTIN"
@@ -144,7 +152,7 @@
           ></v-text-field>
         </v-flex>
       </v-layout>
-      <v-layout justify-space-between>
+      <v-layout wrap justify-space-between>
         <v-flex v-if="link" sm4>
           <v-text-field
             v-model="link"
@@ -182,7 +190,7 @@
           ></v-text-field>
         </v-flex>
       </v-layout>
-      <v-layout justify-space-between>
+      <v-layout wrap justify-space-between>
         <v-flex sm2>
           <v-btn class="yellow" @click="update()" title="save updates">
             <v-icon>save</v-icon>
@@ -286,7 +294,7 @@ export default {
     };
   },
   computed: {
-    ...mapGetters(["getAtom"]),
+    ...mapGetters(["getAtom", "getProject"]),
     description: {
       get() {
         return this.$store.state.projects.atom.description;
@@ -319,14 +327,14 @@ export default {
         this.$store.commit("updateAtomUnitCost", value);
       },
     },
-    currency: {
-      get() {
-        return this.$store.state.projects.atom.currency;
-      },
-      set(value) {
-        this.$store.commit("updateAtomCurrency", value);
-      },
-    },
+    // currency: {
+    //   get() {
+    //     return this.$store.state.projects.atom.currency;
+    //   },
+    //   set(value) {
+    //     this.$store.commit("updateAtomCurrency", value);
+    //   },
+    // },
     link: {
       get() {
         return this.$store.state.projects.atom.link;
@@ -425,8 +433,8 @@ export default {
         this.description &&
         this.moq &&
         // this.quantity_to_assemble &&         //if set to 0 invalid 
-        this.unitCost &&
-        this.currency
+        this.unitCost
+        // this.currency
       ) {
         this.error = null;
       } else {
@@ -440,7 +448,7 @@ export default {
         quantity_to_assemble: this.quantity_to_assemble,
         quantity: this.quantity,
         unitCost: this.unitCost,
-        currency: this.currency,
+        // currency: this.currency,
       }
       // not required properties: GTIN, SKU, vendorUrl, leadTime, link, notes
       if (this.GTIN) {

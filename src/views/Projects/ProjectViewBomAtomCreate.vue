@@ -57,13 +57,13 @@
                 dense
               ></v-text-field>
             </v-flex>
-            <v-flex sm3>
+            <v-flex sm1>
               <v-text-field
-                label="currency"
-                :rules="[rules.required, rules.isCurrency]"
-                v-model="atom.currency"
+                :value="getProject.currency"
                 solo-inverted
                 dense
+                readonly
+                hint="currency"
               ></v-text-field>
             </v-flex>
           </v-layout>
@@ -247,8 +247,8 @@ export default {
         this.atom.description &&
         this.atom.moq &&
         this.atom.quantity &&
-        this.atom.unitCost &&
-        this.atom.currency
+        this.atom.unitCost
+        // this.atom.currency
       ) {
         this.error = null;
       } else {
@@ -276,7 +276,7 @@ export default {
         this.atom.itemNumber =
           this.getBom[this.getBom.length - 1].itemNumber + 1;
       }
-      // add totalCost
+      // TODO try to put this code in a computed() and add the result on a readonly text-field
       if (this.atom.moq == 1) {
         this.atom.totalCost = this.atom.unitCost * this.atom.quantity;
       } else {
@@ -287,6 +287,8 @@ export default {
             Math.ceil(this.atom.quantity / this.atom.moq) * this.atom.unitCost;
         }
       }
+      // add currency
+      this.atom.currency = this.getProject.currency
       try {
         this.isLoading = true;
         const response = await AtomService.addAtomToBom(

@@ -271,6 +271,9 @@ const mutations = {
     updateProjectVersion: (state, version) => {
         state.project.version = version
     },
+    updateProjectCurrency: (state, currency) => {
+        state.project.currency = currency
+    },
     updateProjectLicense: (state, license) => {
         state.project.license = license
     },

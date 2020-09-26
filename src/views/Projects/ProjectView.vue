@@ -35,7 +35,11 @@
       </div>
       <div>
         <v-btn
-          v-if="getProject.state === 'assembling' || getProject.state === 'rooted' || getProject.state === 'released'"
+          v-if="
+            getProject.state === 'assembling' ||
+            getProject.state === 'rooted' ||
+            getProject.state === 'released'
+          "
           @click="toggleComponentUploadImages"
           class="green ml-2 mt-1"
           title="select images to upload"
@@ -46,7 +50,11 @@
       </div>
       <div>
         <v-btn
-          v-if="getProject.state === 'assembling' || getProject.state === 'rooted' || getProject.state === 'released'"
+          v-if="
+            getProject.state === 'assembling' ||
+            getProject.state === 'rooted' ||
+            getProject.state === 'released'
+          "
           @click="toggleComponentAllProducts"
           class="blue ml-2 mt-1"
           title="all products"
@@ -57,7 +65,9 @@
       </div>
       <div>
         <v-btn
-          v-if="getProject.state === 'assembling' || getProject.state === 'rooted'"
+          v-if="
+            getProject.state === 'assembling' || getProject.state === 'rooted'
+          "
           @click="toggleComponentAssembleCopy"
           class="green ml-2 mt-1"
           title="assemble"
@@ -91,13 +101,20 @@
 
     <v-layout>
       <v-flex sm7>
-        <div class="project-state">{{getProject.state}}:</div>
-        <div class="project-name">{{getProject.name}} {{getProject.version}}</div>
-        <div class="project-description">{{getProject.description}}</div>
-        <div class>{{getProject.license}} {{getProject.country}} {{getProject.region}}</div>
+        <div class="project-state">{{ getProject.state }}:</div>
+        <div class="project-name">
+          {{ getProject.name }} {{ getProject.version }}
+        </div>
+        <div class="project-description">{{ getProject.description }}</div>
+        <div class>
+          {{ getProject.license }}
+          <span v-if="!getProject.region">{{ getProject.country }}</span>
+          <span v-if="getProject.region">{{ getProject.region }}</span>
+        </div>
         <div v-if="getProject.link" class="project-link">
           <a :href="getProject.link" target="_blank">link</a>
         </div>
+        <div>{{ getProject.currency }}</div>
         <!-- <div class="project-datetime">date-created: {{getProject.dateTime}}</div> -->
       </v-flex>
       <v-flex class="image" sm4>
