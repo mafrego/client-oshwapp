@@ -1,7 +1,7 @@
 <template>
   <div>
     <panel title="atom data">
-      <v-container>
+      <v-container fluid>
         <v-form ref="form">
           <v-layout row justify-space-between>
             <v-flex sm3>
@@ -11,6 +11,7 @@
                 v-model="atom.name"
                 solo-inverted
                 dense
+                hint="name"
               ></v-text-field>
             </v-flex>
             <v-flex sm8>
@@ -20,6 +21,7 @@
                 v-model="atom.description"
                 solo-inverted
                 dense
+                hint="description"
               ></v-text-field>
             </v-flex>
           </v-layout>
@@ -34,6 +36,7 @@
                 v-model.number="atom.moq"
                 solo-inverted
                 dense
+                hint="m.o.q"
               ></v-text-field>
             </v-flex>
             <v-flex sm2>
@@ -46,15 +49,30 @@
                 v-model.number="atom.quantity"
                 solo-inverted
                 dense
+                hint="quantity"
               ></v-text-field>
             </v-flex>
-            <v-flex sm3>
+            <v-flex sm2>
               <v-text-field
                 label="unit cost"
                 :rules="[rules.required, rules.isPositiveFloat]"
                 v-model="atom.unitCost"
                 solo-inverted
                 dense
+                hint="unit cost"
+              ></v-text-field>
+            </v-flex>
+            <v-flex sm2>
+              <v-text-field
+                @keypress="calculateTotalCost()"
+                @mouseover="calculateTotalCost()"
+                @keyup="calculateTotalCost()"
+                :value="atom.totalCost"
+                label="total cost"
+                solo-inverted
+                dense
+                readonly
+                hint="total cost"
               ></v-text-field>
             </v-flex>
             <v-flex sm1>
@@ -75,6 +93,7 @@
                 v-model="atom.GTIN"
                 solo-inverted
                 dense
+                hint="GTIN"
               ></v-text-field>
             </v-flex>
             <v-flex sm2>
@@ -84,6 +103,7 @@
                 v-model="atom.SKU"
                 solo-inverted
                 dense
+                hint="SKU"
               ></v-text-field>
             </v-flex>
             <v-flex sm5>
@@ -93,6 +113,7 @@
                 v-model="atom.vendorUrl"
                 solo-inverted
                 dense
+                hint="vendor URL"
               ></v-text-field>
             </v-flex>
             <v-flex sm2>
@@ -102,6 +123,7 @@
                 v-model="atom.leadTime"
                 solo-inverted
                 dense
+                hint="lead time"
               ></v-text-field>
             </v-flex>
           </v-layout>
@@ -113,6 +135,7 @@
                 v-model="atom.link"
                 solo-inverted
                 dense
+                hint="link"
               ></v-text-field>
             </v-flex>
             <v-flex sm7>
@@ -122,6 +145,7 @@
                 v-model="atom.notes"
                 solo-inverted
                 dense
+                hint="notes"
               ></v-text-field>
             </v-flex>
           </v-layout>
@@ -161,9 +185,9 @@ export default {
       atom: {
         itemNumber: null,
         quantity_to_assemble: null,
-        totalCost: null,
         moq: null,
         unitCost: null,
+        totalCost: null,
         quantity: null,
       },
       message: "",
@@ -172,10 +196,6 @@ export default {
       rules: {
         required: (value) => !!value || "Required.",
         // counter: (value) => value.length >= 8 || "Min 8 characters",
-        // email: (value) => {
-        //   const pattern = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
-        //   return pattern.test(value) || "Invalid e-mail.";
-        // },
         uniqueName: (value) =>
           !this.getAtomNames.includes(value) || "name already taken!",
         isDescription: (value) => {
@@ -239,6 +259,18 @@ export default {
         event.preventDefault();
       }
     },
+    calculateTotalCost(){
+      if (this.atom.moq == 1) {
+        this.atom.totalCost = this.atom.unitCost * this.atom.quantity;
+      } else {
+        if (this.atom.moq >= this.atom.quantity) {
+          this.atom.totalCost = this.atom.unitCost;
+        } else {
+          this.atom.totalCost =
+            Math.ceil(this.atom.quantity / this.atom.moq) * this.atom.unitCost;
+        }
+      }
+    },
     async create() {
       this.message = "";
       this.error = "";
@@ -248,7 +280,6 @@ export default {
         this.atom.moq &&
         this.atom.quantity &&
         this.atom.unitCost
-        // this.atom.currency
       ) {
         this.error = null;
       } else {
@@ -276,19 +307,10 @@ export default {
         this.atom.itemNumber =
           this.getBom[this.getBom.length - 1].itemNumber + 1;
       }
-      // TODO try to put this code in a computed() and add the result on a readonly text-field
-      if (this.atom.moq == 1) {
-        this.atom.totalCost = this.atom.unitCost * this.atom.quantity;
-      } else {
-        if (this.atom.moq >= this.atom.quantity) {
-          this.atom.totalCost = this.atom.unitCost;
-        } else {
-          this.atom.totalCost =
-            Math.ceil(this.atom.quantity / this.atom.moq) * this.atom.unitCost;
-        }
-      }
       // add currency
       this.atom.currency = this.getProject.currency
+      // add total cost
+      this.calculateTotalCost()
       try {
         this.isLoading = true;
         const response = await AtomService.addAtomToBom(
