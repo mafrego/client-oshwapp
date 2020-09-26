@@ -1,7 +1,5 @@
 <template>
-  <div class="container">
-    <v-layout column>
-      <v-flex xs6>
+    <v-container fluid ma-0 pa-0 class="container">
         <panel title="Projects">
           <v-toolbar-items slot="action">
             <div>
@@ -57,9 +55,7 @@
             </v-layout>
           </div>
         </panel>
-      </v-flex>
-    </v-layout>
-  </div>
+    </v-container>
 </template>
 
 <script>

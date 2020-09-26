@@ -1,21 +1,21 @@
 <template>
-  <div>
     <panel title="Project Metadata">
-      <v-container>
+      <v-container fluid ma-0 pa-2>
         <v-layout row wrap justify-space-between>
-          <v-flex sm3>
+          <v-flex sm2>
             <v-text-field
               label="name"
+              hint="name"
               :rules="[rules.required, rules.uniqueName, rules.isAlphanumeric]"
               v-model="project.name"
               solo-inverted
               dense
-              persistent-hint
             ></v-text-field>
           </v-flex>
           <v-flex sm5>
             <v-text-field
               label="description"
+              hint="description"
               :rules="[rules.required, rules.isDescription]"
               v-model="project.description"
               solo-inverted
@@ -25,8 +25,19 @@
           <v-flex sm2>
             <v-text-field
               label="version"
+              hint="version"
               :rules="[rules.required, rules.isSemanticVersion]"
               v-model="project.version"
+              solo-inverted
+              dense
+            ></v-text-field>
+          </v-flex>
+          <v-flex sm2>
+            <v-text-field
+              label="currency"
+              hint="currency"
+              :rules="[rules.required, rules.isCurrency]"
+              v-model="project.currency"
               solo-inverted
               dense
             ></v-text-field>
@@ -36,6 +47,7 @@
           <v-flex sm2>
             <v-text-field
               label="license"
+              hint="license"
               :rules="[rules.required, rules.isAlphanumeric]"
               v-model="project.license"
               solo-inverted
@@ -45,6 +57,7 @@
           <v-flex sm2>
             <v-text-field
               label="country"
+              hint="country"
               :rules="[rules.required, rules.isISO31661]"
               v-model="project.country"
               solo-inverted
@@ -54,15 +67,17 @@
           <v-flex sm2>
             <v-text-field
               label="region"
+              hint="region"
               :rules="[rules.isISO31662]"
               v-model="project.region"
               solo-inverted
               dense
             ></v-text-field>
           </v-flex>
-          <v-flex sm4>
+          <v-flex sm5>
             <v-text-field
               label="link"
+              hint="link"
               :rules="[rules.isHTTP]"
               v-model="project.link"
               solo-inverted
@@ -84,7 +99,6 @@
     ></v-progress-circular>
       </v-container>
     </panel>
-  </div>
 </template>
 
 <script>
@@ -101,6 +115,7 @@ export default {
         name: null,
         description: null,
         version: null,
+        currency: null,
         license: null,
         country: null,
         region: null,
@@ -137,6 +152,11 @@ export default {
         },
         isSemanticVersion: (value) => {
           if (value) return semverRegex().test(value) || "x.y.z";
+          else return true;
+        },
+        isCurrency: (value) => {
+          const pattern = /[A-Z]{3}/;
+          if (value) return pattern.test(value) || "ISO 4217";
           else return true;
         },
         isHTTP: (value) => {
@@ -193,6 +213,7 @@ export default {
         this.project.name &&
         this.project.description &&
         this.project.version &&
+        this.project.currency &&
         this.project.license &&
         this.project.country
       ) {
