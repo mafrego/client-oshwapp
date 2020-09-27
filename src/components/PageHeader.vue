@@ -6,7 +6,7 @@
       <v-icon>home</v-icon>
     </v-btn>
 
-    <v-btn title="search fully assembled" :to="{name: 'products'}" class="grey ml-2">
+    <v-btn title="search assembled products" :to="{name: 'products'}" class="grey ml-2">
       <v-icon>zoom_out</v-icon>
     </v-btn>
 
@@ -14,14 +14,14 @@
       <v-icon>zoom_in</v-icon>
     </v-btn>
 
-    <v-btn
+    <!-- <v-btn
       v-if="!$store.state.isUserLoggedIn"
       title="validate bom.csv"
       :to="{name: 'validate'}"
       class="grey ml-2"
     >
       <v-icon>done</v-icon>
-    </v-btn>
+    </v-btn> -->
 
     <v-btn v-if="isUserLoggedIn" :to="{name: 'projects'}" title="projects" class="grey ml-2">
       <v-icon>settings</v-icon>
