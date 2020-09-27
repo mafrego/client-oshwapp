@@ -3,7 +3,7 @@
     <v-toolbar-items slot="action">
       <div>
         <v-btn
-          v-if="getBom.length > 0 && getBom.length == getAllProducts.length"
+          v-if="getBom.length > 0 && !getAssemblies.length"
           @click="deleteBOM"
           class="red ml-2 mt-1"
           title="delete all atoms"
@@ -161,7 +161,7 @@ export default {
     };
   },
   computed: {
-    ...mapGetters(["getBom", "getProject", "getAllProducts"]),
+    ...mapGetters(["getBom", "getProject", "getAssemblies"]),
   },
   methods: {
     ...mapActions(["fetchBom", "deleteBom", "deleteAtom", "fetchAllProducts"]),
