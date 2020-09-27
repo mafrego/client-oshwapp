@@ -107,41 +107,77 @@
           </div>
 
           <div v-for="(item, index) in getAssemblableProducts" :key="index">
-            <v-layout>
-              <v-flex xs3 v-if="getProject.state != 'rooted'">
-                <div class="atom-name">
-                  {{ item.name }}
-                  <br />
-                  items left to assemble: {{ item.quantity_to_assemble }}
-                </div>
+            <v-layout row justify-start v-if="getProject.state != 'rooted'">
+              <v-flex xs3 >
+                <span v-if="item._labels.includes('Atom')" class="font-weight-bold item-name">{{item.name}} #{{item.itemNumber}}</span>
+                <span v-else class="font-weight-bold item-name">{{item.name}} @{{item.itemNumber}}</span>
+                <br>
+                  left to assemble: {{ item.quantity_to_assemble }}
                 <v-text-field
                   @keydown="preventNonNumericalInput($event)"
                   :rules="[maxQuantity(item.quantity_to_assemble)]"
                   type="number"
-                  label="how many items per assembly?"
+                  label="qty per assembly"
                   min="0"
                   max="100"
                   step="1"
                   v-model="quantities[index]"
                   @input="
                     setValue(item, index);
-                    recomputeQuantities();
-                  "
+                    recomputeQuantities();"
+                  solo-inverted
+                  dense
+                  hint="qty per assembly"
                 />
               </v-flex>
-              <v-flex xs2>
-                <img class="atom-image" :src="item.imageUrl" :alt="item.name" />
-              </v-flex>
-              <v-flex xs1>
+              <v-flex sm1>
                 <v-btn
                   v-if="!item._labels.includes('Atom')"
-                  color="red"
+                  class="red ml-1"
                   @click="takeApart(item.uuid)"
                   title="disassemble"
                 >
                   <v-icon>construction</v-icon>
                 </v-btn>
               </v-flex>
+              <v-flex class="image" sm2>
+                <img class="atom-image" :src="item.imageUrl" :alt="item.name"
+                @mouseover="hover = item.uuid"
+                @mouseleave="hover = null"
+                @click="fix(item.uuid)"
+                 />
+              </v-flex>
+                <v-flex sm6>
+                  
+              <v-card
+                v-if="hover === item.uuid || fixed === item.uuid"
+                width="100%"
+                outlined
+                raised
+                dark
+                elevation-24
+                class="card"
+              >
+              <v-card-actions>
+                <v-spacer></v-spacer>
+                  <v-btn icon class="grey" x-small @click="fix(null)" title="close">
+                    <v-icon>close</v-icon>
+                  </v-btn>
+              </v-card-actions>
+                <ul>
+                  <li>{{item.description}}</li>
+                  <li>{{item.unitCost}} {{getProject.currency}}</li>
+                  <li v-if="item.GTIN">GTIN: {{item.GTIN}}</li>
+                  <li v-if="item.SKU">SKU: {{item.SKU}}</li>
+                  <li v-if="item.vendorUrl">
+                    <a :href="item.vendorUrl" target="_blank">vendor</a>
+                  </li>
+                  <li v-if="item.link">
+                    <a :href="item.link" target="_blank">link</a>
+                  </li>
+                </ul>
+              </v-card>
+                </v-flex>
             </v-layout>
           </div>
         </v-form>
@@ -169,6 +205,8 @@ export default {
       quantities: [],
       msg: null,
       overlimits: [], //used for storing errror messages
+      fixed: null,
+      hover: null,
       rules: {
         required: (value) => !!value || "Required.",
         natural: (value) => {
@@ -185,7 +223,7 @@ export default {
           if (value)
             return (
               pattern.test(value) ||
-              "Only alphanumeric, dots, hyphens, underscore chars"
+              "only alphanumeric . - _"
             );
           else return true;
         },
@@ -240,6 +278,9 @@ export default {
       "disassemble",
       "updateProjectState",
     ]),
+    fix(uuid) {
+      this.fixed = uuid;
+    },
     // this function prevents Firefox from allowing chars other than digits
     preventNonNumericalInput(event) {
       const char = String.fromCharCode(event.keyCode);
@@ -298,6 +339,7 @@ export default {
         this.msg = "Please select parts to assemble!";
         return;
       }
+      // TODO add itemNumber to assembly
       try {
         const ret = await this.assembleCopy(this.assembly);
         if (ret == 201) {
@@ -341,7 +383,7 @@ export default {
             const total =
               el.quantity_single * this.assembly.quantity_to_assemble;
             if (total > el.quantity_to_assemble) {
-              this.overlimits.push(`${el.name} has not enough pieces left`);
+              this.overlimits.push(`${el.name} not enough!`);
             }
             el.quantity_total =
               el.quantity_single * this.assembly.quantity_to_assemble;
@@ -358,12 +400,25 @@ export default {
 .danger-alert {
   color: red;
 }
+.item-name {
+  font-size: 150%;
+  overflow-wrap: break-word;
+}
+.image {
+  display: flex;
+  justify-content: center;
+  /* align-items: center; */
+}
 .atom-image {
   width: 100px;
   height: 100px;
+  cursor: pointer;
 }
 .openproject {
   width: 100px;
   height: 100px;
+}
+:any-link {
+  text-decoration: none;
 }
 </style>
