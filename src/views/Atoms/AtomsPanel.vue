@@ -10,7 +10,8 @@
                 @mouseover="hover = atom.uuid"
                 @mouseleave="hover = null"
                 @click="fix(atom.uuid)"
-              >{{atom.name}}</div>
+              >{{atom.name}}
+              </div>
 
               <v-card
                 v-if="hover === atom.uuid || fixed === atom.uuid"
