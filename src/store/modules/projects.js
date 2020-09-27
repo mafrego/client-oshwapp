@@ -315,6 +315,7 @@ const mutations = {
         state.assemblableProducts = []
     },
     setProducts: (state, products) => {
+        products.sort((a, b) => a.itemNumber > b.itemNumber ? 1 : b.itemNumber > a.itemNumber ? -1 : 0)
         state.products = products
     },
     addProduct: (state, product) => {
@@ -378,6 +379,7 @@ const mutations = {
         state.atom.notes = notes
     },
     setAssemblableProducts: (state, products) => {
+        products.sort((a, b) => a.itemNumber > b.itemNumber ? 1 : b.itemNumber > a.itemNumber ? -1 : 0)
         state.assemblableProducts = products
     },
     addAssemblableProduct: (state, product) => {
