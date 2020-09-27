@@ -108,11 +108,17 @@
 
           <div v-for="(item, index) in getAssemblableProducts" :key="index">
             <v-layout row justify-start v-if="getProject.state != 'rooted'">
-              <v-flex xs3 >
-                <span v-if="item._labels.includes('Atom')" class="font-weight-bold item-name">{{item.name}} #{{item.itemNumber}}</span>
-                <span v-else class="font-weight-bold item-name">{{item.name}} @{{item.itemNumber}}</span>
-                <br>
-                  left to assemble: {{ item.quantity_to_assemble }}
+              <v-flex xs3>
+                <span
+                  v-if="item._labels.includes('Atom')"
+                  class="font-weight-bold item-name"
+                  >{{ item.name }} #{{ item.itemNumber }}</span
+                >
+                <span v-else class="font-weight-bold item-name"
+                  >{{ item.name }} @{{ item.itemNumber }}</span
+                >
+                <br />
+                left to assemble: {{ item.quantity_to_assemble }}
                 <v-text-field
                   @keydown="preventNonNumericalInput($event)"
                   :rules="[maxQuantity(item.quantity_to_assemble)]"
@@ -124,7 +130,8 @@
                   v-model="quantities[index]"
                   @input="
                     setValue(item, index);
-                    recomputeQuantities();"
+                    recomputeQuantities();
+                  "
                   solo-inverted
                   dense
                   hint="qty per assembly"
@@ -141,43 +148,51 @@
                 </v-btn>
               </v-flex>
               <v-flex class="image" sm2>
-                <img class="atom-image" :src="item.imageUrl" :alt="item.name"
-                @mouseover="hover = item.uuid"
-                @mouseleave="hover = null"
-                @click="fix(item.uuid)"
-                 />
+                <img
+                  class="atom-image"
+                  :src="item.imageUrl"
+                  :alt="item.name"
+                  @mouseover="hover = item.uuid"
+                  @mouseleave="hover = null"
+                  @click="fix(item.uuid)"
+                />
               </v-flex>
-                <v-flex sm6>
-                  
-              <v-card
-                v-if="hover === item.uuid || fixed === item.uuid"
-                width="100%"
-                outlined
-                raised
-                dark
-                elevation-24
-                class="card"
-              >
-              <v-card-actions>
-                <v-spacer></v-spacer>
-                  <v-btn icon class="grey" x-small @click="fix(null)" title="close">
-                    <v-icon>close</v-icon>
-                  </v-btn>
-              </v-card-actions>
-                <ul>
-                  <li>{{item.description}}</li>
-                  <li>{{item.unitCost}} {{getProject.currency}}</li>
-                  <li v-if="item.GTIN">GTIN: {{item.GTIN}}</li>
-                  <li v-if="item.SKU">SKU: {{item.SKU}}</li>
-                  <li v-if="item.vendorUrl">
-                    <a :href="item.vendorUrl" target="_blank">vendor</a>
-                  </li>
-                  <li v-if="item.link">
-                    <a :href="item.link" target="_blank">link</a>
-                  </li>
-                </ul>
-              </v-card>
-                </v-flex>
+              <v-flex sm6>
+                <v-card
+                  v-if="hover === item.uuid || fixed === item.uuid"
+                  width="100%"
+                  outlined
+                  raised
+                  dark
+                  elevation-24
+                  class="card"
+                >
+                  <v-card-actions>
+                    <v-spacer></v-spacer>
+                    <v-btn
+                      icon
+                      class="grey"
+                      x-small
+                      @click="fix(null)"
+                      title="close"
+                    >
+                      <v-icon>close</v-icon>
+                    </v-btn>
+                  </v-card-actions>
+                  <ul>
+                    <li>{{ item.description }}</li>
+                    <li>{{ item.unitCost }} {{ getProject.currency }}</li>
+                    <li v-if="item.GTIN">GTIN: {{ item.GTIN }}</li>
+                    <li v-if="item.SKU">SKU: {{ item.SKU }}</li>
+                    <li v-if="item.vendorUrl">
+                      <a :href="item.vendorUrl" target="_blank">vendor</a>
+                    </li>
+                    <li v-if="item.link">
+                      <a :href="item.link" target="_blank">link</a>
+                    </li>
+                  </ul>
+                </v-card>
+              </v-flex>
             </v-layout>
           </div>
         </v-form>
@@ -220,11 +235,7 @@ export default {
         },
         isDescription: (value) => {
           const pattern = /^[^,;]*$/;
-          if (value)
-            return (
-              pattern.test(value) ||
-              "only alphanumeric . - _"
-            );
+          if (value) return pattern.test(value) || "only alphanumeric . - _";
           else return true;
         },
         isAlphanumeric: (value) => {
