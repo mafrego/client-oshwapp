@@ -19,6 +19,10 @@ export default {
     return Api().get(`productsbyproject/${projectId}`)
   },
 
+  getAssemblies(projectId){
+    return Api().get(`assembliesbyproject/${projectId}`)
+  },
+
   getAssemblableProducts(projectId){
     return Api().get(`getassemblables/${projectId}`)
   },

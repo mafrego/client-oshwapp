@@ -9,6 +9,7 @@ const state = () => ({
     bom: [],
     atom: null,
     products: [],
+    assemblies: [],
     productNames: [],
     assemblableProducts: [],
     root: null,
@@ -31,6 +32,8 @@ const getters = {
     getAtomNames: state => state.bom.map(atom => atom.name),
     getAllProducts: state => state.products,
     getAllProductNames: state => state.products.map(product => product.name),
+    getAssemblies: state => state.assemblies,
+    getAssemblyCounter: state => Math.max(...state.assemblies.map(assembly => assembly.itemNumber), 0),
     getAssemblableProducts: state => state.assemblableProducts,
     getAssembly: state => state.assembly,
     getLoading: state => state.loading,
@@ -146,7 +149,7 @@ const actions = {
             const response = await AtomService.delete(atomID)
             commit('deleteAtom', response.data)
             if (response && state.bom.length < 1) {
-    // TODO try to use: dispatch('updateProjectState', { state: 'created'})
+                // TODO try to use: dispatch('updateProjectState', { state: 'created'})
                 const ret = await ProjectService.updateProjectState({ state: 'created' }, state.project.uuid)
                 commit('updateState', ret.data.project.state)
             }
@@ -161,6 +164,17 @@ const actions = {
             commit('setLoading', true)
             const response = await ProjectService.getAllProducts(state.project.uuid)
             commit('setProducts', response.data)
+        } catch (error) {
+            commit('setError', error)
+        } finally {
+            commit('setLoading', false)
+        }
+    },
+    async fetchAssemblies({ commit, state }) {
+        try {
+            commit('setLoading', true)
+            const response = await ProjectService.getAssemblies(state.project.uuid)
+            commit('setAssemblies', response.data)
         } catch (error) {
             commit('setError', error)
         } finally {
@@ -199,7 +213,7 @@ const actions = {
             commit('setLoading', false)
         }
     },
-    // TODO refactor using dispatch
+    // TODO move async function into Assemble Component
     async assembleCopy({ state, commit }, assembly) {
         try {
             commit('setLoading', true)
@@ -214,8 +228,10 @@ const actions = {
                 commit('updateState', ret.data.project.state)
             }
             if (response.status === 201) {
-                const ret = await ProjectService.getAllProducts(state.project.uuid)
-                commit('setProducts', ret.data)
+                // const ret = await ProjectService.getAllProducts(state.project.uuid)
+                // commit('setProducts', ret.data)
+                const ret = await ProjectService.getAssemblies(state.project.uuid)
+                commit('setAssemblies', ret.data)
                 // update BOM as well because of quantity_to_assemble
                 const ret0 = await ProjectService.getBom(state.project.uuid)
                 commit('setBom', ret0.data)
@@ -296,6 +312,7 @@ const mutations = {
     },
     deleteAssembly: (state, assemblyID) => {
         state.products = state.products.filter(product => product.uuid != assemblyID)
+        state.assemblies = state.assemblies.filter(assembly => assembly.uuid != assemblyID)
     },
     addAtomToBom: (state, atom) => {
         state.bom.push(atom)     // add at the end of array
@@ -321,6 +338,10 @@ const mutations = {
     addProduct: (state, product) => {
         state.products.push(product)
     },
+    setAssemblies: (state, assemblies) => {
+        assemblies.sort((a, b) => a.itemNumber > b.itemNumber ? 1 : b.itemNumber > a.itemNumber ? -1 : 0)
+        state.assemblies = assemblies
+    },
     setAtom: (state, atom) => {
         state.atom = atom
     },
@@ -332,6 +353,7 @@ const mutations = {
     deleteAtom: (state, atom) => {
         state.bom = state.bom.filter(item => { return item.uuid != atom.uuid })
         state.products = state.products.filter(item => { return item.uuid != atom.uuid })
+        state.assemblies = state.assemblies.filter(item => { return item.uuid != atom.uuid })
         state.assemblableProducts = state.assemblableProducts.filter(item => { return item.uuid != atom.uuid })
         state.productNames = state.productNames.filter(item => { return item != atom.name })
     },
