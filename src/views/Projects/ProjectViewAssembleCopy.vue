@@ -103,7 +103,7 @@
           <span>quantities: {{ quantities }}</span>
           <br />
           <span>overlimits: {{ this.overlimits }}</span>
-          <br />-->
+          <br /> -->
           </div>
 
           <div v-for="(item, index) in getAssemblableProducts" :key="index">
@@ -203,7 +203,7 @@
 
 <script>
 import { mapGetters, mapActions, mapState } from "vuex";
-1;
+
 export default {
   name: "ProjectViewAssembleCopy",
   data() {
@@ -271,6 +271,7 @@ export default {
       "getLoading",
       "getError",
       "getAllProductNames",
+      "getAssemblyCounter"
     ]),
     // TODO find substitute with getters and remove states
     ...mapState({
@@ -351,8 +352,10 @@ export default {
         return;
       }
       // TODO add itemNumber to assembly
+      this.assembly.itemNumber = this.getAssemblyCounter + 1
       try {
         const ret = await this.assembleCopy(this.assembly);
+        console.log(ret)
         if (ret == 201) {
           // check if following line is necessary
           // this.addProductName(this.assembly.name);
