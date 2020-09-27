@@ -3,6 +3,16 @@
     <v-toolbar-items slot="action">
       <div>
         <v-btn
+          @click="toggleComponentProjectUpdate"
+          class="yellow ml-2 mt-1"
+          title="update project metadata"
+          light
+        >
+          <v-icon>update</v-icon>
+        </v-btn>
+      </div>
+      <div>
+        <v-btn
           @click="toggleComponentValidateBOM"
           class="grey ml-2 mt-1"
           title="validate BOM"
@@ -14,23 +24,23 @@
       <div>
         <v-btn
           v-if="getProject.state != 'released'"
-          @click="toggleComponentBOM"
-          class="blue ml-2 mt-1"
-          title="BOM"
+          @click="toggleComponentUpload"
+          class="green ml-2 mt-1"
+          title="select yourproject-bom.csv to upload"
           light
         >
-          <v-icon>list</v-icon>
+          <v-icon>attach_file</v-icon>
         </v-btn>
       </div>
       <div>
         <v-btn
           v-if="getProject.state != 'released'"
-          @click="toggleComponentUpload"
-          class="green ml-2 mt-1"
-          title="select bom.csv to upload"
+          @click="toggleComponentBOM"
+          class="yellow ml-2 mt-1"
+          title="update BOM"
           light
         >
-          <v-icon>attach_file</v-icon>
+          <v-icon>list</v-icon>
         </v-btn>
       </div>
       <div>
@@ -48,7 +58,7 @@
           <v-icon>add_a_photo</v-icon>
         </v-btn>
       </div>
-      <div>
+      <!-- <div>
         <v-btn
           v-if="
             getProject.state === 'assembling' ||
@@ -62,7 +72,7 @@
         >
           <v-icon>account_tree</v-icon>
         </v-btn>
-      </div>
+      </div> -->
       <div>
         <v-btn
           v-if="
@@ -78,12 +88,13 @@
       </div>
       <div>
         <v-btn
-          @click="toggleComponentProjectUpdate"
+          v-if="getAssemblableProducts.length != 0"
+          @click="toggleComponentAssemblies"
           class="yellow ml-2 mt-1"
-          title="update project metadata"
+          title="update assembly metadata"
           light
         >
-          <v-icon>update</v-icon>
+          <v-icon>account_tree</v-icon>
         </v-btn>
       </div>
       <div>
@@ -135,8 +146,9 @@
     <project-view-upload-file v-if="showComponentUpload" />
     <project-view-upload-images v-if="showComponentUploadImages" />
     <project-view-bom v-if="showComponentBOM" />
-    <project-view-all-products v-if="showComponentAllProducts" />
+    <!-- <project-view-all-products v-if="showComponentAllProducts" /> -->
     <project-view-assemble-copy v-if="showComponentAssembleCopy" />
+    <project-view-assemblies v-if="showComponentAssemblies" />
   </panel>
 </template>
 
@@ -146,7 +158,8 @@ import ProjectViewUpdate from "./ProjectViewUpdate";
 import ProjectViewUploadFile from "./ProjectViewUploadFile";
 import ProjectViewUploadImages from "./ProjectViewUploadImages";
 import ProjectViewBom from "./ProjectViewBom";
-import ProjectViewAllProducts from "./ProjectViewAllProducts";
+// import ProjectViewAllProducts from "./ProjectViewAllProducts";
+import ProjectViewAssemblies from "./ProjectViewAssemblies";
 import ProjectViewAssembleCopy from "./ProjectViewAssembleCopy";
 import { mapGetters, mapMutations, mapActions } from "vuex";
 
@@ -157,7 +170,8 @@ export default {
     ProjectViewUploadFile,
     ProjectViewUploadImages,
     ProjectViewBom,
-    ProjectViewAllProducts,
+    // ProjectViewAllProducts,
+    ProjectViewAssemblies,
     ProjectViewAssembleCopy,
   },
   data() {
@@ -167,7 +181,8 @@ export default {
       showComponentUpload: false,
       showComponentUploadImages: false,
       showComponentBOM: false,
-      showComponentAllProducts: false,
+      // showComponentAllProducts: false,
+      showComponentAssemblies: false,
       showComponentAssembleCopy: false,
     };
   },
@@ -186,6 +201,7 @@ export default {
       "fetchBom",
       "fetchAssemblableProducts",
       "fetchAllProducts",
+      "fetchAssemblies",
     ]),
     ...mapMutations(["setProject"]),
     del() {
@@ -215,8 +231,11 @@ export default {
     toggleComponentBOM() {
       this.showComponentBOM = !this.showComponentBOM;
     },
-    toggleComponentAllProducts() {
-      this.showComponentAllProducts = !this.showComponentAllProducts;
+    // toggleComponentAllProducts() {
+    //   this.showComponentAllProducts = !this.showComponentAllProducts;
+    // },
+    toggleComponentAssemblies() {
+      this.showComponentAssemblies = !this.showComponentAssemblies;
     },
     toggleComponentAssembleCopy() {
       this.showComponentAssembleCopy = !this.showComponentAssembleCopy;
@@ -229,8 +248,9 @@ export default {
     );
     this.setProject(project);
     this.fetchBom();
+    this.fetchAssemblies();
     this.fetchAssemblableProducts();
-    this.fetchAllProducts();
+    // this.fetchAllProducts();
   },
 };
 </script>
