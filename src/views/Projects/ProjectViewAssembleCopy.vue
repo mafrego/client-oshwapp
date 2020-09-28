@@ -116,10 +116,10 @@
                 </div>
               </v-flex>
             </v-layout>
-            <br />
-          <span>assembly.parts: {{ assembly.parts }}</span>
-          <br />
-          <!-- <span>quantities: {{ quantities }}</span>
+            <!-- <br />
+            <span>assembly.parts: {{ assembly.parts }}</span>
+            <br /> -->
+            <!-- <span>quantities: {{ quantities }}</span>
           <br />
           <span>overlimits: {{ this.overlimits }}</span>
           <br /> -->
@@ -200,7 +200,10 @@
                   </v-card-actions>
                   <ul>
                     <li>{{ item.description }}</li>
-                    <li>{{ item.unitCost }} {{ getProject.currency }}</li>
+                    <li>
+                      {{ item.pseudoUnitCost.toFixed(2) }}
+                      {{ getProject.currency }}
+                    </li>
                     <li v-if="item.GTIN">GTIN: {{ item.GTIN }}</li>
                     <li v-if="item.SKU">SKU: {{ item.SKU }}</li>
                     <li v-if="item.vendorUrl">
@@ -209,7 +212,7 @@
                     <li v-if="item.link">
                       <a :href="item.link" target="_blank">link</a>
                     </li>
-                    <li v-if="item.instruction">{{ item.instruction}}</li>
+                    <li v-if="item.instruction">{{ item.instruction }}</li>
                   </ul>
                 </v-card>
               </v-flex>
@@ -258,7 +261,10 @@ export default {
         },
         isDescription: (value) => {
           const pattern = /^[^,;]*$/;
-          if (value) return pattern.test(value) || "any char except for commas and semicolons";
+          if (value)
+            return (
+              pattern.test(value) || "any char except for commas and semicolons"
+            );
           else return true;
         },
         isAlphanumeric: (value) => {
@@ -352,6 +358,7 @@ export default {
     async startAssembling() {
       this.message = null;
       this.error = null;
+      // get parts without nulls
       this.assembly.parts = this.assembly.parts.filter((el) => {
         return el != null;
       });
@@ -385,8 +392,10 @@ export default {
       }
       // add itemNumber to assembly
       this.assembly.itemNumber = this.getAssemblyCounter + 1;
+      // TODO add assembly cost
+      this.assembly.pseudoUnitCost = this.calculateAssemblyCost()
       try {
-        this.isLoading = true
+        this.isLoading = true;
         const response = await AssemblyService.assembleCopy(
           this.assembly,
           this.getProject.uuid
@@ -416,7 +425,7 @@ export default {
         console.log(error);
         this.error = error.response.data.message;
       } finally {
-        this.isLoading = false
+        this.isLoading = false;
       }
     },
     // re-write this function
@@ -428,7 +437,7 @@ export default {
       this.assembly.parts[index] = {
         uuid: item.uuid,
         name: item.name,
-        // unitCost: item.unitCost,
+        pseudoUnitCost: item.pseudoUnitCost,
         quantity_to_assemble: item.quantity_to_assemble,
         quantity_single: this.quantities[index],
         quantity_total:
@@ -452,6 +461,14 @@ export default {
           return el;
         });
       }
+    },
+    calculateAssemblyCost() {
+      return this.assembly.parts.reduce((accumulator, currentvalue) => {
+        return (
+          accumulator +
+          currentvalue.pseudoUnitCost * currentvalue.quantity_single
+        );
+      }, 0);
     },
   },
 };
