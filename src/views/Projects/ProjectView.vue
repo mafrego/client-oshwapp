@@ -108,6 +108,17 @@
           <v-icon>delete</v-icon>
         </v-btn>
       </div>
+      <div>
+        <v-btn
+          v-if="getProject.state === 'released'"
+          class="red ml-2 mt-1"
+          @click="unrelease()"
+          title="recall product"
+          light
+        >
+          <v-icon>construction</v-icon>
+        </v-btn>
+      </div>
     </v-toolbar-items>
 
     <v-layout>
@@ -202,6 +213,7 @@ export default {
       "fetchAssemblableProducts",
       "fetchAllProducts",
       "fetchAssemblies",
+      "updateProjectState"
     ]),
     ...mapMutations(["setProject"]),
     del() {
@@ -215,6 +227,9 @@ export default {
       } catch (err) {
         console.log(err);
       }
+    },
+    unrelease(){
+      this.updateProjectState({ state: 'rooted'})
     },
     toggleComponentValidateBOM() {
       this.showComponentValidateBOM = !this.showComponentValidateBOM;
