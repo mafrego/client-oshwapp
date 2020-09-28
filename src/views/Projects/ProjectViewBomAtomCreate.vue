@@ -197,7 +197,7 @@ export default {
         required: (value) => !!value || "Required.",
         // counter: (value) => value.length >= 8 || "Min 8 characters",
         uniqueName: (value) =>
-          !this.getAtomNames.includes(value) || "name already taken!",
+          !this.getAtomNames.includes(value) || "name not available!",
         isDescription: (value) => {
           const pattern = /^[^,;]+$/;
           if (value)
@@ -249,7 +249,7 @@ export default {
     };
   },
   computed: {
-    ...mapGetters(["getAtomNames", "getBom", "getProject"]),
+    ...mapGetters(["getAtomNames", "getBom", "getProject", "getAssembliesNames"]),
   },
   methods: {
     ...mapActions(["createAtom", "updateProjectState"]),
@@ -274,6 +274,11 @@ export default {
     async create() {
       this.message = "";
       this.error = "";
+      // check that atom name is unique among atoms and assemblies
+      if(this.getAtomNames.includes(this.atom.name) || this.getAssembliesNames.includes(this.atom.name)){
+        this.error = "name not available!"
+        return
+      }
       if (
         this.atom.name &&
         this.atom.description &&
