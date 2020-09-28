@@ -8,12 +8,12 @@ const state = () => ({
     project: null,
     bom: [],
     atom: null,
+    assembly: null,
     products: [],
     assemblies: [],
     productNames: [],
     assemblableProducts: [],
     root: null,
-    assembly: null,
     loading: false,
     error: null,
     errorBom: null,
@@ -137,9 +137,7 @@ const actions = {
         commit('addProduct', atom)
         commit('addAssemblableProduct', atom)
     },
-    // remeber to update products and assemblableProducts with actions as well
     reviseAtom({ dispatch }) {
-        // commit('updateAtom', atom)
         dispatch('fetchAssemblableProducts')
         dispatch('fetchBom')
         dispatch('fetchAllProducts')
@@ -218,6 +216,10 @@ const actions = {
         commit('setAssemblableProducts', assemblableProducts)
         dispatch('fetchAssemblies')
         dispatch('fetchBom')
+    },
+    reviseAssembly({ dispatch }) {
+        dispatch('fetchAssemblableProducts')
+        dispatch('fetchAssemblies')
     },
     // TODO refactor using dispatch
     async disassemble({ state, commit }, assemblyID) {
@@ -375,6 +377,18 @@ const mutations = {
     },
     updateAtomNotes: (state, notes) => {
         state.atom.notes = notes
+    },
+    setAssembly: (state, assembly) => {
+        state.assembly = assembly
+    },
+    updateAssemblyDescription: (state, description) => {
+        state.assembly.description = description
+    },
+    updateAssemblyInstruction: (state, instruction) => {
+        state.assembly.instruction = instruction
+    },
+    updateAssemblyLink: (state, link) => {
+        state.assembly.link = link
     },
     setAssemblableProducts: (state, products) => {
         products.sort((a, b) => a.itemNumber > b.itemNumber ? 1 : b.itemNumber > a.itemNumber ? -1 : 0)
