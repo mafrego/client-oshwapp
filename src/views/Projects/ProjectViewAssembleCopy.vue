@@ -1,14 +1,32 @@
 <template>
   <div>
-    <div v-if="getProject.state == 'rooted'">
-      <img
-        src="https://oshwapp.s3.eu-central-1.amazonaws.com/service/openproject.svg"
-        class="openproject"
-      />
-      <v-btn @click="release" color="blue">release</v-btn>
-    </div>
-    <br />
-    <panel v-if="getAssemblableProducts.length" title="Assembly panel">
+    <panel v-if="getProject.state === 'rooted'" title="root product">
+      <v-container fluid>
+        <v-layout row justify-start>
+          <v-flex xs3>
+            <span class="font-weight-bold item-name"
+              >{{ getAssemblableProducts[0].name }} @{{
+                getAssemblableProducts[0].itemNumber
+              }}</span
+            >
+          </v-flex>
+          <v-flex sm2>
+            <v-btn @click="release" class="yellow">release</v-btn>
+          </v-flex>
+          <v-flex sm1>
+            <v-btn
+              class="red ml-1"
+              @click="takeApart(getAssemblableProducts[0].uuid)"
+              title="disassemble"
+            >
+              <v-icon>construction</v-icon>
+            </v-btn>
+          </v-flex>
+          <v-flex xs1> </v-flex>
+        </v-layout>
+      </v-container>
+    </panel>
+    <panel v-if="getProject.state === 'assembling'" title="Assembly panel">
       <v-container fluid>
         <v-form ref="form">
           <div v-if="getProject.state != 'rooted'">
@@ -27,7 +45,7 @@
                   hint="name"
                 ></v-text-field>
               </v-flex>
-              <v-flex sm1>
+              <v-flex sm2>
                 <v-text-field
                   @keydown="preventNonNumericalInput($event)"
                   :rules="[rules.required, rules.isPositiveInt]"
@@ -37,10 +55,10 @@
                   @input="recomputeQuantities"
                   solo-inverted
                   dense
-                  hint="qty"
+                  hint="quantity"
                 />
               </v-flex>
-              <v-flex sm7>
+              <v-flex sm6>
                 <v-text-field
                   label="assembly description"
                   :rules="[rules.required, rules.isDescription]"
@@ -76,7 +94,7 @@
                 ></v-text-field>
               </v-flex>
             </v-layout>
-            <v-layout row justify-start>
+            <v-layout row justify-space-between>
               <v-flex sm1>
                 <v-btn class="green" @click="startAssembling" title="assemble">
                   <v-icon>build</v-icon>
@@ -85,14 +103,15 @@
               <v-flex sm1>
                 <v-progress-circular
                   class="ml-10"
-                  v-if="getLoading"
-                  :indeterminate="getLoading"
+                  v-if="isLoading"
+                  :indeterminate="isLoading"
                   color="light-blue"
                 ></v-progress-circular>
               </v-flex>
               <v-flex sm8>
-                <div class="danger-alert" v-if="msg">{{ msg }}</div>
-                <div class="danger-alert" v-if="overlimits.length != 0">
+                <div class="green--text" v-if="message">{{ message }}</div>
+                <div class="red--text" v-if="error">{{ error }}</div>
+                <div class="red--text" v-if="overlimits.length != 0">
                   {{ overlimits.join(", ") }}
                 </div>
               </v-flex>
@@ -190,6 +209,7 @@
                     <li v-if="item.link">
                       <a :href="item.link" target="_blank">link</a>
                     </li>
+                    <li v-if="item.instruction">{{ item.instruction}}</li>
                   </ul>
                 </v-card>
               </v-flex>
@@ -203,6 +223,7 @@
 
 <script>
 import { mapGetters, mapActions, mapState } from "vuex";
+import AssemblyService from "@/services/AssemblyService";
 
 export default {
   name: "ProjectViewAssembleCopy",
@@ -218,10 +239,12 @@ export default {
         quantity: 1,
       },
       quantities: [],
-      msg: null,
+      message: null,
+      error: null,
       overlimits: [], //used for storing errror messages
       fixed: null,
       hover: null,
+      isLoading: false,
       rules: {
         required: (value) => !!value || "Required.",
         natural: (value) => {
@@ -235,7 +258,7 @@ export default {
         },
         isDescription: (value) => {
           const pattern = /^[^,;]*$/;
-          if (value) return pattern.test(value) || "only alphanumeric . - _";
+          if (value) return pattern.test(value) || "any char except for commas and semicolons";
           else return true;
         },
         isAlphanumeric: (value) => {
@@ -253,7 +276,10 @@ export default {
           else return true;
         },
         singleName: (value) =>
-          !this.getAllProductNames.includes(value) || "name already taken!",
+          !(
+            this.getAtomNames.includes(value) ||
+            this.getAssembliesNames.includes(value)
+          ) || "name not available!",
         string: (value) => {
           const pattern = /^[^,;"]+$/;
           return (
@@ -268,10 +294,12 @@ export default {
     ...mapGetters([
       "getProject",
       "getAssemblableProducts",
-      "getLoading",
-      "getError",
-      "getAllProductNames",
-      "getAssemblyCounter"
+      // "getLoading",
+      // "getError",
+      // "getAllProductNames",
+      "getAssemblyCounter",
+      "getAssembliesNames",
+      "getAtomNames",
     ]),
     // TODO find substitute with getters and remove states
     ...mapState({
@@ -322,7 +350,8 @@ export default {
       await this.disassemble(uuid);
     },
     async startAssembling() {
-      this.msg = null;
+      this.message = null;
+      this.error = null;
       this.assembly.parts = this.assembly.parts.filter((el) => {
         return el != null;
       });
@@ -336,29 +365,43 @@ export default {
       }
       // check if required properties are filled in
       if (!this.assembly.name || !this.assembly.description) {
-        this.msg = "Please fill in all the required fields";
+        this.error = "Please fill in all the required fields";
         return;
       }
-      if (this.getAllProductNames.includes(this.assembly.name)) {
-        this.msg = "Please change assembly name";
+      if (
+        this.getAtomNames.includes(this.assembly.name) ||
+        this.getAssembliesNames.includes(this.assembly.name)
+      ) {
+        this.error = "Please change assembly name";
         return;
       }
       if (this.overlimits.length != 0) {
-        this.msg = "Please check part quantities and try again!";
+        this.error = "Please check part quantities and try again!";
         return;
       }
       if (this.assembly.parts.length === 0) {
-        this.msg = "Please select parts to assemble!";
+        this.error = "Please select parts to assemble!";
         return;
       }
-      // TODO add itemNumber to assembly
-      this.assembly.itemNumber = this.getAssemblyCounter + 1
+      // add itemNumber to assembly
+      this.assembly.itemNumber = this.getAssemblyCounter + 1;
       try {
-        const ret = await this.assembleCopy(this.assembly);
-        console.log(ret)
-        if (ret == 201) {
-          // check if following line is necessary
-          // this.addProductName(this.assembly.name);
+        this.isLoading = true
+        const response = await AssemblyService.assembleCopy(
+          this.assembly,
+          this.getProject.uuid
+        );
+        // console.log(response);
+        if (response.status == 201) {
+          if (
+            response.data.length === 1 &&
+            response.data[0].quantity_to_assemble === 1
+          ) {
+            this.updateProjectState({ state: "rooted" });
+          }
+          this.message = `product ${this.assembly.name} assembled`;
+          this.assembleCopy(response.data);
+
           this.assembly.name = null;
           this.assembly.description = null;
           this.assembly.instruction = null;
@@ -371,6 +414,9 @@ export default {
         }
       } catch (error) {
         console.log(error);
+        this.error = error.response.data.message;
+      } finally {
+        this.isLoading = false
       }
     },
     // re-write this function
@@ -397,7 +443,7 @@ export default {
             const total =
               el.quantity_single * this.assembly.quantity_to_assemble;
             if (total > el.quantity_to_assemble) {
-              this.overlimits.push(`${el.name} not enough!`);
+              this.overlimits.push(`${el.name} has not enough pieces!`);
             }
             el.quantity_total =
               el.quantity_single * this.assembly.quantity_to_assemble;
