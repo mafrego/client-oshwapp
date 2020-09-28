@@ -128,7 +128,7 @@ export default {
       rules: {
         required: (value) => !!value || "Required.",
         uniqueName: (value) =>
-          !this.getProjectNames.includes(value) || "name already taken!",
+          !this.getProjectNames.includes(value) || "not available!",
         isAlphanumeric: (value) => {
           const pattern = /^[-0-9a-zA-Z_]+$/;
           if (value)
@@ -209,6 +209,10 @@ export default {
     async create() {
       this.error = null;
       this.message = null;
+      if(this.getProjectNames.includes(this.project.name)){
+        this.error = "choose another name"
+        return
+      }
       if (
         this.project.name &&
         this.project.description &&
