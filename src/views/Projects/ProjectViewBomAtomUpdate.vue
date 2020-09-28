@@ -35,6 +35,7 @@
         </v-flex>
         <!-- update atom quantity_to_assemble that is quantity left  -->
         <!-- ATTENTION test this carefully!!! -->
+              <!-- v-if="atom.quantity === atom.quantity_to_assemble" -->
         <v-flex sm2>
           <v-text-field
             @keydown="preventNonNumericalInput($event)"
@@ -47,7 +48,7 @@
             dense
           ></v-text-field>
         </v-flex>
-        <v-flex sm2>
+        <v-flex sm2 v-if="getAtom.quantity === getAtom.quantity_to_assemble">
           <v-text-field
             type="number"
             min="0"
@@ -57,6 +58,15 @@
             label="unit cost"
             outlined
             dense
+          ></v-text-field>
+        </v-flex>
+        <v-flex sm2  v-if="getAtom.quantity != getAtom.quantity_to_assemble">
+          <v-text-field
+            :value="getAtom.unitCost"
+            label="unit cost"
+            outlined
+            dense
+            readonly
           ></v-text-field>
         </v-flex>
         <v-flex sm2>
@@ -423,6 +433,24 @@ export default {
         event.preventDefault();
       }
     },
+    calculateTotalCost(){
+      if (this.moq == 1) {
+        return this.unitCost * this.quantity;
+      } else {
+        if (this.moq >= this.quantity) {
+          return this.unitCost;
+        } else {
+          return  Math.ceil(this.quantity / this.moq) * this.unitCost;
+        }
+      }
+    },
+    calculatePseudoUnitCost(){
+      if(this.moq === 1){
+        return this.unitCost
+      } else {
+        return this.calculateTotalCost() / this.quantity
+      }
+    },
     async update() {
       // console.log(this.atomToUpdate.description)
       this.message = "";
@@ -448,7 +476,7 @@ export default {
         quantity_to_assemble: this.quantity_to_assemble,
         quantity: this.quantity,
         unitCost: this.unitCost,
-        // currency: this.currency,
+        pseudoUnitCost: this.calculatePseudoUnitCost()
       }
       // not required properties: GTIN, SKU, vendorUrl, leadTime, link, notes
       if (this.GTIN) {

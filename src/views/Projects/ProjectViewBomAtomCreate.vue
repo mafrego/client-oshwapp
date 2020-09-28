@@ -271,6 +271,13 @@ export default {
         }
       }
     },
+    calculatePseudoUnitCost(){
+      if (this.atom.moq == 1) {
+        this.atom.pseudoUnitCost = this.atom.unitCost
+      } else {
+        this.atom.pseudoUnitCost = this.atom.totalCost / this.atom.quantity
+      }
+    },
     async create() {
       this.message = "";
       this.error = "";
@@ -312,10 +319,10 @@ export default {
         this.atom.itemNumber =
           this.getBom[this.getBom.length - 1].itemNumber + 1;
       }
-      // add currency
+      // costs and currency
       this.atom.currency = this.getProject.currency
-      // add total cost
       this.calculateTotalCost()
+      this.calculatePseudoUnitCost()
       try {
         this.isLoading = true;
         const response = await AtomService.addAtomToBom(
