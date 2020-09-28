@@ -1,6 +1,5 @@
 <template>
   <v-container fluid>
-    <div>
       <v-layout>
         <!-- name, code, quantity, imageUrl cannot be updated -->
         <v-text-field
@@ -221,7 +220,6 @@
           <div v-if="error" class="red--text msg ml-2">{{ error }}</div>
         </v-flex>
       </v-layout>
-    </div>
   </v-container>
 </template>
 
