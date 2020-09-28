@@ -116,10 +116,10 @@
                 </div>
               </v-flex>
             </v-layout>
-            <!-- <br />
+            <br />
           <span>assembly.parts: {{ assembly.parts }}</span>
           <br />
-          <span>quantities: {{ quantities }}</span>
+          <!-- <span>quantities: {{ quantities }}</span>
           <br />
           <span>overlimits: {{ this.overlimits }}</span>
           <br /> -->
@@ -428,6 +428,7 @@ export default {
       this.assembly.parts[index] = {
         uuid: item.uuid,
         name: item.name,
+        // unitCost: item.unitCost,
         quantity_to_assemble: item.quantity_to_assemble,
         quantity_single: this.quantities[index],
         quantity_total:
