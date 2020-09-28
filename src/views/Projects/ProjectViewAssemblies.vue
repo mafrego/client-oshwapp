@@ -1,16 +1,12 @@
 <template>
   <panel title="Assemblies">
-    <v-toolbar-items slot="action">
-    </v-toolbar-items>
-
-<v-container fluid>
-  
-    <div v-for="assembly in getAssemblies" :key="assembly.itemNumber">
-          <v-layout>
-            <v-flex sm6 class="assembly">
-              
+    <v-toolbar-items slot="action"> </v-toolbar-items>
+    <v-container fluid>
+      <div v-for="assembly in getAssemblies" :key="assembly.itemNumber">
+        <v-layout>
+          <v-flex sm6 class="assembly">
             <div class="font-family: monospace font-weight-black">
-              {{ assembly.name }} @{{assembly.itemNumber}}
+              {{ assembly.name }} @{{ assembly.itemNumber }}
             </div>
             <v-btn
               color="yellow"
@@ -28,19 +24,23 @@
             >
               <v-icon>close</v-icon>
             </v-btn>
-            </v-flex>
-        <v-flex class="image" sm6>
-          <img class="assembly-image" :src="assembly.imageUrl" :alt="assembly.name" />
-        </v-flex>
-          </v-layout>
-      <v-layout wrap>
-        <project-view-assemblies-update
-          v-if="assemblyToUpdate === assembly.uuid"
-          v-bind:assembly="assembly"
-        />
-      </v-layout>
-    </div>
-</v-container>
+          </v-flex>
+          <v-flex class="image" sm6>
+            <img
+              class="assembly-image"
+              :src="assembly.imageUrl"
+              :alt="assembly.name"
+            />
+          </v-flex>
+        </v-layout>
+        <v-layout wrap>
+          <project-view-assemblies-update
+            v-if="assemblyToUpdate === assembly.uuid"
+            v-bind:assembly="assembly"
+          />
+        </v-layout>
+      </div>
+    </v-container>
   </panel>
 </template>
 
@@ -63,19 +63,17 @@ export default {
   },
   methods: {
     ...mapActions(["fetchBom", "deleteBom", "deleteAtom", "fetchAssemblies"]),
-    ...mapMutations(["setAtom"]),
+    ...mapMutations(["setAssembly"]),
     selectAtomToUpdate(assembly) {
       this.assemblyToUpdate = assembly.uuid;
-      // this.setAssembly(assembly);
+      this.setAssembly(assembly);
     },
     hideUpdate() {
       this.assemblyToUpdate = null;
     },
   },
   created() {
-    // this.fetchBom();
-    // this.fetchAllProducts(); //to make sure that size of product array is updated
-    this.fetchAssemblies()
+    this.fetchAssemblies();
   },
 };
 </script>
