@@ -214,36 +214,6 @@ const actions = {
             commit('setLoading', false)
         }
     },
-    // TODO move async function into Assemble Component
-    // async assembleCopy({ state, commit }, assembly) {
-    //     try {
-    //         commit('setLoading', true)
-    //         const response = await AssemblyService.assembleCopy(assembly, state.project.uuid)
-    //         commit('setAssemblableProducts', response.data)
-    //         // if response is the root assembly: the only part left to assemble
-    //         if (response.data.length === 1 && response.data[0].quantity_to_assemble === 1) {
-    //             const ret = await ProjectService.updateProjectState(
-    //                 { state: 'rooted' },
-    //                 state.project.uuid)
-    //             // console.log('ret: ', ret)
-    //             commit('updateState', ret.data.project.state)
-    //         }
-    //         if (response.status === 201) {
-    //             // const ret = await ProjectService.getAllProducts(state.project.uuid)
-    //             // commit('setProducts', ret.data)
-    //             const ret = await ProjectService.getAssemblies(state.project.uuid)
-    //             commit('setAssemblies', ret.data)
-    //             // update BOM as well because of quantity_to_assemble
-    //             const ret0 = await ProjectService.getBom(state.project.uuid)
-    //             commit('setBom', ret0.data)
-    //             return response.status
-    //         }
-    //     } catch (error) {
-    //         commit('setError', error)
-    //     } finally {
-    //         commit('setLoading', false)
-    //     }
-    // },
     assembleCopy({dispatch, commit}, assemblableProducts){
         commit('setAssemblableProducts', assemblableProducts)
         dispatch('fetchAssemblies')
