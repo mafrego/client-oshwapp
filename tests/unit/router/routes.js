@@ -15,7 +15,7 @@ import CreateAtom from '@/views/Atoms/AtomCreate'
 import CreateCompound from '@/views/Compounds/CompoundCreate'
 //I DONNO but you need to add ".vue" otherwise vue looks for ".js"
 import CreateAssembly from '@/views/Assemblies/AssemblyCreate.vue'
-import CreateProject from '@/views/Projects/ProjectCreate.vue'
+// import CreateProject from '@/views/Projects/ProjectCreate.vue'
 import ViewProject from '@/views/Projects/ProjectView'
 // import ProjectView from '@/views/Projects/ProjectView.vue'
 import Experiments from '@/views/Experiments/Experiments.vue'
@@ -95,11 +95,11 @@ export default [
     name: 'project',
     component: ViewProject
   },
-  {
-    path: '/projects/create',
-    name: 'projects-create',
-    component: CreateProject
-  },
+  // {
+  //   path: '/projects/create',
+  //   name: 'projects-create',
+  //   component: CreateProject
+  // },
   {
     path: '/experiments',
     name: 'experiments',
