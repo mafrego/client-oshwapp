@@ -137,8 +137,15 @@ const actions = {
         commit('addProduct', atom)
         commit('addAssemblableProduct', atom)
     },
-    reviseAtom({ dispatch }) {
-        dispatch('fetchAssemblableProducts')
+    reviseAtom({ dispatch, state }) {
+        dispatch('fetchAssemblableProducts').then(() => {
+            if (
+                state.assemblableProducts.length === 1 &&
+                state.assemblableProducts[0].quantity_to_assemble === 1
+            ) {
+               dispatch('updateProjectState', { state: "rooted" })
+            }
+        })
         dispatch('fetchBom')
         dispatch('fetchAllProducts')
     },
@@ -212,7 +219,12 @@ const actions = {
             commit('setLoading', false)
         }
     },
-    assembleCopy({dispatch, commit}, assemblableProducts){
+    assembleCopy({ dispatch, commit }, assemblableProducts) {
+        if (
+            assemblableProducts.length === 1 &&
+            assemblableProducts[0].quantity_to_assemble === 1
+        ) { dispatch('updateProjectState', { state: "rooted" });}
+
         commit('setAssemblableProducts', assemblableProducts)
         dispatch('fetchAssemblies')
         dispatch('fetchBom')
