@@ -1,19 +1,30 @@
 <template>
-  <div>
-    <v-layout column>
-      <v-flex xs1>
-        <v-text-field v-model="description" :rules="[rules.isDescription]" label="description"></v-text-field>
-
+<v-container fluid>
+    <v-layout >
+      <v-flex sm12>
+        <v-text-field
+          v-model="description"
+          :rules="[rules.isDescription]"
+          label="description"
+          solo
+          dense
+        ></v-text-field>
+      </v-flex>
+    </v-layout>
+    <v-layout row justify-start>
+      <v-flex sm1>
         <v-btn class="yellow" @click="update()" title="update profile">
           <v-icon>save</v-icon>
         </v-btn>
+      </v-flex>
+      <v-flex sm6>
         <div v-if="this.message" class="ml-2 msg">
-          <span class="green--text">{{message}}</span>
+          <span class="green--text">{{ message }}</span>
         </div>
-        <div v-if="error" class="red--text msg ml-2">{{error}}</div>
+        <div v-if="error" class="red--text msg ml-2">{{ error }}</div>
       </v-flex>
     </v-layout>
-  </div>
+</v-container>
 </template>
 
 <script>
@@ -29,51 +40,59 @@ export default {
         required: (value) => !!value || "Required.",
         isDescription: (value) => {
           const pattern = /^[-a-zA-Z0-9 _.]*$/;
-          if(value) return pattern.test(value) || "Only alphanumeric, dots, hyphens, underscore chars";
-          else return true
+          if (value)
+            return (
+              pattern.test(value) ||
+              "Only alphanumeric, dots, hyphens, underscore chars"
+            );
+          else return true;
         },
         isAlphanumeric: (value) => {
           const pattern = /^[a-zA-Z0-9_]*$/;
-          if(value) return pattern.test(value) || "Only alphanumeric, dots, hyphens, underscore chars";
-          else return true
+          if (value)
+            return (
+              pattern.test(value) ||
+              "Only alphanumeric, dots, hyphens, underscore chars"
+            );
+          else return true;
         },
         isCurrency: (value) => {
           const pattern = /[A-Z]{3}/;
-          if(value) return pattern.test(value) || "only currency ISO 4217";
-          else return true
+          if (value) return pattern.test(value) || "only currency ISO 4217";
+          else return true;
         },
         isURL: (value) => {
           const pattern = /https?:\/\/(www\.)?[-a-zA-Z0-9@:%._+~#=]{1,256}\.[a-zA-Z0-9()]{1,6}\b([-a-zA-Z0-9()@:%_+.~#?&//=]*)/;
-          if(value) return pattern.test(value) || "invalid URL";
-          else return true
+          if (value) return pattern.test(value) || "invalid URL";
+          else return true;
         },
         isPositiveFloat: (value) => {
           const pattern = /^(?:[1-9]\d*|0)?(?:\.\d+)?$/;
-          if(value) return pattern.test(value) || "only positive float";
-          else return true
+          if (value) return pattern.test(value) || "only positive float";
+          else return true;
         },
         isPositiveInt: (value) => {
           const pattern = /^[1-9]+[0-9]*$/;
-          if(value) return pattern.test(value) || "only positive integers > 0";
-          else return true
+          if (value) return pattern.test(value) || "only positive integers > 0";
+          else return true;
         },
         isDuration: (value) => {
           const pattern = /^P(?!$)(\d+(?:\.\d+)?Y)?(\d+(?:\.\d+)?M)?(\d+(?:\.\d+)?W)?(\d+(?:\.\d+)?D)?(T(?=\d)(\d+(?:\.\d+)?H)?(\d+(?:\.\d+)?M)?(\d+(?:\.\d+)?S)?)?$/;
-          if(value) return pattern.test(value) || "only duration ISO 8601";
-          else return true
-        }
-      }
+          if (value) return pattern.test(value) || "only duration ISO 8601";
+          else return true;
+        },
+      },
     };
   },
   computed: {
-      description: {
-        get() {
-          return this.$store.state.user.description
-        },
-        set (value) {
-          this.$store.commit('updateUserDescription', value)
-        }
+    description: {
+      get() {
+        return this.$store.state.user.description;
       },
+      set(value) {
+        this.$store.commit("updateUserDescription", value);
+      },
+    },
   },
   methods: {
     ...mapGetters(["getUser"]),
