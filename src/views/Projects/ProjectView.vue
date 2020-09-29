@@ -23,7 +23,7 @@
       </div>
       <div>
         <v-btn
-          v-if="getProject.state != 'released'"
+          v-if="getProject.state === 'created'"
           @click="toggleComponentUpload"
           class="green ml-2 mt-1"
           title="select yourproject-bom.csv to upload"
@@ -75,9 +75,7 @@
       </div> -->
       <div>
         <v-btn
-          v-if="
-            getProject.state === 'assembling' || getProject.state === 'rooted'
-          "
+          v-if="getProject.state === 'assembling' || getProject.state === 'rooted'"
           @click="toggleComponentAssembleCopy"
           class="green ml-2 mt-1"
           title="assemble"
@@ -88,7 +86,7 @@
       </div>
       <div>
         <v-btn
-          v-if="getAssemblableProducts.length != 0"
+          v-if="getAssemblies.length > 0"
           @click="toggleComponentAssemblies"
           class="yellow ml-2 mt-1"
           title="update assembly metadata"
@@ -201,9 +199,9 @@ export default {
     ...mapGetters([
       "getProject",
       "getBom",
-      "getAssemblableProducts",
       "getLoading",
       "getProjectByID",
+      "getAssemblies"
     ]),
   },
   methods: {
