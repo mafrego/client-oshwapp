@@ -56,7 +56,7 @@
               {{ atom.name }} #{{atom.itemNumber}}
             </div>
           </v-layout>
-          <v-layout v-if="getProject.state == 'created' || getProject.state == 'assembling'">
+          <v-layout>
             <v-btn
               color="yellow"
               class="ml-2"
