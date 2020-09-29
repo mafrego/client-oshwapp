@@ -4,7 +4,7 @@ import Register from '@/views/general/Register'
 import Login from '@/views/general/Login'
 import Atoms from '@/views/Atoms/Index'
 import Atms from '@/views/Atoms/Atoms'
-import Products from '@/views/Products/Index'
+// import Products from '@/views/Products/Index'
 import Projects from '@/views/Projects/ProjectsPanel'
 import ViewAtom from '@/views/Atoms/AtomView'
 import ViewProduct from '@/views/Products/ProductView'
@@ -70,11 +70,11 @@ export default [
     name: 'assemblies-create',
     component: CreateAssembly
   },
-   {
-    path: '/products',
-    name: 'products',
-    component: Products
-  },
+  //  {
+  //   path: '/products',
+  //   name: 'products',
+  //   component: Products
+  // },
   {
     path: '/products/:productId',
     name: 'product',
