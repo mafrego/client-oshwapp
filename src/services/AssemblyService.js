@@ -20,10 +20,10 @@ export default {
       .post('assemblies', assembly, { headers: authHeader() })
   },
 
-  // assemble(assembly, projectID) {
-  //   return Api()
-  //     .post(`assembly/${projectID}`, assembly, { headers: authHeader() })
-  // },
+  put(assembly) {
+    return Api()
+      .put('assembly', assembly, { headers: authHeader() })
+  },
   
   assembleCopy(assembly, projectID) {
     return Api()
