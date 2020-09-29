@@ -4,37 +4,43 @@
     <h1>OSHW APP</h1>
     <ul>
       <li>
-        <span class="bold">Version</span>: 1.0.3
+        <a
+          href="https://github.com/mafrego/docs-oshwapp/blob/master/CHANGELOG.md"
+          target="_blank"
+          ><img src="https://img.shields.io/badge/version-1.6.0-blue" alt=""
+        /></a>
       </li>
       <li>
-        <span class="bold">License</span>:
         <a href="https://www.gnu.org/licenses/gpl-3.0.html" target="_blank">
           <img src="https://img.shields.io/badge/License-AGPL%20v3-blue.svg" />
         </a>
       </li>
       <li>
-        <span class="bold">Git repos</span>:
+        <span class="bold">Git public repos</span>:
         <ul>
           <li>
             <a
               class="font-weight-bold"
               href="https://github.com/mafrego/docs-oshwapp"
               target="_blank"
-            >docs and templates</a>
+              >docs and templates</a
+            >
           </li>
           <li>
             <a
               class="font-weight-bold"
               href="https://github.com/mafrego/client-oshwapp"
               target="_blank"
-            >client</a>: Vue.js 
+              >client</a
+            >: Vue.js
           </li>
           <li>
             <a
               class="font-weight-bold"
               href="https://github.com/mafrego/server-oshwapp"
               target="_blank"
-            >server</a>: Node.js Express.js
+              >server</a
+            >: Node.js Express.js
           </li>
         </ul>
       </li>
@@ -42,7 +48,10 @@
     <h1>Contact</h1>
     <ul>
       <li>
-        <span class="bold">Developer</span>: marco[dot]fregonese[at]student[dot]uibk[dot]ac[dot]at
+        <span class="bold">Developer</span>:
+        <a href="mailto:marco.fregonese@student.uibk.ac.at">
+          marco.fregonese@student.uibk.ac.at
+        </a>
       </li>
     </ul>
   </div>

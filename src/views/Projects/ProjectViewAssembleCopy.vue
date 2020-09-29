@@ -77,7 +77,7 @@
                   v-model="assembly.instruction"
                   solo
                   dense
-                  rows="1"
+                  rows="2"
                   hint="assembly instructions"
                 ></v-textarea>
               </v-flex>

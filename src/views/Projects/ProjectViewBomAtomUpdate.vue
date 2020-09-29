@@ -453,14 +453,12 @@ export default {
       // console.log(this.atomToUpdate.description)
       this.message = "";
       this.error = "";
-      // TODO check that required fields are filled in and that not required are set to null if empty
+      //  check that required fields are filled in and that not required are set to null if empty
       if (
-        // this.project.name &&
         this.description &&
         this.moq &&
         // this.quantity_to_assemble &&         //if set to 0 invalid 
         this.unitCost
-        // this.currency
       ) {
         this.error = null;
       } else {
