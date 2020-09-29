@@ -11,7 +11,7 @@
           hint="description"
         ></v-text-field>
       </v-flex>
-      <v-flex sm5>
+      <v-flex v-if="link" sm5>
         <v-text-field
           label="assembly link"
           :rules="[rules.isHTTP]"
@@ -21,16 +21,36 @@
           hint="link"
         ></v-text-field>
       </v-flex>
+        <v-flex v-if="!link" sm5>
+          <v-text-field
+            v-model="addLink"
+            :rules="[rules.isHTTP]"
+            label="add link"
+            outlined
+            dense
+          ></v-text-field>
+        </v-flex>
     </v-layout>
     <v-layout row justify-space-between>
-      <v-flex sm12>
+      <v-flex v-if="instruction" sm12>
         <v-textarea
           label="assembly instructions"
           :rules="[rules.isDescription]"
           v-model="instruction"
           solo
           dense
-          rows="1"
+          rows="2"
+          hint="assembly instructions"
+        ></v-textarea>
+      </v-flex>
+      <v-flex v-if="!instruction" sm12>
+        <v-textarea
+          label="add assembly instructions"
+          :rules="[rules.isDescription]"
+          v-model="addInstruction"
+          solo
+          dense
+          rows="2"
           hint="assembly instructions"
         ></v-textarea>
       </v-flex>
@@ -61,6 +81,7 @@
 
 <script>
 import { mapGetters, mapActions } from "vuex";
+import AssemblyService from "@/services/AssemblyService";
 
 export default {
   name: "Blank",
@@ -69,6 +90,8 @@ export default {
       error: null,
       message: null,
       isLoading: false,
+      addInstruction: null,
+      addLink: null,
       rules: {
         required: (value) => !!value || "Required.",
         isDescription: (value) => {
@@ -90,7 +113,49 @@ export default {
   methods: {
     ...mapActions(["reviseAssembly"]),
     async update(){
-       console.log('hola')
+      this.message = "";
+      this.error = "";
+      // TODO check that required fields are filled in and that not required are set to null if empty
+      if (
+        this.description
+      ) {
+        this.error = null;
+      } else {
+        this.error = "Please fill the required field";
+        return;
+      }
+      const assembly = {
+        uuid: this.getAssembly.uuid,
+        description: this.description
+      }
+      // not required properties: instruction and link
+      if (this.instruction) {
+        assembly.instruction = this.instruction;
+      } else if (this.addInstruction) {
+        assembly.instruction = this.addInstruction;
+      } else {
+        assembly.instruction = null;
+      }
+      if (this.link) {
+        assembly.link = this.link;
+      } else if (this.addLink) {
+        assembly.link = this.addLink;
+      } else {
+        assembly.link = null;
+      }
+      try {
+        this.isLoading = true
+        const response = await AssemblyService.put(assembly)
+        if(response.status === 200){
+          this.reviseAssembly()
+          this.message = "assembly updated!"
+        }
+      } catch (error) {
+        this.error = error.response.data.message;
+        console.log(error);
+      } finally {
+        this.isLoading = false
+      }
     }
   },
   computed: {
