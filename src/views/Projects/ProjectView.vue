@@ -11,7 +11,7 @@
           <v-icon>update</v-icon>
         </v-btn>
       </div>
-      <div>
+      <!-- <div>
         <v-btn
           @click="toggleComponentValidateBOM"
           class="grey ml-2 mt-1"
@@ -20,7 +20,7 @@
         >
           <v-icon>done</v-icon>
         </v-btn>
-      </div>
+      </div> -->
       <div>
         <v-btn
           v-if="getProject.state === 'created'"
