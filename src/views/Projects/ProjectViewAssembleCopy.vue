@@ -402,12 +402,6 @@ export default {
         );
         // console.log(response);
         if (response.status == 201) {
-          if (
-            response.data.length === 1 &&
-            response.data[0].quantity_to_assemble === 1
-          ) {
-            this.updateProjectState({ state: "rooted" });
-          }
           this.message = `product ${this.assembly.name} assembled`;
           this.assembleCopy(response.data);
 
