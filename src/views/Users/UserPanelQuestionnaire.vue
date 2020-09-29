@@ -1,39 +1,50 @@
 <template>
-  <div>
-    <br>
-    <v-layout column>
-      <v-flex xs1>
-        <v-text-field
-          v-model="questionnaire.answer0"
-          :rules="[rules.isAlphanumeric]"
-          label="What do you like about this app?"
-        ></v-text-field>
-        <v-text-field
-          v-model="questionnaire.answer1"
-          :rules="[rules.isAlphanumeric]"
-          label="What don't you like?"
-        ></v-text-field>
-        <v-text-field
-          v-model="questionnaire.answer2"
-          :rules="[rules.isAlphanumeric]"
-          label="What would you improve?"
-        ></v-text-field>
-        <v-text-field
-          v-model="questionnaire.answer3"
-          :rules="[rules.isAlphanumeric]"
-          label="Any other comment, suggestion, criticism, etc.?"
-        ></v-text-field>
+  <v-container fluid>
+    <v-textarea
+      v-model="questionnaire.answer0"
+      :rules="[rules.isAlphanumeric]"
+      label="What do you like about this app?"
+      rows="1"
+      solo
+      dense
+      hint="what do you like about this app?"
+    ></v-textarea>
+    <v-textarea
+      v-model="questionnaire.answer1"
+      :rules="[rules.isAlphanumeric]"
+      label="What don't you like?"
+      rows="1"
+      solo
+      dense
+      hint="what don't you like?"
+    ></v-textarea>
+    <v-textarea
+      v-model="questionnaire.answer2"
+      :rules="[rules.isAlphanumeric]"
+      label="What would you improve?"
+      rows="1"
+      solo
+      dense
+      hint="what would you improve?"
+    ></v-textarea>
+    <v-textarea
+      v-model="questionnaire.answer3"
+      :rules="[rules.isAlphanumeric]"
+      label="Any other comment, suggestion, criticism, etc.?"
+      rows="1"
+      solo
+      dense
+      hint="Any other comment, suggestion, criticism, etc.?"
+    ></v-textarea>
 
-        <v-btn class="yellow" @click="update()" title="update questionnaire">
-          <v-icon>save</v-icon>
-        </v-btn>
-        <div v-if="this.message" class="ml-2 msg">
-          <span class="green--text">{{message}}</span>
-        </div>
-        <div v-if="error" class="red--text msg ml-2">{{error}}</div>
-      </v-flex>
-    </v-layout>
-  </div>
+    <v-btn class="yellow" @click="update()" title="update questionnaire">
+      <v-icon>save</v-icon>
+    </v-btn>
+    <div v-if="this.message" class="ml-2 msg">
+      <span class="green--text">{{ message }}</span>
+    </div>
+    <div v-if="error" class="red--text msg ml-2">{{ error }}</div>
+  </v-container>
 </template>
 
 <script>
@@ -48,12 +59,6 @@ export default {
       error: "",
       questionnaire: {},
       rules: {
-        // required: (value) => !!value || "Required.",
-        // isDescription: (value) => {
-        //   const pattern = /^[-a-zA-Z0-9 _.]*$/;
-        //   if(value) return pattern.test(value) || "Only alphanumeric, dots, hyphens, underscore chars";
-        //   else return true
-        // },
         isAlphanumeric: (value) => {
           const pattern = /^[^©]{0,200}$/;
           if (value)
@@ -63,31 +68,6 @@ export default {
             );
           else return true;
         },
-        // isCurrency: (value) => {
-        //   const pattern = /[A-Z]{3}/;
-        //   if(value) return pattern.test(value) || "only currency ISO 4217";
-        //   else return true
-        // },
-        // isURL: (value) => {
-        //   const pattern = /https?:\/\/(www\.)?[-a-zA-Z0-9@:%._+~#=]{1,256}\.[a-zA-Z0-9()]{1,6}\b([-a-zA-Z0-9()@:%_+.~#?&//=]*)/;
-        //   if(value) return pattern.test(value) || "invalid URL";
-        //   else return true
-        // },
-        // isPositiveFloat: (value) => {
-        //   const pattern = /^(?:[1-9]\d*|0)?(?:\.\d+)?$/;
-        //   if(value) return pattern.test(value) || "only positive float";
-        //   else return true
-        // },
-        // isPositiveInt: (value) => {
-        //   const pattern = /^[1-9]+[0-9]*$/;
-        //   if(value) return pattern.test(value) || "only positive integers > 0";
-        //   else return true
-        // },
-        // isDuration: (value) => {
-        //   const pattern = /^P(?!$)(\d+(?:\.\d+)?Y)?(\d+(?:\.\d+)?M)?(\d+(?:\.\d+)?W)?(\d+(?:\.\d+)?D)?(T(?=\d)(\d+(?:\.\d+)?H)?(\d+(?:\.\d+)?M)?(\d+(?:\.\d+)?S)?)?$/;
-        //   if(value) return pattern.test(value) || "only duration ISO 8601";
-        //   else return true
-        // }
       },
     };
   },
