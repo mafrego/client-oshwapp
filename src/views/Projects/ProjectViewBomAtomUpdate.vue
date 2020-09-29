@@ -11,7 +11,7 @@
         ></v-text-field>
       </v-layout>
       <v-layout wrap justify-space-between>
-        <v-flex sm2>
+        <v-flex sm2 v-if="getAtom.quantity === getAtom.quantity_to_assemble">
           <v-text-field
             @keydown="preventNonNumericalInput($event)"
             type="number"
@@ -21,6 +21,15 @@
             label="m.o.q."
             outlined
             dense
+          ></v-text-field>
+        </v-flex>
+        <v-flex sm2 v-if="getAtom.quantity != getAtom.quantity_to_assemble">
+          <v-text-field
+            :value="moq"
+            label="m.o.q."
+            outlined
+            dense
+            readonly
           ></v-text-field>
         </v-flex>
         <v-flex sm1>
@@ -35,7 +44,7 @@
         <!-- update atom quantity_to_assemble that is quantity left  -->
         <!-- ATTENTION test this carefully!!! -->
               <!-- v-if="atom.quantity === atom.quantity_to_assemble" -->
-        <v-flex sm2>
+        <v-flex sm2 v-if="getProject.state === 'assembling'">
           <v-text-field
             @keydown="preventNonNumericalInput($event)"
             type="number"
@@ -45,6 +54,15 @@
             label="qty left"
             outlined
             dense
+          ></v-text-field>
+        </v-flex>
+        <v-flex sm2 v-if="getProject.state != 'assembling'">
+          <v-text-field
+            :value="getAtom.quantity_to_assemble"
+            label="qty left"
+            outlined
+            dense
+            readonly
           ></v-text-field>
         </v-flex>
         <v-flex sm2 v-if="getAtom.quantity === getAtom.quantity_to_assemble">
