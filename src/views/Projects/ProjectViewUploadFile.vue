@@ -36,7 +36,7 @@
             </ul>
           </div>
           <div v-if="message" class="message-error">{{message}}</div>
-          <div v-if="getProject.state === 'assembling'" class="message-success">BOM uploaded!</div>
+          <div v-if="getProject.state === 'assembling'" class="message-success">BOM uploaded</div>
           <div v-if="getProject.state != 'assembling'" class="field"></div>
         </v-flex>
       </v-layout>
