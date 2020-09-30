@@ -4,7 +4,7 @@
     <v-container fluid>
       <div v-for="assembly in getAssemblies" :key="assembly.itemNumber">
         <v-layout>
-          <v-flex sm6 class="assembly">
+          <v-flex sm4 class="assembly">
             <div class="font-family: monospace font-weight-black">
               {{ assembly.name }} @{{ assembly.itemNumber }}
             </div>
@@ -25,13 +25,52 @@
               <v-icon>close</v-icon>
             </v-btn>
           </v-flex>
-          <v-flex class="image" sm6>
+          <v-flex class="image" sm2>
             <img
               class="assembly-image"
               :src="assembly.imageUrl"
               :alt="assembly.name"
+            @mouseover="hover = assembly.uuid"
+            @mouseleave="hover = null"
+            @click="fix(assembly.uuid)"
             />
           </v-flex>
+
+        <v-flex sm6>
+          <v-card
+            v-if="hover === assembly.uuid || fixed === assembly.uuid"
+            width="100%"
+            outlined
+            raised
+            dark
+            elevation-24
+            class="card"
+          >
+            <v-card-actions>
+              <v-spacer></v-spacer>
+              <v-btn icon class="grey" x-small @click="fix(null)" title="close">
+                <v-icon>close</v-icon>
+              </v-btn>
+            </v-card-actions>
+            <ul>
+              <li>{{ assembly.description }}</li>
+              <li>qty: {{assembly.quantity}}</li>
+              <li>
+                {{ assembly.pseudoUnitCost.toFixed(2) }}
+                {{ getProject.currency }}
+              </li>
+              <li v-if="assembly.GTIN">GTIN: {{ assembly.GTIN }}</li>
+              <li v-if="assembly.SKU">SKU: {{ assembly.SKU }}</li>
+              <li v-if="assembly.vendorUrl">
+                <a :href="assembly.vendorUrl" target="_blank">vendor</a>
+              </li>
+              <li v-if="assembly.link">
+                <a :href="assembly.link" target="_blank">link</a>
+              </li>
+              <li v-if="assembly.instruction">{{ assembly.instruction }}</li>
+            </ul>
+          </v-card>
+        </v-flex>
         </v-layout>
         <v-layout wrap>
           <project-view-assemblies-update
@@ -56,6 +95,8 @@ export default {
   data() {
     return {
       assemblyToUpdate: null,
+      hover: null,
+      fixed: null
     };
   },
   computed: {
@@ -64,6 +105,9 @@ export default {
   methods: {
     ...mapActions(["fetchBom", "deleteBom", "deleteAtom", "fetchAssemblies"]),
     ...mapMutations(["setAssembly"]),
+    fix(uuid) {
+      this.fixed = uuid;
+    },
     selectAtomToUpdate(assembly) {
       this.assemblyToUpdate = assembly.uuid;
       this.setAssembly(assembly);
@@ -94,11 +138,14 @@ export default {
 .image {
   display: flex;
   justify-content: center;
-  align-items: flex-end;
   overflow-wrap: break-word;
 }
 .assembly-image {
   width: 100px;
   height: 100px;
+  cursor: pointer;
+}
+:any-link {
+  text-decoration: none;
 }
 </style>

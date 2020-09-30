@@ -50,10 +50,10 @@
 
     <div v-for="atom in getBom" :key="atom.itemNumber">
       <v-layout>
-        <v-flex sm6 class="atom">
+        <v-flex sm4 class="atom">
           <v-layout>
             <div class="font-family: monospace font-weight-black">
-              {{ atom.name }} #{{atom.itemNumber}}
+              {{ atom.name }} #{{ atom.itemNumber }}
             </div>
           </v-layout>
           <v-layout>
@@ -84,50 +84,54 @@
             </v-btn>
           </v-layout>
         </v-flex>
-        <v-flex class="image" sm6>
-          <img class="atom-image" :src="atom.imageUrl" :alt="atom.name" />
+        <v-flex class="image" sm2>
+          <img
+            class="atom-image"
+            :src="atom.imageUrl"
+            :alt="atom.name"
+            @mouseover="hover = atom.uuid"
+            @mouseleave="hover = null"
+            @click="fix(atom.uuid)"
+          />
+        </v-flex>
+
+        <v-flex sm6>
+          <v-card
+            v-if="hover === atom.uuid || fixed === atom.uuid"
+            width="100%"
+            outlined
+            raised
+            dark
+            elevation-24
+            class="card"
+          >
+            <v-card-actions>
+              <v-spacer></v-spacer>
+              <v-btn icon class="grey" x-small @click="fix(null)" title="close">
+                <v-icon>close</v-icon>
+              </v-btn>
+            </v-card-actions>
+            <ul>
+              <li>{{ atom.description }}</li>
+              <li>qty: {{atom.quantity}}</li>
+              <li>
+                {{ atom.pseudoUnitCost.toFixed(2) }}
+                {{ getProject.currency }}
+              </li>
+              <li v-if="atom.GTIN">GTIN: {{ atom.GTIN }}</li>
+              <li v-if="atom.SKU">SKU: {{ atom.SKU }}</li>
+              <li v-if="atom.vendorUrl">
+                <a :href="atom.vendorUrl" target="_blank">vendor</a>
+              </li>
+              <li v-if="atom.link">
+                <a :href="atom.link" target="_blank">link</a>
+              </li>
+              <li v-if="atom.instruction">{{ atom.instruction }}</li>
+            </ul>
+          </v-card>
         </v-flex>
       </v-layout>
       <v-layout wrap>
-        <!-- <v-btn color="blue" @click="selectAtomDetails(atom.uuid)" title="atom details">
-                <v-icon>article</v-icon>
-              </v-btn>
-              <v-btn
-                v-if="atomDetails === atom.uuid"
-                @click="hideDetails"
-                class="grey ml-1"
-                title="hide details"
-              >
-                <v-icon>close</v-icon>
-              </v-btn> -->
-        <!-- <project-view-bom-atom-details v-if="atomDetails === atom.uuid" v-bind:atom="atom" /> -->
-
-        <!-- <v-btn
-                color="yellow"
-                class="ml-2"
-                @click="selectAtomToUpdate(atom)"
-                title="update atom"
-              >
-                <v-icon>update</v-icon>
-              </v-btn>
-              <v-btn
-                v-if="atomToUpdate === atom.uuid"
-                @click="hideUpdate"
-                class="grey ml-1"
-                title="hide update"
-              >
-                <v-icon>close</v-icon>
-              </v-btn>
-              <v-btn
-                v-if="atom.quantity === atom.quantity_to_assemble"
-                class="ml-2"
-                color="red"
-                @click="deleteATOM(atom.uuid)"
-                title="delete atom"
-              >
-                <v-icon>delete</v-icon>
-              </v-btn> -->
-        <!-- <project-view-bom-atom-details v-if="atomDetails === atom.uuid" v-bind:atom="atom" /> -->
         <project-view-bom-atom-update
           v-if="atomToUpdate === atom.uuid"
           v-bind:atom="atom"
@@ -140,7 +144,6 @@
 <script>
 import { mapGetters, mapActions, mapMutations } from "vuex";
 import ProjectViewBomAtomCreate from "./ProjectViewBomAtomCreate";
-// import ProjectViewBomAtomDetails from "./ProjectViewBomAtomDetails";
 import ProjectViewBomAtomUpdate from "./ProjectViewBomAtomUpdate";
 import ProjectService from "@/services/ProjectService";
 
@@ -148,7 +151,6 @@ export default {
   name: "ProjectViewBom",
   components: {
     ProjectViewBomAtomCreate,
-    // ProjectViewBomAtomDetails,
     ProjectViewBomAtomUpdate,
   },
   data() {
@@ -158,6 +160,8 @@ export default {
       atomDetails: null,
       showDownloadBtn: false,
       bomUrl: null,
+      hover: null,
+      fixed: null,
     };
   },
   computed: {
@@ -166,6 +170,9 @@ export default {
   methods: {
     ...mapActions(["fetchBom", "deleteBom", "deleteAtom", "fetchAllProducts"]),
     ...mapMutations(["setAtom"]),
+    fix(uuid) {
+      this.fixed = uuid;
+    },
     toggleCreateAtom() {
       this.showCreateAtom = !this.showCreateAtom;
     },
@@ -240,11 +247,14 @@ export default {
 .image {
   display: flex;
   justify-content: center;
-  align-items: flex-end;
   overflow-wrap: break-word;
 }
 .atom-image {
   width: 100px;
   height: 100px;
+  cursor: pointer;
+}
+:any-link {
+  text-decoration: none;
 }
 </style>
